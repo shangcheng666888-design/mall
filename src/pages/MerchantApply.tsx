@@ -6,9 +6,11 @@ import idHandheldExample from '../assets/id-handheld-example.png'
 import { api } from '../api/client'
 import { useToast } from '../components/ToastProvider'
 import { useLang } from '../context/LangContext'
+import { getMerchantConsoleLoginUrl } from '../config/env'
 
 const MerchantApply: React.FC = () => {
   const { lang } = useLang()
+  const merchantLoginUrl = getMerchantConsoleLoginUrl()
   const [_verifyMethod, _setVerifyMethod] = useState<'email' | 'phone'>('email')
   const [_passwordVisible, _setPasswordVisible] = useState(false)
   const [_confirmPasswordVisible, _setConfirmPasswordVisible] = useState(false)
@@ -346,14 +348,20 @@ const MerchantApply: React.FC = () => {
             {lang === 'zh'
               ? '如果您已是卖家,请'
               : 'If you are already a seller, please '}
-            <a
-              href={`${(import.meta.env.VITE_MERCHANT_CONSOLE_URL || '').replace(/\/$/, '')}/login`}
-              className="merchant-apply-login-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {lang === 'zh' ? '点击登录' : 'click to log in'}
-            </a>
+            {merchantLoginUrl ? (
+              <a
+                href={merchantLoginUrl}
+                className="merchant-apply-login-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {lang === 'zh' ? '点击登录' : 'click to log in'}
+              </a>
+            ) : (
+              <span className="merchant-apply-login-link merchant-apply-login-link--disabled">
+                {lang === 'zh' ? '点击登录' : 'click to log in'}
+              </span>
+            )}
           </p>
         </header>
 

@@ -5836,6 +5836,11 @@ button {
   text-decoration: underline;
 }
 
+.merchant-apply-login-link--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .merchant-apply-form--row .merchant-apply-field {
   display: grid;
   grid-template-columns: 140px 1fr;
