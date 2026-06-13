@@ -312,6 +312,38 @@ const Layout: React.FC = () => {
                 </span>
                 <span className="header-caret">▾</span>
               </button>
+              {langDropdownOpen && (
+                <div
+                  className="lang-dropdown"
+                  role="listbox"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                  }}
+                >
+                  {LANGUAGES.map((opt) => (
+                    <button
+                      key={opt.code}
+                      type="button"
+                      role="option"
+                      aria-selected={currentLang.code === opt.code}
+                      className="lang-dropdown-item"
+                      onClick={() => {
+                        setLang(opt.code as 'zh' | 'en')
+                        setLangDropdownOpen(false)
+                      }}
+                    >
+                      <span className="lang-flag-circle">
+                        {opt.code === 'zh' ? (
+                          <img src={zhFlagIcon} alt="简体中文" className="lang-flag-image" />
+                        ) : (
+                          <img src={enFlagIcon} alt="English" className="lang-flag-image" />
+                        )}
+                      </span>
+                      <span className="lang-name">{opt.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -458,46 +490,6 @@ const Layout: React.FC = () => {
           </button>
         )}
       </nav>
-
-      {langDropdownOpen && (
-        <div
-          className="lang-overlay"
-          onClick={() => {
-            setLangDropdownOpen(false)
-          }}
-        >
-          <div
-            className="lang-dropdown"
-            role="listbox"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            {LANGUAGES.map((opt) => (
-              <button
-                key={opt.code}
-                type="button"
-                role="option"
-                aria-selected={currentLang.code === opt.code}
-                className="lang-dropdown-item"
-                onClick={() => {
-                  setLang(opt.code as 'zh' | 'en')
-                  setLangDropdownOpen(false)
-                }}
-              >
-                <span className="lang-flag-circle">
-                  {opt.code === 'zh' ? (
-                    <img src={zhFlagIcon} alt="简体中文" className="lang-flag-image" />
-                  ) : (
-                    <img src={enFlagIcon} alt="English" className="lang-flag-image" />
-                  )}
-                </span>
-                <span className="lang-name">{opt.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       <footer className="app-footer">
         <div className="footer-inner">
