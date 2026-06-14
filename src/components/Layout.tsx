@@ -26,6 +26,7 @@ import { openCrispChat } from '../utils/crispChat'
 import LogoutSuccessModal from './LogoutSuccessModal.tsx'
 import CartDrawer from './CartDrawer.tsx'
 import { useLang } from '../context/LangContext'
+import { navigateFromSearchQuery } from '../utils/searchNavigation'
 
 const LANGUAGES = [
   { code: 'en', name: 'English' },
@@ -127,12 +128,7 @@ const Layout: React.FC = () => {
   }
 
   const handleHeaderSearchSubmit = () => {
-    const q = headerSearchKeyword.trim()
-    if (!q) {
-      navigate('/products')
-      return
-    }
-    navigate(`/products?keyword=${encodeURIComponent(q)}`)
+    navigateFromSearchQuery(navigate, headerSearchKeyword)
   }
 
   const handleGoAccount = () => {

@@ -2,6 +2,7 @@ import type React from 'react'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
+import { navigateFromSearchQuery } from '../utils/searchNavigation'
 import { api, apiBase } from '../api/client'
 import ProductCard from '../components/ProductCard'
 import lunbo1 from '../assets/lunbo1.png'
@@ -213,12 +214,7 @@ const Home: React.FC = () => {
   }, [shuffle])
 
   const handleSearchSubmit = () => {
-    const q = searchKeyword.trim()
-    if (!q) {
-      navigate('/products')
-      return
-    }
-    navigate(`/products?keyword=${encodeURIComponent(q)}`)
+    navigateFromSearchQuery(navigate, searchKeyword)
   }
 
   return (

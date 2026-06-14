@@ -6,6 +6,7 @@ import { api, apiBase } from '../api/client'
 import { getCategoryNameZh } from '../constants/categoryNameZh'
 import { useLang } from '../context/LangContext'
 import { translateSubcategoryName } from './Categories'
+import { normalizeShopIdQuery } from '../utils/searchNavigation'
 import categoryTitleIcon from '../assets/category-icon.png'
 
 /** 后端返回的商城商品项（上架记录） */
@@ -84,6 +85,13 @@ const Products: React.FC = () => {
   const categoryIdFromUrl = searchParams.get('categoryId') ?? ''
   const subCategoryIdFromUrl = searchParams.get('subCategoryId') ?? ''
   const keywordFromUrl = searchParams.get('keyword')?.trim() ?? ''
+
+  useEffect(() => {
+    const shopId = normalizeShopIdQuery(keywordFromUrl)
+    if (shopId) {
+      navigate(`/shops/${encodeURIComponent(shopId)}`, { replace: true })
+    }
+  }, [keywordFromUrl, navigate])
 
   const [categories, setCategories] = useState<CategoryItem[]>([])
   const [categoriesLoading, setCategoriesLoading] = useState(true)
