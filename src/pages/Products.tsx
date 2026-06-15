@@ -8,6 +8,7 @@ import { useLang } from '../context/LangContext'
 import { translateSubcategoryName } from './Categories'
 import { normalizeShopIdQuery } from '../utils/searchNavigation'
 import categoryTitleIcon from '../assets/category-icon.png'
+import { toTraditional, tr } from '../i18n'
 
 /** 后端返回的商城商品项（上架记录） */
 interface ApiProductItem {
@@ -69,15 +70,19 @@ const Products: React.FC = () => {
   const { lang } = useLang()
 
   const getCategoryLabel = (rawName: string) => {
-    if (lang === 'zh') return getCategoryNameZh(rawName) || rawName
+    const zh = getCategoryNameZh(rawName) || rawName
+    if (lang === 'tw') return toTraditional(zh)
+    if (lang === 'zh') return zh
     return rawName
   }
 
   const getSubCategoryLabel = (rawName: string) => {
-    if (lang === 'zh') return getCategoryNameZh(rawName) || rawName
-    // 英文模式：如果是中文名，则用细分类翻译；否则直接使用原始英文名
     const hasChinese = /[\u4e00-\u9fa5]/.test(rawName)
-    if (hasChinese) return translateSubcategoryName('en', rawName)
+    if (lang === 'zh' || lang === 'tw') {
+      const zh = getCategoryNameZh(rawName) || rawName
+      return lang === 'tw' ? toTraditional(zh) : zh
+    }
+    if (hasChinese) return translateSubcategoryName(lang, rawName)
     return rawName
   }
   const [searchParams] = useSearchParams()
@@ -300,19 +305,19 @@ const Products: React.FC = () => {
               }}
             >
               <h2 className="products-sidebar-title">
-                {lang === 'zh' ? '分类' : 'Categories'}
+                {tr(lang, { zh: '分类', en: 'Categories', de: 'Kategorien', ja: 'カテゴリー', ko: '카테고리', es: 'Categorías', it: 'Categorie', vi: 'Danh mục', fr: 'Catégories' })}
               </h2>
               <Link
                 to="/products"
                 className={`products-sidebar-item${!categoryIdFromUrl && !subCategoryIdFromUrl ? ' products-sidebar-item--active' : ''}`}
                 onClick={() => setMobileCategoriesOpen(false)}
               >
-                {lang === 'zh' ? '全部' : 'All'}
+                {tr(lang, { zh: '全部', en: 'All', de: 'Alle', ja: 'すべて', ko: '전체', es: 'Todo', it: 'Tutto', vi: 'Tất cả', fr: 'Tout' })}
               </Link>
               <nav className="products-sidebar-nav">
               {categoriesLoading ? (
                 <p className="products-sidebar-loading">
-                  {lang === 'zh' ? '加载分类…' : 'Loading categories…'}
+                  {tr(lang, { zh: '加载分类…', en: 'Loading categories…', de: 'Kategorien werden geladen…', ja: 'カテゴリを読み込み中…', ko: '카테고리 로딩 중…', es: 'Cargando categorías…', it: 'Caricamento categorie…', vi: 'Đang tải danh mục…', fr: 'Chargement des catégories…' })}
                 </p>
               ) : (
                 topCategories.map((cat) => {
@@ -376,14 +381,22 @@ const Products: React.FC = () => {
           <main className="products-main">
             {keywordFromUrl && (
               <p className="products-search-result-title">
-                {lang === 'zh'
-                  ? `搜索结果：${keywordFromUrl}（共 ${productsTotal} 件商品${searchShops.length > 0 ? `，${searchShops.length} 家店铺` : ''}）`
-                  : `Search: "${keywordFromUrl}" (${productsTotal} items${searchShops.length > 0 ? `, ${searchShops.length} shops` : ''})`}
+                {tr(lang, {
+                  zh: `搜索结果：${keywordFromUrl}（共 ${productsTotal} 件商品${searchShops.length > 0 ? `，${searchShops.length} 家店铺` : ''}）`,
+                  en: `Search: "${keywordFromUrl}" (${productsTotal} items${searchShops.length > 0 ? `, ${searchShops.length} shops` : ''})`,
+                  de: `Suche: „${keywordFromUrl}" (${productsTotal} Artikel${searchShops.length > 0 ? `, ${searchShops.length} Shops` : ''})`,
+                  ja: `検索：「${keywordFromUrl}」（商品 ${productsTotal} 件${searchShops.length > 0 ? `、店舗 ${searchShops.length} 件` : ''}）`,
+                  ko: `검색: "${keywordFromUrl}" (상품 ${productsTotal}개${searchShops.length > 0 ? `, ${searchShops.length}개 매장` : ''})`,
+                  es: `Búsqueda: "${keywordFromUrl}" (${productsTotal} artículos${searchShops.length > 0 ? `, ${searchShops.length} tiendas` : ''})`,
+                  it: `Ricerca: "${keywordFromUrl}" (${productsTotal} articoli${searchShops.length > 0 ? `, ${searchShops.length} negozi` : ''})`,
+                  vi: `Tìm kiếm: "${keywordFromUrl}" (${productsTotal} sản phẩm${searchShops.length > 0 ? `, ${searchShops.length} cửa hàng` : ''})`,
+                  fr: `Recherche : « ${keywordFromUrl} » (${productsTotal} articles${searchShops.length > 0 ? `, ${searchShops.length} boutiques` : ''})`,
+                })}
               </p>
             )}
             {keywordFromUrl && searchShops.length > 0 && (
-              <section className="products-search-shops" aria-label={lang === 'zh' ? '相关店铺' : 'Related shops'}>
-                <h3 className="products-search-shops-title">{lang === 'zh' ? '相关店铺' : 'Related shops'}</h3>
+              <section className="products-search-shops" aria-label={tr(lang, { zh: '相关店铺', en: 'Related shops', de: 'Verwandte Shops', ja: '関連ショップ', ko: '관련 매장', es: 'Tiendas relacionadas', it: 'Negozi correlati', vi: 'Cửa hàng liên quan', fr: 'Boutiques associées' })}>
+                <h3 className="products-search-shops-title">{tr(lang, { zh: '相关店铺', en: 'Related shops', de: 'Verwandte Shops', ja: '関連ショップ', ko: '관련 매장', es: 'Tiendas relacionadas', it: 'Negozi correlati', vi: 'Cửa hàng liên quan', fr: 'Boutiques associées' })}</h3>
                 <div className="products-search-shops-grid">
                   {searchShops.map((shop) => (
                     <Link key={shop.id} to={`/shops/${shop.id}`} className="products-search-shop-card">
@@ -397,7 +410,17 @@ const Products: React.FC = () => {
                       <div className="products-search-shop-name">{shop.name}</div>
                       {shop.listedCount != null && (
                         <div className="products-search-shop-meta">
-                          {lang === 'zh' ? `${shop.listedCount} 件在售` : `${shop.listedCount} listed`}
+                          {tr(lang, {
+                            zh: `${shop.listedCount} 件在售`,
+                            en: `${shop.listedCount} listed`,
+                            de: `${shop.listedCount} gelistet`,
+                            ja: `${shop.listedCount} 件出品中`,
+                            ko: `${shop.listedCount}개 판매 중`,
+                            es: `${shop.listedCount} en venta`,
+                            it: `${shop.listedCount} in vendita`,
+                            vi: `${shop.listedCount} đang bán`,
+                            fr: `${shop.listedCount} en vente`,
+                          })}
                         </div>
                       )}
                     </Link>
@@ -413,8 +436,8 @@ const Products: React.FC = () => {
                 aria-expanded={mobileCategoriesOpen}
                 aria-label={
                   mobileCategoriesOpen
-                    ? (lang === 'zh' ? '收起分类' : 'Collapse categories')
-                    : (lang === 'zh' ? '展开分类' : 'Expand categories')
+                    ? tr(lang, { zh: '收起分类', en: 'Collapse categories', de: 'Kategorien einklappen', ja: 'カテゴリを折りたたむ', ko: '카테고리 접기', es: 'Contraer categorías', it: 'Comprimi categorie', vi: 'Thu gọn danh mục', fr: 'Réduire les catégories' })
+                    : tr(lang, { zh: '展开分类', en: 'Expand categories', de: 'Kategorien erweitern', ja: 'カテゴリを展開', ko: '카테고리 펼치기', es: 'Expandir categorías', it: 'Espandi categorie', vi: 'Mở rộng danh mục', fr: 'Développer les catégories' })
                 }
               >
                 <span className="products-sidebar-toggle-text">
@@ -425,7 +448,7 @@ const Products: React.FC = () => {
                       aria-hidden="true"
                       className="products-sidebar-toggle-icon-img"
                     />
-                    <span>{lang === 'zh' ? '分类' : 'Categories'}</span>
+                    <span>{tr(lang, { zh: '分类', en: 'Categories', de: 'Kategorien', ja: 'カテゴリー', ko: '카테고리', es: 'Categorías', it: 'Categorie', vi: 'Danh mục', fr: 'Catégories' })}</span>
                   </span>
                 </span>
                 <span className="products-sidebar-toggle-icon" aria-hidden>
@@ -463,7 +486,7 @@ const Products: React.FC = () => {
                 className="products-sort-btn products-sort-btn--default"
                 onClick={() => setSortKey('default')}
               >
-                {lang === 'zh' ? '综合' : 'Default'}
+                {tr(lang, { zh: '综合', en: 'Default', de: 'Standard', ja: 'デフォルト', ko: '기본', es: 'Predeterminado', it: 'Predefinito', vi: 'Mặc định', fr: 'Par défaut' })}
               </button>
               <button
                 type="button"
@@ -472,7 +495,7 @@ const Products: React.FC = () => {
                 }`}
                 onClick={() => handleSort('sales')}
               >
-                {lang === 'zh' ? '销量' : 'Sales'}{' '}
+                {tr(lang, { zh: '销量', en: 'Sales', de: 'Verkäufe', ja: '売上', ko: '판매량', es: 'Ventas', it: 'Vendite', vi: 'Doanh số', fr: 'Ventes' })}{' '}
                 <span className="products-sort-icon" aria-hidden>
                   <SortArrowIcon active={sortKey === 'sales'} dir={sortDir} />
                 </span>
@@ -484,7 +507,7 @@ const Products: React.FC = () => {
                 }`}
                 onClick={() => handleSort('price')}
               >
-                {lang === 'zh' ? '价格' : 'Price'}{' '}
+                {tr(lang, { zh: '价格', en: 'Price', de: 'Preis', ja: '価格', ko: '가격', es: 'Precio', it: 'Prezzo', vi: 'Giá', fr: 'Prix' })}{' '}
                 <span className="products-sort-icon" aria-hidden>
                   <SortArrowIcon active={sortKey === 'price'} dir={sortDir} />
                 </span>
@@ -496,7 +519,7 @@ const Products: React.FC = () => {
                 }`}
                 onClick={() => handleSort('new')}
               >
-                {lang === 'zh' ? '上新' : 'Newest'}{' '}
+                {tr(lang, { zh: '上新', en: 'Newest', de: 'Neueste', ja: '新着', ko: '최신', es: 'Más recientes', it: 'Più recenti', vi: 'Mới nhất', fr: 'Plus récents' })}{' '}
                 <span className="products-sort-icon" aria-hidden>
                   <SortArrowIcon active={sortKey === 'new'} dir={sortDir} />
                 </span>
@@ -506,29 +529,43 @@ const Products: React.FC = () => {
             <div className="mall-product-grid products-main-grid">
               {productsLoading ? (
                 <p className="products-empty">
-                  {lang === 'zh' ? '加载中...' : 'Loading...'}
+                  {tr(lang, { zh: '加载中...', en: 'Loading...', de: 'Laden...', ja: '読み込み中...', ko: '로딩 중...', es: 'Cargando...', it: 'Caricamento...', vi: 'Đang tải...', fr: 'Chargement...' })}
                 </p>
               ) : pageProducts.length === 0 ? (
                 <p className="products-empty">
                   {keywordFromUrl
-                    ? (lang === 'zh' ? `未找到与「${keywordFromUrl}」相关的商品` : `No products found for "${keywordFromUrl}"`)
-                    : (lang === 'zh' ? '暂无商品' : 'No products found')}
+                    ? tr(lang, {
+                        zh: `未找到与「${keywordFromUrl}」相关的商品`,
+                        en: `No products found for "${keywordFromUrl}"`,
+                        de: `Keine Produkte für „${keywordFromUrl}" gefunden`,
+                        ja: `「${keywordFromUrl}」に関連する商品が見つかりません`,
+                        ko: `"${keywordFromUrl}"에 대한 상품을 찾을 수 없습니다`,
+                        es: `No se encontraron productos para "${keywordFromUrl}"`,
+                        it: `Nessun prodotto trovato per "${keywordFromUrl}"`,
+                        vi: `Không tìm thấy sản phẩm cho "${keywordFromUrl}"`,
+                        fr: `Aucun produit trouvé pour « ${keywordFromUrl} »`,
+                      })
+                    : tr(lang, { zh: '暂无商品', en: 'No products found', de: 'Keine Produkte gefunden', ja: '商品が見つかりません', ko: '상품이 없습니다', es: 'No se encontraron productos', it: 'Nessun prodotto trovato', vi: 'Không có sản phẩm', fr: 'Aucun produit trouvé' })}
                 </p>
               ) : (
                 pageProducts.map((item) => {
                   const id = item.listingId ?? item.id
                   const priceStr = `$${item.price.toFixed(2)}`
                   const subtitle =
-                    lang === 'zh'
-                      ? getCategoryNameZh(item.subCategory) ||
-                        getCategoryNameZh(item.category) ||
-                        item.subCategory ||
-                        item.category
+                    lang === 'zh' || lang === 'tw'
+                      ? (() => {
+                          const zh =
+                            getCategoryNameZh(item.subCategory) ||
+                            getCategoryNameZh(item.category) ||
+                            item.subCategory ||
+                            item.category
+                          return lang === 'tw' ? toTraditional(zh) : zh
+                        })()
                       : (() => {
                           const first = item.subCategory || item.category
                           if (!first) return ''
                           const hasChinese = /[\u4e00-\u9fa5]/.test(first)
-                          return hasChinese ? translateSubcategoryName('en', first) : first
+                          return hasChinese ? translateSubcategoryName(lang, first) : first
                         })()
                   return (
                     <Link key={String(id)} to={`/products/${id}`} className="product-card-link">
@@ -550,14 +587,14 @@ const Products: React.FC = () => {
             {totalPages > 1 && (
               <nav
                 className="products-pagination"
-                aria-label={lang === 'zh' ? '分页' : 'Pagination'}
+                aria-label={tr(lang, { zh: '分页', en: 'Pagination', de: 'Seitennummerierung', ja: 'ページネーション', ko: '페이지 매김', es: 'Paginación', it: 'Impaginazione', vi: 'Phân trang', fr: 'Pagination' })}
               >
                 <button
                   type="button"
                   className="products-pagination-btn products-pagination-arrow"
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
-                  aria-label={lang === 'zh' ? '上一页' : 'Previous page'}
+                  aria-label={tr(lang, { zh: '上一页', en: 'Previous page', de: 'Vorherige Seite', ja: '前のページ', ko: '이전 페이지', es: 'Página anterior', it: 'Pagina precedente', vi: 'Trang trước', fr: 'Page précédente' })}
                 >
                   &lt;
                 </button>
@@ -581,7 +618,7 @@ const Products: React.FC = () => {
                   className="products-pagination-btn products-pagination-arrow"
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
-                  aria-label={lang === 'zh' ? '下一页' : 'Next page'}
+                  aria-label={tr(lang, { zh: '下一页', en: 'Next page', de: 'Nächste Seite', ja: '次のページ', ko: '다음 페이지', es: 'Página siguiente', it: 'Pagina successiva', vi: 'Trang sau', fr: 'Page suivante' })}
                 >
                   &gt;
                 </button>

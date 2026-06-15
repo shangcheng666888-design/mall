@@ -1,4 +1,6 @@
 import { formatDateTime } from './datetime'
+import type { Lang } from '../i18n/lang'
+import { tr, type TrMap } from '../i18n/tr'
 /** 充值记录 */
 export type WalletRechargeRecord = {
   id: string
@@ -87,6 +89,22 @@ export function addWithdrawRecord(record: Omit<WalletWithdrawRecord, 'id' | 'cre
   return full
 }
 
+export type WalletRecordStatus = 'pending' | 'approved' | 'rejected' | 'completed' | 'failed'
+
+const WALLET_STATUS_TEXT: Record<WalletRecordStatus, TrMap> = {
+  pending: { zh: '待审核', en: 'Pending', de: 'Ausstehend', ja: '審査待ち', ko: '대기 중', es: 'Pendiente', it: 'In attesa', vi: 'Chờ duyệt', fr: 'En attente' },
+  approved: { zh: '已通过', en: 'Approved', de: 'Genehmigt', ja: '承認済み', ko: '승인됨', es: 'Aprobado', it: 'Approvato', vi: 'Đã duyệt', fr: 'Approuvé' },
+  rejected: { zh: '已拒绝', en: 'Rejected', de: 'Abgelehnt', ja: '却下', ko: '거절됨', es: 'Rechazado', it: 'Rifiutato', vi: 'Đã từ chối', fr: 'Rejeté' },
+  completed: { zh: '已完成', en: 'Completed', de: 'Abgeschlossen', ja: '完了', ko: '완료', es: 'Completado', it: 'Completato', vi: 'Hoàn tất', fr: 'Terminé' },
+  failed: { zh: '失败', en: 'Failed', de: 'Fehlgeschlagen', ja: '失敗', ko: '실패', es: 'Fallido', it: 'Non riuscito', vi: 'Thất bại', fr: 'Échec' },
+}
+
+export function getWalletStatusLabel(status: string, lang: Lang): string {
+  const labels = WALLET_STATUS_TEXT[status as WalletRecordStatus]
+  return labels ? tr(lang, labels) : status
+}
+
+/** @deprecated use getWalletStatusLabel */
 export const STATUS_TEXT: Record<string, string> = {
   pending: '待审核',
   approved: '已通过',

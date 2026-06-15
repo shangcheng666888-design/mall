@@ -1,4 +1,6 @@
 import type React from 'react'
+import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
 
 interface LoginSuccessModalProps {
   open: boolean
@@ -6,10 +8,23 @@ interface LoginSuccessModalProps {
 }
 
 const LoginSuccessModal: React.FC<LoginSuccessModalProps> = ({ open, onClose }) => {
+  const { lang } = useLang()
   if (!open) return null
 
+  const label = tr(lang, {
+    zh: '登录成功',
+    en: 'Login successful',
+    de: 'Anmeldung erfolgreich',
+    ja: 'ログイン成功',
+    ko: '로그인 성공',
+    es: 'Inicio de sesión exitoso',
+    it: 'Accesso riuscito',
+    vi: 'Đăng nhập thành công',
+    fr: 'Connexion réussie',
+  })
+
   return (
-    <div className="auth-success-overlay" role="dialog" aria-label="登录成功" onClick={onClose}>
+    <div className="auth-success-overlay" role="dialog" aria-label={label} onClick={onClose}>
       <div className="auth-success-box" onClick={(e) => e.stopPropagation()}>
         <div className="auth-success-icon auth-success-icon--black">
           <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
@@ -24,11 +39,10 @@ const LoginSuccessModal: React.FC<LoginSuccessModalProps> = ({ open, onClose }) 
             />
           </svg>
         </div>
-        <p className="auth-success-text">登录成功</p>
+        <p className="auth-success-text">{label}</p>
       </div>
     </div>
   )
 }
 
 export default LoginSuccessModal
-

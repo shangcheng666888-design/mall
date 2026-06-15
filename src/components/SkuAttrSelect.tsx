@@ -1,5 +1,7 @@
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
 
 export interface SkuAttrOption {
   raw: string
@@ -28,11 +30,23 @@ function OptionContent({ opt }: { opt: SkuAttrOption }) {
 
 const SkuAttrSelect: React.FC<SkuAttrSelectProps> = ({
   label,
-  placeholder = '请选择',
+  placeholder,
   options,
   value,
   onChange,
 }) => {
+  const { lang } = useLang()
+  const resolvedPlaceholder = placeholder ?? tr(lang, {
+    zh: '请选择',
+    en: 'Please select',
+    de: 'Bitte auswählen',
+    ja: '選択してください',
+    ko: '선택해 주세요',
+    es: 'Seleccione',
+    it: 'Seleziona',
+    vi: 'Vui lòng chọn',
+    fr: 'Veuillez sélectionner',
+  })
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -65,7 +79,7 @@ const SkuAttrSelect: React.FC<SkuAttrSelectProps> = ({
         onClick={() => setOpen((p) => !p)}
       >
         <span className="product-detail-sku-dropdown-value">
-          {selectedOpt ? <OptionContent opt={selectedOpt} /> : placeholder}
+          {selectedOpt ? <OptionContent opt={selectedOpt} /> : resolvedPlaceholder}
         </span>
         <span className="product-detail-sku-dropdown-caret" aria-hidden>
           ▾

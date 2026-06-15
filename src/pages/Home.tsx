@@ -37,6 +37,9 @@ import iconZhengpin from '../assets/zhifu.png'
 import iconTuihuo from '../assets/tuihuo.png'
 import iconYunshu from '../assets/yunshu.png'
 import iconZhifu from '../assets/zhengping.png'
+import { tr } from '../i18n'
+import { translateCategoryName } from './Categories'
+
 
 const CAROUSEL_IMAGES = [lunbo4, lunbo3, lunbo2, lunbo1]
 
@@ -248,9 +251,7 @@ const Home: React.FC = () => {
           <input
             className="search-input"
             placeholder={
-              lang === 'zh'
-                ? '找货源/商品/供应商/求购'
-                : 'Search products / suppliers / suppliers requests'
+              tr(lang, { zh: '找货源/商品/供应商/求购', en: 'Search products / suppliers / suppliers requests', de: 'Suche nach Produkten / Lieferanten / Lieferantenanfragen', ja: '製品・サプライヤー検索・サプライヤーリクエスト', ko: '제품/공급업체/공급업체 요청 검색', es: 'Buscar productos / proveedores / solicitudes de proveedores', it: 'Ricerca prodotti/fornitori/richieste fornitori', vi: 'Tìm kiếm sản phẩm/nhà cung cấp/yêu cầu nhà cung cấp', fr: 'Rechercher des produits / fournisseurs / demandes de fournisseurs' })
             }
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
@@ -261,7 +262,7 @@ const Home: React.FC = () => {
             className="search-button"
             onClick={handleSearchSubmit}
           >
-            {lang === 'zh' ? '搜索' : 'Search'}
+            {tr(lang, { zh: '搜索', en: 'Search', de: 'Suchen', ja: '検索', ko: '찾다', es: 'Buscar', it: 'Ricerca', vi: 'Tìm kiếm', fr: 'Recherche' })}
           </button>
         </div>
       </div>
@@ -304,10 +305,10 @@ const Home: React.FC = () => {
       <section className="section section-categories">
         <div className="section-header">
           <h2 className="section-title">
-            {lang === 'zh' ? '推荐分类' : 'Recommended categories'}
+            {tr(lang, { zh: '推荐分类', en: 'Recommended categories', de: 'Empfohlene Kategorien', ja: 'おすすめカテゴリー', ko: '추천 카테고리', es: 'Categorías recomendadas', it: 'Categorie consigliate', vi: 'Danh mục được đề xuất', fr: 'Catégories recommandées' })}
           </h2>
           <Link to="/categories" className="link-btn category-all">
-            {lang === 'zh' ? '全部 >' : 'All >'}
+            {tr(lang, { zh: '全部 >', en: 'All >', de: 'Alle >', ja: 'すべて >', ko: '모두 >', es: 'Todos >', it: 'Tutti >', vi: 'Tất cả >', fr: 'Tout >' })}
           </Link>
         </div>
         <div
@@ -333,46 +334,7 @@ const Home: React.FC = () => {
                 ) : null}
               </div>
               <span className="category-name">
-                {lang === 'zh'
-                  ? item.name
-                  : (() => {
-                      switch (item.name) {
-                        case '手机配件':
-                          return 'Phone accessories'
-                        case '防疫物品':
-                          return 'Epidemic supplies'
-                        case '办公文具':
-                          return 'Office supplies'
-                        case '数码产品':
-                          return 'Digital products'
-                        case '男士服装':
-                          return "Men's clothing"
-                        case '女士服装':
-                          return "Women's clothing"
-                        case '休闲鱼具':
-                          return 'Leisure fishing'
-                        case '零食甜点':
-                          return 'Snacks & desserts'
-                        case '饮品酒水':
-                          return 'Beverages & alcohol'
-                        case '户外运动':
-                          return 'Outdoor sports'
-                        case '居家橱柜':
-                          return 'Home & cabinets'
-                        case '美妆护肤':
-                          return 'Beauty & skincare'
-                        case '珠宝手表':
-                          return 'Jewelry & watches'
-                        case '儿童玩具':
-                          return "Kids' toys"
-                        case '电脑配件':
-                          return 'Computer accessories'
-                        case '礼品卡':
-                          return 'Gift cards'
-                        default:
-                          return item.name
-                      }
-                    })()}
+                {translateCategoryName(lang, item.name)}
               </span>
             </Link>
           ))}
@@ -383,7 +345,7 @@ const Home: React.FC = () => {
         <section className="section home-loading-section">
           <div className="home-loading-block">
             <span className="home-loading-spinner" aria-hidden />
-            <p className="home-loading-text">{lang === 'zh' ? '加载中…' : 'Loading…'}</p>
+            <p className="home-loading-text">{tr(lang, { zh: '加载中…', en: 'Loading…', de: 'Laden…', ja: '読み込み中…', ko: '로드 중…', es: 'Cargando…', it: 'Caricamento…', vi: 'Đang tải…', fr: 'Chargement…' })}</p>
           </div>
         </section>
       )}
@@ -391,9 +353,9 @@ const Home: React.FC = () => {
       {homeLoadFailed && (
         <section className="section home-error-section">
           <div className="home-error-block">
-            <p className="home-error-text">{lang === 'zh' ? '加载失败，请刷新或重试' : 'Failed to load. Please refresh or try again.'}</p>
+            <p className="home-error-text">{tr(lang, { zh: '加载失败，请刷新或重试', en: 'Failed to load. Please refresh or try again.', de: 'Laden fehlgeschlagen. Bitte aktualisieren Sie die Seite oder versuchen Sie es erneut.', ja: 'ロードに失敗しました。更新するか、もう一度試してください。', ko: '로드하지 못했습니다. 새로고침하거나 다시 시도하세요.', es: 'No se pudo cargar. Actualice o vuelva a intentarlo.', it: 'Impossibile caricare. Aggiorna o riprova.', vi: 'Không thể tải. Vui lòng làm mới hoặc thử lại.', fr: 'Échec du chargement. Veuillez actualiser ou réessayer.' })}</p>
             <button type="button" className="home-error-retry" onClick={() => fetchHomeData()}>
-              {lang === 'zh' ? '重试' : 'Retry'}
+              {tr(lang, { zh: '重试', en: 'Retry', de: 'Wiederholen', ja: 'リトライ', ko: '다시 해 보다', es: 'Rever', it: 'Riprova', vi: 'Thử lại', fr: 'Réessayer' })}
             </button>
           </div>
         </section>
@@ -402,16 +364,16 @@ const Home: React.FC = () => {
       <section className="section">
         <div className="section-header">
           <h2 className="section-title">
-            {lang === 'zh' ? '每日新品上架' : 'New arrivals today'}
+            {tr(lang, { zh: '每日新品上架', en: 'New arrivals today', de: 'Heute Neuzugänge', ja: '本日の新入荷', ko: '오늘 새로 도착한', es: 'Recién llegados hoy', it: 'Nuovi arrivi oggi', vi: 'Hàng mới về hôm nay', fr: 'Nouveautés aujourd\'hui' })}
           </h2>
           <Link to="/products" className="link-btn">
-            {lang === 'zh' ? '更多 >' : 'More >'}
+            {tr(lang, { zh: '更多 >', en: 'More >', de: 'Mehr >', ja: 'もっと見る >', ko: '더 보기 >', es: 'Más >', it: 'Altro >', vi: 'Thêm >', fr: 'Plus >' })}
           </Link>
         </div>
         <div className="home-products-grid mall-product-grid card-grid">
           {newArrivals.length === 0 ? (
             <p className="home-section-empty">
-              {lang === 'zh' ? '暂无数据' : 'No data yet'}
+              {tr(lang, { zh: '暂无数据', en: 'No data yet', de: 'Noch keine Daten', ja: 'まだデータがありません', ko: '아직 데이터가 없습니다', es: 'Aún no hay datos', it: 'Nessun dato ancora', vi: 'Chưa có dữ liệu', fr: 'Aucune donnée pour l\'instant' })}
             </p>
           ) : (
             newArrivals.slice(0, HOME_PRODUCTS_MAX).map((item) => (
@@ -449,18 +411,18 @@ const Home: React.FC = () => {
           </div>
           <div className="merchant-banner-content">
             <div className="merchant-banner-line">
-              {lang === 'zh' ? '成为商家' : 'Become a merchant'}
+              {tr(lang, { zh: '成为商家', en: 'Become a merchant', de: 'Werden Sie Händler', ja: '商人になる', ko: '판매자가 되세요', es: 'Conviértete en comerciante', it: 'Diventa un commerciante', vi: 'Trở thành một thương gia', fr: 'Devenez commerçant' })}
             </div>
             <div className="merchant-banner-line">
-              {lang === 'zh' ? '共享佣金' : 'Share commissions'}
+              {tr(lang, { zh: '共享佣金', en: 'Share commissions', de: 'Aktienprovisionen', ja: 'コミッションを共有する', ko: '커미션 공유', es: 'Comisiones de acciones', it: 'Condividi le commissioni', vi: 'Chia sẻ hoa hồng', fr: 'Partager les commissions' })}
             </div>
             <div className="merchant-banner-line merchant-banner-line-highlight">
-              {lang === 'zh' ? '最高 ' : 'Up to '}
+              {tr(lang, { zh: '最高 ', en: 'Up to ', de: 'Bis zu', ja: 'まで', ko: '최대', es: 'Arriba a', it: 'Fino a', vi: 'Lên đến', fr: 'Jusqu\'à' })}
               <span className="merchant-banner-amount">$10,000</span>
-              {lang === 'zh' ? ' 美金' : ' USD'}
+              {tr(lang, { zh: ' 美金', en: ' USD', de: 'USD', ja: '米ドル', ko: 'USD', es: 'Dólar estadounidense', it: 'Dollaro statunitense', vi: 'USD', fr: 'USD' })}
             </div>
             <Link to="/merchant/apply" className="merchant-banner-btn">
-              {lang === 'zh' ? '立即加入' : 'Join now'}
+              {tr(lang, { zh: '立即加入', en: 'Join now', de: 'Melden Sie sich jetzt an', ja: '今すぐ参加', ko: '지금 가입하세요', es: 'Únete ahora', it: 'Iscriviti adesso', vi: 'Tham gia ngay bây giờ', fr: 'Inscrivez-vous maintenant' })}
             </Link>
           </div>
         </div>
@@ -469,13 +431,13 @@ const Home: React.FC = () => {
       <section className="section">
         <div className="section-header">
           <h2 className="section-title">
-            {lang === 'zh' ? '推荐产品' : 'Recommended products'}
+            {tr(lang, { zh: '推荐产品', en: 'Recommended products', de: 'Empfohlene Produkte', ja: 'おすすめ商品', ko: '추천상품', es: 'Productos recomendados', it: 'Prodotti consigliati', vi: 'Sản phẩm được đề xuất', fr: 'Produits recommandés' })}
           </h2>
         </div>
         <div className="home-products-grid mall-product-grid card-grid">
           {recommendedProducts.length === 0 ? (
             <p className="home-section-empty">
-              {lang === 'zh' ? '暂无数据' : 'No data yet'}
+              {tr(lang, { zh: '暂无数据', en: 'No data yet', de: 'Noch keine Daten', ja: 'まだデータがありません', ko: '아직 데이터가 없습니다', es: 'Aún no hay datos', it: 'Nessun dato ancora', vi: 'Chưa có dữ liệu', fr: 'Aucune donnée pour l\'instant' })}
             </p>
           ) : (
             recommendedProducts.slice(0, HOME_PRODUCTS_MAX).map((item) => (
@@ -498,13 +460,13 @@ const Home: React.FC = () => {
       <section className="section">
         <div className="section-header">
           <h2 className="section-title">
-            {lang === 'zh' ? '推荐店铺' : 'Recommended shops'}
+            {tr(lang, { zh: '推荐店铺', en: 'Recommended shops', de: 'Empfohlene Geschäfte', ja: 'おすすめショップ', ko: '추천 매장', es: 'Tiendas recomendadas', it: 'Negozi consigliati', vi: 'Cửa hàng được đề xuất', fr: 'Magasins recommandés' })}
           </h2>
         </div>
         <div className="home-shops-grid">
           {recommendedShops.length === 0 ? (
             <p className="home-section-empty">
-              {lang === 'zh' ? '暂无数据' : 'No data yet'}
+              {tr(lang, { zh: '暂无数据', en: 'No data yet', de: 'Noch keine Daten', ja: 'まだデータがありません', ko: '아직 데이터가 없습니다', es: 'Aún no hay datos', it: 'Nessun dato ancora', vi: 'Chưa có dữ liệu', fr: 'Aucune donnée pour l\'instant' })}
             </p>
           ) : (
             homeShops.map((shop) => (
@@ -520,21 +482,21 @@ const Home: React.FC = () => {
                   <div className="shop-card-name">{shop.name}</div>
                   <div className="shop-card-stats">
                     <span>
-                      {lang === 'zh' ? '商品：' : 'Products: '}
+                      {tr(lang, { zh: '商品：', en: 'Products: ', de: 'Produkte:', ja: '製品：', ko: '제품:', es: 'Productos:', it: 'Prodotti:', vi: 'Các sản phẩm:', fr: 'Produits :' })}
                       {shop.products}
                     </span>
                     <span>
-                      {lang === 'zh' ? '销量：' : 'Sales: '}
+                      {tr(lang, { zh: '销量：', en: 'Sales: ', de: 'Verkäufe:', ja: '販売:', ko: '매상:', es: 'Ventas:', it: 'Saldi:', vi: 'Việc bán hàng:', fr: 'Ventes:' })}
                       {shop.sales.toLocaleString()}
                     </span>
                     <span>
-                      {lang === 'zh' ? '好评率：' : 'Good rate: '}
+                      {tr(lang, { zh: '好评率：', en: 'Good rate: ', de: 'Guter Preis:', ja: '良いレート:', ko: '좋은 요금:', es: 'Buen precio:', it: 'Buon tasso:', vi: 'Tỷ lệ tốt:', fr: 'Bon tarif :' })}
                       {shop.goodRate}%
                     </span>
                   </div>
                 </div>
                 <Link to={`/shops/${shop.id}`} className="shop-card-btn">
-                  {lang === 'zh' ? '访问商店 >' : 'Visit shop >'}
+                  {tr(lang, { zh: '访问商店 >', en: 'Visit shop >', de: 'Besuchen Sie den Shop >', ja: 'ショップにアクセス >', ko: '매장 방문 >', es: 'Visitar tienda >', it: 'Visita il negozio >', vi: 'Ghé thăm cửa hàng >', fr: 'Visitez la boutique >' })}
                 </Link>
               </div>
             ))
@@ -545,13 +507,13 @@ const Home: React.FC = () => {
       <section className="section">
         <div className="section-header">
           <h2 className="section-title">
-            {lang === 'zh' ? '热销推荐' : 'Hot sales'}
+            {tr(lang, { zh: '热销推荐', en: 'Hot sales', de: 'Heiße Verkäufe', ja: '熱い販売', ko: '뜨거운 판매', es: 'Ventas calientes', it: 'Vendite calde', vi: 'Bán hàng nóng', fr: 'Ventes chaudes' })}
           </h2>
         </div>
         <div className="home-products-grid mall-product-grid card-grid">
           {hotSales.length === 0 ? (
             <p className="home-section-empty">
-              {lang === 'zh' ? '暂无数据' : 'No data yet'}
+              {tr(lang, { zh: '暂无数据', en: 'No data yet', de: 'Noch keine Daten', ja: 'まだデータがありません', ko: '아직 데이터가 없습니다', es: 'Aún no hay datos', it: 'Nessun dato ancora', vi: 'Chưa có dữ liệu', fr: 'Aucune donnée pour l\'instant' })}
             </p>
           ) : (
             hotSales.slice(0, HOME_PRODUCTS_MAX).map((item) => (
@@ -573,31 +535,31 @@ const Home: React.FC = () => {
 
       <section
         className="section service-features"
-        aria-label={lang === 'zh' ? '服务保障' : 'Service guarantees'}
+        aria-label={tr(lang, { zh: '服务保障', en: 'Service guarantees', de: 'Servicegarantien', ja: 'サービス保証', ko: '서비스 보증', es: 'Garantías de servicio', it: 'Garanzie di servizio', vi: 'Đảm bảo dịch vụ', fr: 'Garanties de services' })}
       >
         <div className="service-features-inner">
           <div className="service-feature-item">
             <img src={iconZhengpin} alt="" className="service-feature-icon" />
             <span className="service-feature-label">
-              {lang === 'zh' ? '100% 正品' : '100% authentic'}
+              {tr(lang, { zh: '100% 正品', en: '100% authentic', de: '100 % authentisch', ja: '100%本物', ko: '100% 정품', es: '100% autentico', it: '100% autentico', vi: '100% xác thực', fr: '100% authentique' })}
             </span>
           </div>
           <div className="service-feature-item">
             <img src={iconTuihuo} alt="" className="service-feature-icon" />
             <span className="service-feature-label">
-              {lang === 'zh' ? '7 天退货' : '7‑day returns'}
+              {tr(lang, { zh: '7 天退货', en: '7‑day returns', de: '7-tägige Rückgabefrist', ja: '7日間返品可能', ko: '7일 반품', es: 'Devoluciones en 7 días', it: 'Resi entro 7 giorni', vi: 'Trả lại 7 ngày', fr: 'Retours sous 7 jours' })}
             </span>
           </div>
           <div className="service-feature-item">
             <img src={iconYunshu} alt="" className="service-feature-icon" />
             <span className="service-feature-label">
-              {lang === 'zh' ? '运费折扣' : 'Shipping discounts'}
+              {tr(lang, { zh: '运费折扣', en: 'Shipping discounts', de: 'Versandrabatte', ja: '送料割引', ko: '배송비 할인', es: 'Descuentos de envío', it: 'Sconti sulla spedizione', vi: 'Giảm giá vận chuyển', fr: 'Remises sur les frais d\'expédition' })}
             </span>
           </div>
           <div className="service-feature-item">
             <img src={iconZhifu} alt="" className="service-feature-icon" />
             <span className="service-feature-label">
-              {lang === 'zh' ? '安全支付' : 'Secure payment'}
+              {tr(lang, { zh: '安全支付', en: 'Secure payment', de: 'Sichere Zahlung', ja: '安全な支払い', ko: '안전한 결제', es: 'Pago seguro', it: 'Pagamento sicuro', vi: 'Thanh toán an toàn', fr: 'Paiement sécurisé' })}
             </span>
           </div>
         </div>

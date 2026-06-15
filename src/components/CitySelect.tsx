@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getCities } from '../constants/countryRegions'
+import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
 
 interface CitySelectProps {
   countryCode: string
@@ -15,9 +17,32 @@ const CitySelect: React.FC<CitySelectProps> = ({
   regionValue,
   value,
   onChange,
-  placeholder = '城市',
+  placeholder,
   disabled = false,
 }) => {
+  const { lang } = useLang()
+  const resolvedPlaceholder = placeholder ?? tr(lang, {
+    zh: '城市',
+    en: 'City',
+    de: 'Stadt',
+    ja: '都市',
+    ko: '도시',
+    es: 'Ciudad',
+    it: 'Città',
+    vi: 'Thành phố',
+    fr: 'Ville',
+  })
+  const searchPlaceholder = tr(lang, {
+    zh: '输入城市搜索',
+    en: 'Search city',
+    de: 'Stadt suchen',
+    ja: '都市を検索',
+    ko: '도시 검색',
+    es: 'Buscar ciudad',
+    it: 'Cerca città',
+    vi: 'Tìm thành phố',
+    fr: 'Rechercher une ville',
+  })
   const [open, setOpen] = useState(false)
   const [keyword, setKeyword] = useState('')
   const wrapperRef = useRef<HTMLDivElement | null>(null)
@@ -43,7 +68,6 @@ const CitySelect: React.FC<CitySelectProps> = ({
         opt.label.toLowerCase().includes(filterText) ||
         opt.value.toLowerCase().includes(filterText),
     )
-    // 无数据国家仅有一项「—」时，搜索后也保留该项，避免列表为空
     if (filtered.length === 0 && fallbackOption) return [fallbackOption]
     return filtered
   })()
@@ -66,14 +90,14 @@ const CitySelect: React.FC<CitySelectProps> = ({
         disabled={disabled}
         onClick={() => !disabled && setOpen((prev) => !prev)}
       >
-        {selectedLabel || placeholder}
+        {selectedLabel || resolvedPlaceholder}
       </button>
       {open && !disabled && (
         <div className="phone-code-dropdown">
           <div className="phone-code-dropdown-search">
             <input
               className="phone-code-dropdown-search-input"
-              placeholder="输入城市搜索"
+              placeholder={searchPlaceholder}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />

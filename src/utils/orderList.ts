@@ -1,4 +1,5 @@
-/** 订单内商品快照（与购物车项结构一致，便于恢复购物车） */
+import type { Lang } from '../i18n/lang'
+import { tr, type TrMap } from '../i18n/tr'
 export type OrderItemSnapshot = {
   id: string
   title: string
@@ -111,35 +112,21 @@ export function getOrderById(orderId: string): Order | null {
   return loadRaw().find((o) => o.id === orderId) ?? null
 }
 
-export const ORDER_STATUS_LABEL_ZH: Record<OrderStatus, string> = {
-  pending: '待支付',
-  shipping: '待发货',
-  outbound: '正在出库',
-  transit: '正在配送',
-  signed: '已签收',
-  completed: '订单完成',
-  return_pending: '申请退货',
-  returned: '已退货',
-  refund_pending: '正在退款',
-  refunded: '已退款',
-  cancelled: '已取消',
+const ORDER_STATUS_TEXT: Record<OrderStatus, TrMap> = {
+  pending: { zh: '待支付', en: 'To pay', de: 'Zu zahlen', ja: '支払い待ち', ko: '결제 대기', es: 'Por pagar', it: 'Da pagare', vi: 'Chờ thanh toán', fr: 'À payer' },
+  shipping: { zh: '待发货', en: 'To ship', de: 'Zu versenden', ja: '発送待ち', ko: '발송 대기', es: 'Por enviar', it: 'Da spedire', vi: 'Chờ giao hàng', fr: 'À expédier' },
+  outbound: { zh: '正在出库', en: 'Preparing shipment', de: 'Versand wird vorbereitet', ja: '出庫処理中', ko: '출고 중', es: 'Preparando envío', it: 'Preparazione spedizione', vi: 'Đang xuất kho', fr: 'Préparation de l\'expédition' },
+  transit: { zh: '正在配送', en: 'In transit', de: 'Unterwegs', ja: '配送中', ko: '배송 중', es: 'En tránsito', it: 'In transito', vi: 'Đang giao', fr: 'En cours de livraison' },
+  signed: { zh: '已签收', en: 'Delivered', de: 'Zugestellt', ja: '受取済み', ko: '수령 완료', es: 'Entregado', it: 'Consegnato', vi: 'Đã nhận', fr: 'Livré' },
+  completed: { zh: '订单完成', en: 'Completed', de: 'Abgeschlossen', ja: '完了', ko: '완료', es: 'Completado', it: 'Completato', vi: 'Hoàn tất', fr: 'Terminé' },
+  return_pending: { zh: '申请退货', en: 'Return requested', de: 'Rückgabe beantragt', ja: '返品申請中', ko: '반품 신청', es: 'Devolución solicitada', it: 'Reso richiesto', vi: 'Yêu cầu trả hàng', fr: 'Retour demandé' },
+  returned: { zh: '已退货', en: 'Returned', de: 'Zurückgegeben', ja: '返品済み', ko: '반품 완료', es: 'Devuelto', it: 'Restituito', vi: 'Đã trả hàng', fr: 'Retourné' },
+  refund_pending: { zh: '正在退款', en: 'Refund pending', de: 'Rückerstattung ausstehend', ja: '返金処理中', ko: '환불 처리 중', es: 'Reembolso pendiente', it: 'Rimborso in attesa', vi: 'Đang hoàn tiền', fr: 'Remboursement en cours' },
+  refunded: { zh: '已退款', en: 'Refunded', de: 'Erstattet', ja: '返金済み', ko: '환불 완료', es: 'Reembolsado', it: 'Rimborsato', vi: 'Đã hoàn tiền', fr: 'Remboursé' },
+  cancelled: { zh: '已取消', en: 'Cancelled', de: 'Storniert', ja: 'キャンセル済み', ko: '취소됨', es: 'Cancelado', it: 'Annullato', vi: 'Đã hủy', fr: 'Annulé' },
 }
 
-export const ORDER_STATUS_LABEL_EN: Record<OrderStatus, string> = {
-  pending: 'To pay',
-  shipping: 'To ship',
-  outbound: 'Preparing shipment',
-  transit: 'In transit',
-  signed: 'Delivered',
-  completed: 'Completed',
-  return_pending: 'Return requested',
-  returned: 'Returned',
-  refund_pending: 'Refund pending',
-  refunded: 'Refunded',
-  cancelled: 'Cancelled',
-}
-
-export function getOrderStatusLabel(status: OrderStatus, lang: 'zh' | 'en'): string {
-  const map = lang === 'zh' ? ORDER_STATUS_LABEL_ZH : ORDER_STATUS_LABEL_EN
-  return map[status] ?? status
+export function getOrderStatusLabel(status: OrderStatus, lang: Lang): string {
+  const labels = ORDER_STATUS_TEXT[status]
+  return labels ? tr(lang, labels) : status
 }

@@ -8,6 +8,8 @@ import { useToast } from './ToastProvider'
 import { AVATAR_STORAGE_KEY, AVATAR_OPTIONS } from '../utils/avatarOptions'
 import { api } from '../api/client'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 type AccountNavKey =
   | 'wallet'
@@ -47,7 +49,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
   const handleSelectAvatar = useCallback((url: string) => {
     const uid = authUser?.id
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.patch(`/api/users/${uid}`, { avatar: url })
@@ -57,9 +59,9 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
         window.localStorage.setItem(AVATAR_STORAGE_KEY, url)
         setAvatarUrl(url)
         setAvatarPickerOpen(false)
-        showToast(lang === 'zh' ? '头像已更换' : 'Avatar updated')
+        showToast(tr(lang, { zh: '头像已更换', en: 'Avatar updated', de: 'Avatar aktualisiert', ja: 'アバターが更新されました', ko: '아바타가 업데이트되었습니다.', es: 'Avatar actualizado', it: 'Avatar aggiornato', vi: 'Đã cập nhật hình đại diện', fr: 'Avatar mis à jour' }))
       })
-      .catch(() => showToast(lang === 'zh' ? '头像保存失败' : 'Failed to save avatar', 'error'))
+      .catch(() => showToast(tr(lang, { zh: '头像保存失败', en: 'Failed to save avatar', de: 'Avatar konnte nicht gespeichert werden', ja: 'アバターの保存に失敗しました', ko: '아바타를 저장하지 못했습니다.', es: 'No se pudo guardar el avatar', it: 'Impossibile salvare l\'avatar', vi: 'Không lưu được hình đại diện', fr: 'Échec de l\'enregistrement de l\'avatar' }), 'error'))
   }, [showToast, authUser, lang])
 
   const displayAuthValue = (v: string | undefined) => (v && typeof v === 'string' ? v : '')
@@ -67,7 +69,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
   // 商城登录存 value，商家登录存 account
   const userLabel = authUser
     ? displayAuthValue(authUser.value ?? authUser.account)
-    : (lang === 'zh' ? '未登录用户' : 'Guest user')
+    : (tr(lang, { zh: '未登录用户', en: 'Guest user', de: 'Gastbenutzer', ja: 'ゲストユーザー', ko: '게스트 사용자', es: 'Usuario invitado', it: 'Utente ospite', vi: 'Người dùng khách', fr: 'Utilisateur invité' }))
 
   const userId = authUser?.id ?? ''
   const displayId = userId || (authUser?.account ?? authUser?.value) || '—'
@@ -78,13 +80,13 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
       navigator.clipboard
         .writeText(toCopy)
         .then(() => {
-          showToast(lang === 'zh' ? '复制成功' : 'Copied')
+          showToast(tr(lang, { zh: '复制成功', en: 'Copied', de: 'Kopiert', ja: 'コピーされました', ko: '복사됨', es: 'Copiado', it: 'Copiato', vi: 'Đã sao chép', fr: 'Copié' }))
         })
         .catch(() => {
-          showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+          showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
         })
     } else {
-      showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+      showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
     }
   }
 
@@ -104,7 +106,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           type="button"
           className="account-avatar account-avatar-btn"
           onClick={() => setAvatarPickerOpen(true)}
-          aria-label={lang === 'zh' ? '更换头像' : 'Change avatar'}
+          aria-label={tr(lang, { zh: '更换头像', en: 'Change avatar', de: 'Avatar ändern', ja: 'アバターの変更', ko: '아바타 변경', es: 'Cambiar avatar', it: 'Cambia avatar', vi: 'Thay đổi hình đại diện', fr: 'Changer d\'avatar' })}
         >
           {avatarUrl ? (
             <img src={avatarUrl} alt="" className="account-avatar-img" />
@@ -116,17 +118,17 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
         </button>
         <div className="account-profile-main">
           <div className="account-profile-name">
-            {userLabel || (lang === 'zh' ? '账户' : 'Account')}
+            {userLabel || (tr(lang, { zh: '账户', en: 'Account', de: 'Konto', ja: 'アカウント', ko: '계정', es: 'Cuenta', it: 'Account', vi: 'Tài khoản', fr: 'Compte' }))}
           </div>
           <div className="account-profile-id">
             <span className="account-profile-id-label">
-              {lang === 'zh' ? '账户ID：' : 'Account ID: '}
+              {tr(lang, { zh: '账户ID：', en: 'Account ID: ', de: 'Konto-ID:', ja: 'アカウントID:', ko: '계정 ID:', es: 'ID de cuenta:', it: 'ID conto:', vi: 'ID tài khoản:', fr: 'Identifiant du compte :' })}
             </span>
             <span className="account-profile-id-value">{displayId}</span>
             <button
               type="button"
               className="account-id-copy"
-              aria-label={lang === 'zh' ? '复制账户ID' : 'Copy account ID'}
+              aria-label={tr(lang, { zh: '复制账户ID', en: 'Copy account ID', de: 'Konto-ID kopieren', ja: 'アカウントIDをコピーする', ko: '계정 ID 복사', es: 'Copiar ID de cuenta', it: 'Copia l\'ID dell\'account', vi: 'Sao chép ID tài khoản', fr: 'Copier l\'identifiant du compte' })}
               onClick={handleCopyId}
               disabled={!displayId || displayId === '—'}
             >
@@ -169,12 +171,12 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           <span className="account-nav-icon account-nav-icon--wallet">
             <img
               src={walletIcon}
-              alt={lang === 'zh' ? '我的钱包' : 'My wallet'}
+              alt={tr(lang, { zh: '我的钱包', en: 'My wallet', de: 'Meine Brieftasche', ja: '私の財布', ko: '내 지갑', es: 'mi billetera', it: 'Il mio portafoglio', vi: 'Ví của tôi', fr: 'Mon portefeuille' })}
               className="account-nav-wallet-img"
             />
           </span>
           <span className="account-nav-label">
-            {lang === 'zh' ? '我的钱包' : 'My wallet'}
+            {tr(lang, { zh: '我的钱包', en: 'My wallet', de: 'Meine Brieftasche', ja: '私の財布', ko: '내 지갑', es: 'mi billetera', it: 'Il mio portafoglio', vi: 'Ví của tôi', fr: 'Mon portefeuille' })}
           </span>
         </button>
         <button
@@ -185,12 +187,12 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           <span className="account-nav-icon account-nav-icon--order">
             <img
               src={orderIcon}
-              alt={lang === 'zh' ? '我的订单' : 'My orders'}
+              alt={tr(lang, { zh: '我的订单', en: 'My orders', de: 'Meine Bestellungen', ja: '私の注文', ko: '내 주문', es: 'mis pedidos', it: 'I miei ordini', vi: 'Đơn đặt hàng của tôi', fr: 'Mes commandes' })}
               className="account-nav-order-img"
             />
           </span>
           <span className="account-nav-label">
-            {lang === 'zh' ? '我的订单' : 'My orders'}
+            {tr(lang, { zh: '我的订单', en: 'My orders', de: 'Meine Bestellungen', ja: '私の注文', ko: '내 주문', es: 'mis pedidos', it: 'I miei ordini', vi: 'Đơn đặt hàng của tôi', fr: 'Mes commandes' })}
           </span>
         </button>
         <button
@@ -201,12 +203,12 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           <span className="account-nav-icon account-nav-icon--favorite">
             <img
               src={favoriteIcon}
-              alt={lang === 'zh' ? '商品收藏' : 'Product favorites'}
+              alt={tr(lang, { zh: '商品收藏', en: 'Product favorites', de: 'Produktfavoriten', ja: '製品のお気に入り', ko: '제품 즐겨찾기', es: 'Productos favoritos', it: 'Preferiti dei prodotti', vi: 'Sản phẩm yêu thích', fr: 'Produits favoris' })}
               className="account-nav-favorite-img"
             />
           </span>
           <span className="account-nav-label">
-            {lang === 'zh' ? '商品收藏' : 'Product favorites'}
+            {tr(lang, { zh: '商品收藏', en: 'Product favorites', de: 'Produktfavoriten', ja: '製品のお気に入り', ko: '제품 즐겨찾기', es: 'Productos favoritos', it: 'Preferiti dei prodotti', vi: 'Sản phẩm yêu thích', fr: 'Produits favoris' })}
           </span>
         </button>
         <button
@@ -217,12 +219,12 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           <span className="account-nav-icon account-nav-icon--shop-fav">
             <img
               src={shopFavIcon}
-              alt={lang === 'zh' ? '关注店铺' : 'Followed shops'}
+              alt={tr(lang, { zh: '关注店铺', en: 'Followed shops', de: 'Gefolgte Geschäfte', ja: 'フォローしたお店', ko: '팔로우한 상점', es: 'Tiendas seguidas', it: 'Negozi seguiti', vi: 'Cửa hàng đã theo dõi', fr: 'Boutiques suivies' })}
               className="account-nav-shop-fav-img"
             />
           </span>
           <span className="account-nav-label">
-            {lang === 'zh' ? '关注店铺' : 'Followed shops'}
+            {tr(lang, { zh: '关注店铺', en: 'Followed shops', de: 'Gefolgte Geschäfte', ja: 'フォローしたお店', ko: '팔로우한 상점', es: 'Tiendas seguidas', it: 'Negozi seguiti', vi: 'Cửa hàng đã theo dõi', fr: 'Boutiques suivies' })}
           </span>
         </button>
         <button
@@ -233,12 +235,12 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           <span className="account-nav-icon account-nav-icon--settings">
             <img
               src={settingsIcon}
-              alt={lang === 'zh' ? '设置' : 'Settings'}
+              alt={tr(lang, { zh: '设置', en: 'Settings', de: 'Einstellungen', ja: '設定', ko: '설정', es: 'Ajustes', it: 'Impostazioni', vi: 'Cài đặt', fr: 'Paramètres' })}
               className="account-nav-settings-img"
             />
           </span>
           <span className="account-nav-label">
-            {lang === 'zh' ? '设置' : 'Settings'}
+            {tr(lang, { zh: '设置', en: 'Settings', de: 'Einstellungen', ja: '設定', ko: '설정', es: 'Ajustes', it: 'Impostazioni', vi: 'Cài đặt', fr: 'Paramètres' })}
           </span>
         </button>
       </nav>
@@ -259,13 +261,13 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
           >
             <div className="account-avatar-picker-head">
               <h2 id="account-avatar-picker-title" className="account-avatar-picker-title">
-                {lang === 'zh' ? '选择头像' : 'Choose avatar'}
+                {tr(lang, { zh: '选择头像', en: 'Choose avatar', de: 'Wählen Sie Avatar', ja: 'アバターを選択', ko: '아바타 선택', es: 'Elige avatar', it: 'Scegli l\'avatar', vi: 'Chọn hình đại diện', fr: 'Choisir un avatar' })}
               </h2>
               <button
                 type="button"
                 className="account-avatar-picker-close"
                 onClick={() => setAvatarPickerOpen(false)}
-                aria-label={lang === 'zh' ? '关闭' : 'Close'}
+                aria-label={tr(lang, { zh: '关闭', en: 'Close', de: 'Schließen', ja: '近い', ko: '닫다', es: 'Cerca', it: 'Vicino', vi: 'Đóng', fr: 'Fermer' })}
               >
                 ×
               </button>
@@ -277,7 +279,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeKey = 'wallet', o
                   type="button"
                   className={`account-avatar-option${avatarUrl === url ? ' account-avatar-option--selected' : ''}`}
                   onClick={() => handleSelectAvatar(url)}
-                  aria-label={lang === 'zh' ? '选择头像' : 'Choose avatar'}
+                  aria-label={tr(lang, { zh: '选择头像', en: 'Choose avatar', de: 'Wählen Sie Avatar', ja: 'アバターを選択', ko: '아바타 선택', es: 'Elige avatar', it: 'Scegli l\'avatar', vi: 'Chọn hình đại diện', fr: 'Choisir un avatar' })}
                 >
                   <img src={url} alt="" />
                 </button>

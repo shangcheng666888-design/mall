@@ -12,6 +12,9 @@ import { formatSkuAttrsDisplay, getAttrOptionsFromSkus, findSkuByAttrs, getSkuAt
 import SkuAttrSelect from '../components/SkuAttrSelect'
 import { useLang } from '../context/LangContext'
 import { sanitizeHtml } from '../utils/sanitizeHtml'
+import { tr } from '../i18n'
+import { translateSubcategoryName } from './Categories'
+
 
 interface ListingSku {
   sku_id: string
@@ -90,7 +93,7 @@ const ProductDetail: React.FC = () => {
   useEffect(() => {
     if (!id) {
       setLoading(false)
-      setError(lang === 'zh' ? '缺少商品 ID' : 'Missing product ID')
+      setError(tr(lang, { zh: '缺少商品 ID', en: 'Missing product ID', de: 'Fehlende Produkt-ID', ja: '製品IDがありません', ko: '제품 ID가 누락되었습니다.', es: 'Falta ID de producto', it: 'ID prodotto mancante', vi: 'Thiếu ID sản phẩm', fr: 'ID de produit manquant' }))
       return
     }
     let cancelled = false
@@ -238,7 +241,7 @@ const ProductDetail: React.FC = () => {
     const needsSpec = attrSelectors.length > 0 && !selectedSku
     if (needsSpec) {
       showToast(
-        lang === 'zh' ? '请先选择规格' : 'Please select a variant first',
+        tr(lang, { zh: '请先选择规格', en: 'Please select a variant first', de: 'Bitte wählen Sie zunächst eine Variante aus', ja: '最初にバリエーションを選択してください', ko: '먼저 변형을 선택하세요.', es: 'Por favor seleccione una variante primero', it: 'Seleziona prima una variante', vi: 'Vui lòng chọn một biến thể trước', fr: 'Veuillez d\'abord sélectionner une variante' }),
         'error',
       )
       return
@@ -249,14 +252,14 @@ const ProductDetail: React.FC = () => {
         const uid = raw ? (JSON.parse(raw) as { id?: string })?.id : null
         if (!uid) {
           showToast(
-            lang === 'zh' ? '请先登录后再购买' : 'Please log in before purchasing',
+            tr(lang, { zh: '请先登录后再购买', en: 'Please log in before purchasing', de: 'Bitte melden Sie sich vor dem Kauf an', ja: '購入する前にログインしてください', ko: '구매 전 로그인해주세요', es: 'Por favor inicia sesión antes de comprar', it: 'Effettua il login prima dell\'acquisto', vi: 'Vui lòng đăng nhập trước khi mua', fr: 'Veuillez vous connecter avant d\'acheter' }),
             'error',
           )
           navigate('/login', { state: { from: '/checkout' } })
           return
         }
       } catch {
-        showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+        showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
         navigate('/login', { state: { from: '/checkout' } })
         return
       }
@@ -312,15 +315,15 @@ const ProductDetail: React.FC = () => {
           type="button"
           className="product-detail-mobile-back"
           onClick={handleBack}
-          aria-label={lang === 'zh' ? '返回' : 'Back'}
+          aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
         >
           <span className="product-detail-mobile-back-icon" aria-hidden>←</span>
           <span className="product-detail-mobile-back-text">
-            {lang === 'zh' ? '返回' : 'Back'}
+            {tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
           </span>
         </button>
         <div className="product-detail-main" style={{ padding: '2rem', textAlign: 'center' }}>
-          {lang === 'zh' ? '加载中…' : 'Loading…'}
+          {tr(lang, { zh: '加载中…', en: 'Loading…', de: 'Laden…', ja: '読み込み中…', ko: '로드 중…', es: 'Cargando…', it: 'Caricamento…', vi: 'Đang tải…', fr: 'Chargement…' })}
         </div>
       </div>
     )
@@ -335,22 +338,20 @@ const ProductDetail: React.FC = () => {
           type="button"
           className="product-detail-mobile-back"
           onClick={handleBack}
-          aria-label={lang === 'zh' ? '返回' : 'Back'}
+          aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
         >
           <span className="product-detail-mobile-back-icon" aria-hidden>←</span>
           <span className="product-detail-mobile-back-text">
-            {lang === 'zh' ? '返回' : 'Back'}
+            {tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
           </span>
         </button>
         <div className="product-detail-main" style={{ padding: '2rem', textAlign: 'center' }}>
           <p>
             {error ||
-              (lang === 'zh'
-                ? '商品不存在或已下架'
-                : 'Product does not exist or has been removed')}
+              (tr(lang, { zh: '商品不存在或已下架', en: 'Product does not exist or has been removed', de: 'Das Produkt existiert nicht oder wurde entfernt', ja: '製品が存在しないか、削除されました', ko: '제품이 존재하지 않거나 제거되었습니다.', es: 'El producto no existe o ha sido eliminado', it: 'Il prodotto non esiste o è stato rimosso', vi: 'Sản phẩm không tồn tại hoặc đã bị xóa', fr: 'Le produit n\'existe pas ou a été supprimé' }))}
           </p>
           <Link to="/products" className="product-detail-back-link">
-            {lang === 'zh' ? '< 返回商品列表' : '< Back to product list'}
+            {tr(lang, { zh: '< 返回商品列表', en: '< Back to product list', de: '< Zurück zur Produktliste', ja: '< 製品一覧に戻る', ko: '< 상품목록으로 돌아가기', es: '< Volver a la lista de productos', it: '< Torna all\'elenco dei prodotti', vi: '< Quay lại danh sách sản phẩm', fr: '< Retour à la liste des produits' })}
           </Link>
         </div>
       </div>
@@ -364,11 +365,11 @@ const ProductDetail: React.FC = () => {
         type="button"
         className="product-detail-mobile-back"
         onClick={handleBack}
-        aria-label={lang === 'zh' ? '返回' : 'Back'}
+        aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
       >
         <span className="product-detail-mobile-back-icon" aria-hidden>←</span>
         <span className="product-detail-mobile-back-text">
-          {lang === 'zh' ? '返回' : 'Back'}
+          {tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
         </span>
       </button>
       <div className="product-detail-main">
@@ -402,41 +403,44 @@ const ProductDetail: React.FC = () => {
         <div className="product-detail-info">
           <h1 className="product-detail-title">{listing.title}</h1>
           <div className="product-detail-subtitle">
-            {lang === 'zh'
+            {lang === 'zh' || lang === 'tw'
               ? getCategoryNameZh(listing.subCategory) ||
                 getCategoryNameZh(listing.category) ||
                 listing.subCategory ||
                 listing.category
-              : listing.subCategory || listing.category}
+              : (() => {
+                  const first = listing.subCategory || listing.category
+                  if (!first) return ''
+                  const hasChinese = /[\u4e00-\u9fa5]/.test(first)
+                  return hasChinese ? translateSubcategoryName(lang, first) : first
+                })()}
           </div>
 
           <div className="product-detail-field-list">
             <div className="product-detail-field">
               <span className="product-detail-field-label">
-                {lang === 'zh' ? '零售价' : 'Retail price'}
+                {tr(lang, { zh: '零售价', en: 'Retail price', de: 'Verkaufspreis', ja: '小売価格', ko: '소매가', es: 'Precio al por menor', it: 'Prezzo al dettaglio', vi: 'Giá bán lẻ', fr: 'Prix ​​en détail' })}
               </span>
               <span className="product-detail-price-value">${unitPrice.toFixed(2)}</span>
             </div>
             <div className="product-detail-field">
               <span className="product-detail-field-label">
-                {lang === 'zh' ? '发货' : 'Shipping time'}
+                {tr(lang, { zh: '发货', en: 'Shipping time', de: 'Lieferzeit', ja: '配送時間', ko: '배송 시간', es: 'Tiempo de envío', it: 'Tempo di spedizione', vi: 'thời gian vận chuyển', fr: 'Délai d\'expédition' })}
               </span>
               <span className="product-detail-field-value">
-                {lang === 'zh'
-                  ? '商品下单后，24 小时内发货。如下单存在物流管控，订单可能被延时发货，请留意订单物流信息或联系客服'
-                  : 'Orders are shipped within 24 hours after payment. If there are logistics controls, delivery may be delayed — please follow the tracking info or contact support.'}
+                {tr(lang, { zh: '商品下单后，24 小时内发货。如下单存在物流管控，订单可能被延时发货，请留意订单物流信息或联系客服', en: 'Orders are shipped within 24 hours after payment. If there are logistics controls, delivery may be delayed — please follow the tracking info or contact support.', de: 'Bestellungen werden innerhalb von 24 Stunden nach Zahlungseingang versendet. Bei Logistikkontrollen kann sich die Lieferung verzögern. Bitte befolgen Sie die Informationen zur Sendungsverfolgung oder wenden Sie sich an den Support.', ja: '注文は支払い後24時間以内に発送されます。物流管理がある場合、配送が遅れる可能性があります。追跡情報に従うか、サポートにお問い合わせください。', ko: '주문은 결제 후 24시간 이내에 배송됩니다. 물류 통제가 있는 경우 배송이 지연될 수 있습니다. 추적 정보를 따르거나 지원팀에 문의하세요.', es: 'Los pedidos se envían dentro de las 24 horas posteriores al pago. Si hay controles logísticos, la entrega puede retrasarse; siga la información de seguimiento o comuníquese con el soporte.', it: 'Gli ordini vengono spediti entro 24 ore dal pagamento. Se sono presenti controlli logistici, la consegna potrebbe subire ritardi: segui le informazioni di tracciamento o contatta l\'assistenza.', vi: 'Đơn đặt hàng được vận chuyển trong vòng 24 giờ sau khi thanh toán. Nếu có biện pháp kiểm soát hậu cần, việc giao hàng có thể bị trì hoãn - vui lòng làm theo thông tin theo dõi hoặc liên hệ với bộ phận hỗ trợ.', fr: 'Les commandes sont expédiées dans les 24 heures après le paiement. S\'il y a des contrôles logistiques, la livraison peut être retardée — veuillez suivre les informations de suivi ou contacter l\'assistance.' })}
               </span>
             </div>
             <div className="product-detail-field">
               <span className="product-detail-field-label">
-                {lang === 'zh' ? '运费' : 'Shipping fee'}
+                {tr(lang, { zh: '运费', en: 'Shipping fee', de: 'Versandkosten', ja: '送料', ko: '배송비', es: 'Tarifa de envío', it: 'Spese di spedizione', vi: 'Phí vận chuyển', fr: 'Frais d\'expédition' })}
               </span>
               <span className="product-detail-field-value product-detail-freight">
-                {lang === 'zh' ? '免运费' : 'Free shipping'}
+                {tr(lang, { zh: '免运费', en: 'Free shipping', de: 'Kostenloser Versand', ja: '送料無料', ko: '무료 배송', es: 'Envío gratis', it: 'Spedizione gratuita', vi: 'miễn phí vận chuyển', fr: 'Livraison gratuite' })}
                 <span className="product-detail-info-icon-wrapper">
                   <span className="product-detail-info-icon" aria-hidden="true">i</span>
                   <div className="product-detail-info-tooltip">
-                    {lang === 'zh' ? (
+                    {lang === 'zh' || lang === 'tw' ? (
                       <>
                         1、跨境商品运费构成：运费=派送费+长途运费+送货费<br />
                         2、如不满足包邮条件，按实际收取运费产品<br />
@@ -506,7 +510,7 @@ const ProductDetail: React.FC = () => {
             )}
             <div className="product-detail-field">
               <span className="product-detail-field-label">
-                {lang === 'zh' ? '数量' : 'Quantity'}
+                {tr(lang, { zh: '数量', en: 'Quantity', de: 'Menge', ja: '量', ko: '수량', es: 'Cantidad', it: 'Quantità', vi: 'Số lượng', fr: 'Quantité' })}
               </span>
               <div className="product-detail-field-value">
                 <div className="product-detail-qty-control">
@@ -520,7 +524,7 @@ const ProductDetail: React.FC = () => {
                     onChange={handleQtyInputChange}
                     onBlur={handleQtyInputBlur}
                     min={1}
-                    aria-label={lang === 'zh' ? '数量' : 'Quantity'}
+                    aria-label={tr(lang, { zh: '数量', en: 'Quantity', de: 'Menge', ja: '量', ko: '수량', es: 'Cantidad', it: 'Quantità', vi: 'Số lượng', fr: 'Quantité' })}
                   />
                   <button type="button" className="product-detail-qty-btn" onClick={() => handleQuantityChange('inc')}>+</button>
                 </div>
@@ -528,7 +532,7 @@ const ProductDetail: React.FC = () => {
             </div>
             <div className="product-detail-field">
               <span className="product-detail-field-label">
-                {lang === 'zh' ? '总价' : 'Total'}
+                {tr(lang, { zh: '总价', en: 'Total', de: 'Gesamt', ja: '合計', ko: '총', es: 'Total', it: 'Totale', vi: 'Tổng cộng', fr: 'Total' })}
               </span>
               <span className="product-detail-field-value product-detail-total">
                 ${(unitPrice * quantity).toFixed(2)}
@@ -542,14 +546,14 @@ const ProductDetail: React.FC = () => {
               className="product-detail-btn product-detail-btn-primary"
               onClick={() => handleAddToCart(true)}
             >
-              {lang === 'zh' ? '立即购买' : 'Buy now'}
+              {tr(lang, { zh: '立即购买', en: 'Buy now', de: 'Jetzt kaufen', ja: '今すぐ購入', ko: '지금 구매', es: 'Comprar ahora', it: 'Acquista ora', vi: 'Mua ngay', fr: 'Acheter maintenant' })}
             </button>
             <button
               type="button"
               className="product-detail-btn product-detail-btn-secondary"
               onClick={() => handleAddToCart(false)}
             >
-              {lang === 'zh' ? '添加购物车' : 'Add to cart'}
+              {tr(lang, { zh: '添加购物车', en: 'Add to cart', de: 'In den Warenkorb legen', ja: 'カートに追加', ko: '장바구니에 추가', es: 'Añadir a la cesta', it: 'Aggiungi al carrello', vi: 'Thêm vào giỏ hàng', fr: 'Ajouter au panier' })}
             </button>
           </div>
         </div>
@@ -558,7 +562,7 @@ const ProductDetail: React.FC = () => {
       {description && (
         <section className="product-detail-desc">
           <h2 className="product-detail-desc-title">
-            {lang === 'zh' ? '商品描述' : 'Product description'}
+            {tr(lang, { zh: '商品描述', en: 'Product description', de: 'Produktbeschreibung', ja: '製品説明', ko: '상품 설명', es: 'Descripción del Producto', it: 'Descrizione del prodotto', vi: 'Mô tả sản phẩm', fr: 'Description du produit' })}
           </h2>
           <div
             className="product-detail-desc-body"
@@ -570,17 +574,17 @@ const ProductDetail: React.FC = () => {
       <section className="product-detail-reviews">
         <div className="product-detail-reviews-header">
           <h2 className="product-detail-reviews-title">
-            {lang === 'zh' ? '用户评价 (0)' : 'Reviews (0)'}
+            {tr(lang, { zh: '用户评价 (0)', en: 'Reviews (0)', de: 'Bewertungen (0)', ja: 'レビュー (0)', ko: '리뷰 (0)', es: 'Reseñas (0)', it: 'Recensioni (0)', vi: 'Đánh giá (0)', fr: 'Avis (0)' })}
           </h2>
         </div>
         <div className="product-detail-reviews-body">
           <img
             src={reviewsEmpty}
-            alt={lang === 'zh' ? '暂无评价' : 'No reviews yet'}
+            alt={tr(lang, { zh: '暂无评价', en: 'No reviews yet', de: 'Noch keine Bewertungen', ja: 'まだレビューはありません', ko: '아직 리뷰가 없습니다', es: 'Aún no hay reseñas', it: 'Nessuna recensione ancora', vi: 'Chưa có đánh giá nào', fr: 'Aucun avis pour l\'instant' })}
             className="product-detail-reviews-empty-icon"
           />
           <div className="product-detail-reviews-empty-text">
-            {lang === 'zh' ? '暂无评价' : 'No reviews yet'}
+            {tr(lang, { zh: '暂无评价', en: 'No reviews yet', de: 'Noch keine Bewertungen', ja: 'まだレビューはありません', ko: '아직 리뷰가 없습니다', es: 'Aún no hay reseñas', it: 'Nessuna recensione ancora', vi: 'Chưa có đánh giá nào', fr: 'Aucun avis pour l\'instant' })}
           </div>
         </div>
       </section>
@@ -599,7 +603,7 @@ const ProductDetail: React.FC = () => {
           <div className="product-detail-shop-stat">
             <div className="product-detail-shop-stat-value">{shopInfo?.productCount ?? '—'}</div>
             <div className="product-detail-shop-stat-label">
-              {lang === 'zh' ? '全部商品' : 'All products'}
+              {tr(lang, { zh: '全部商品', en: 'All products', de: 'Alle Produkte', ja: 'すべての製品', ko: '모든 제품', es: 'Todos los productos', it: 'Tutti i prodotti', vi: 'Tất cả sản phẩm', fr: 'Tous les produits' })}
             </div>
           </div>
           <div className="product-detail-shop-stat">
@@ -607,22 +611,22 @@ const ProductDetail: React.FC = () => {
               {shopInfo?.goodRate != null ? `${shopInfo.goodRate}%` : '—'}
             </div>
             <div className="product-detail-shop-stat-label">
-              {lang === 'zh' ? '好评率' : 'Good rate'}
+              {tr(lang, { zh: '好评率', en: 'Good rate', de: 'Guter Preis', ja: '良いレート', ko: '좋은 요금', es: 'Buen precio', it: 'Buon prezzo', vi: 'Tỷ lệ tốt', fr: 'Bon tarif' })}
             </div>
           </div>
           <div className="product-detail-shop-stat">
             <div className="product-detail-shop-stat-value">{shopInfo != null ? String(shopInfo.followers) : '—'}</div>
             <div className="product-detail-shop-stat-label">
-              {lang === 'zh' ? '关注度' : 'Followers'}
+              {tr(lang, { zh: '关注度', en: 'Followers', de: 'Anhänger', ja: 'フォロワー', ko: '추종자', es: 'Seguidores', it: 'Seguaci', vi: 'Người theo dõi', fr: 'Abonnés' })}
             </div>
           </div>
         </div>
         <Link to={`/shops/${listing.shopId}`} className="product-detail-shop-btn">
-          {lang === 'zh' ? '访问商店 >' : 'Visit shop >'}
+          {tr(lang, { zh: '访问商店 >', en: 'Visit shop >', de: 'Besuchen Sie den Shop >', ja: 'ショップにアクセス >', ko: '매장 방문 >', es: 'Visitar tienda >', it: 'Visita il negozio >', vi: 'Ghé thăm cửa hàng >', fr: 'Visitez la boutique >' })}
         </Link>
         <div className="product-detail-shop-recommend">
           <h3 className="product-detail-shop-recommend-title">
-            {lang === 'zh' ? '推荐产品' : 'Recommended products'}
+            {tr(lang, { zh: '推荐产品', en: 'Recommended products', de: 'Empfohlene Produkte', ja: 'おすすめ商品', ko: '추천상품', es: 'Productos recomendados', it: 'Prodotti consigliati', vi: 'Sản phẩm được đề xuất', fr: 'Produits recommandés' })}
           </h3>
           <div className="product-detail-shop-recommend-list">
             {displayedRecommendations.length > 0 ? (
@@ -637,7 +641,7 @@ const ProductDetail: React.FC = () => {
                   </div>
                   <div className="product-detail-shop-recommend-info">
                     <div className="product-detail-shop-recommend-name">
-                      {p.title || (lang === 'zh' ? '商品' : 'Product')}
+                      {p.title || (tr(lang, { zh: '商品', en: 'Product', de: 'Produkt', ja: '製品', ko: '제품', es: 'Producto', it: 'Prodotto', vi: 'Sản phẩm', fr: 'Produit' }))}
                     </div>
                     <div className="product-detail-shop-recommend-price">
                       {p.price > 0 ? `$${p.price.toFixed(2)}` : '—'}
@@ -652,9 +656,7 @@ const ProductDetail: React.FC = () => {
                 </div>
                 <div className="product-detail-shop-recommend-info">
                   <div className="product-detail-shop-recommend-name">
-                    {lang === 'zh'
-                      ? '更多商品请返回列表'
-                      : 'For more products please go back to the list'}
+                    {tr(lang, { zh: '更多商品请返回列表', en: 'For more products please go back to the list', de: 'Für weitere Produkte gehen Sie bitte zurück zur Liste', ja: 'その他の製品については、リストに戻ってください', ko: '더 많은 제품을 보려면 목록으로 돌아가세요.', es: 'Para más productos por favor regrese a la lista', it: 'Per ulteriori prodotti torna all\'elenco', vi: 'Để xem thêm sản phẩm vui lòng quay lại danh sách', fr: 'Pour plus de produits, veuillez revenir à la liste' })}
                   </div>
                   <div className="product-detail-shop-recommend-price">—</div>
                 </div>
@@ -666,7 +668,7 @@ const ProductDetail: React.FC = () => {
 
       <div className="product-detail-back">
         <Link to="/products" className="product-detail-back-link">
-          {lang === 'zh' ? '< 返回商品列表' : '< Back to product list'}
+          {tr(lang, { zh: '< 返回商品列表', en: '< Back to product list', de: '< Zurück zur Produktliste', ja: '< 製品一覧に戻る', ko: '< 상품목록으로 돌아가기', es: '< Volver a la lista de productos', it: '< Torna all\'elenco dei prodotti', vi: '< Quay lại danh sách sản phẩm', fr: '< Retour à la liste des produits' })}
         </Link>
       </div>
     </div>

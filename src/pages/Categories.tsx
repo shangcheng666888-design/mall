@@ -1,6 +1,8 @@
 import type React from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
+import type { Lang } from '../i18n/lang'
+import { tr } from '../i18n'
 import categoryTitleIcon from '../assets/category-icon.png'
 import categoryShoujipeijian from '../assets/category-shoujipeijian.png'
 import categoryHuwaiyundong from '../assets/category-huwaiyundong.png'
@@ -138,8 +140,7 @@ export const CATEGORY_CARDS: CategoryCardItem[] = [
   },
 ]
 
-function translateCategoryName(lang: 'zh' | 'en', name: string): string {
-  if (lang === 'zh') return name
+function categoryNameEn(name: string): string {
   switch (name) {
     case '饮品酒水':
       return 'Beverages & alcohol'
@@ -178,8 +179,12 @@ function translateCategoryName(lang: 'zh' | 'en', name: string): string {
   }
 }
 
-export function translateSubcategoryName(lang: 'zh' | 'en', item: string): string {
-  if (lang === 'zh') return item
+export function translateCategoryName(lang: Lang, name: string): string {
+  const en = categoryNameEn(name)
+  return tr(lang, { zh: name, en, de: en, ja: en, ko: en, es: en, it: en, vi: en, fr: en })
+}
+
+function subcategoryNameEn(item: string): string {
   switch (item) {
     // 饮品酒水
     case '矿泉水':
@@ -580,13 +585,18 @@ export function translateSubcategoryName(lang: 'zh' | 'en', item: string): strin
   }
 }
 
+export function translateSubcategoryName(lang: Lang, item: string): string {
+  const en = subcategoryNameEn(item)
+  return tr(lang, { zh: item, en, de: en, ja: en, ko: en, es: en, it: en, vi: en, fr: en })
+}
+
 const Categories: React.FC = () => {
   const { lang } = useLang()
   return (
     <div className="page categories-page">
       <div className="categories-page-inner">
         <h1 className="categories-page-title">
-          {lang === 'zh' ? '分类' : 'Categories'}
+          {tr(lang, { zh: '分类', en: 'Categories', de: 'Kategorien', ja: 'カテゴリ', ko: '카테고리', es: 'Categorías', it: 'Categorie', vi: 'Danh mục', fr: 'Catégories' })}
         </h1>
         <div className="categories-card-grid">
           {CATEGORY_CARDS.map((cat) => (

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getRegions } from '../constants/countryRegions'
+import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
 
 interface RegionSelectProps {
   countryCode: string
@@ -13,9 +15,32 @@ const RegionSelect: React.FC<RegionSelectProps> = ({
   countryCode,
   value,
   onChange,
-  placeholder = '省/州/邦',
+  placeholder,
   disabled = false,
 }) => {
+  const { lang } = useLang()
+  const resolvedPlaceholder = placeholder ?? tr(lang, {
+    zh: '省/州/邦',
+    en: 'State / province',
+    de: 'Bundesland / Provinz',
+    ja: '州/省',
+    ko: '주/도',
+    es: 'Estado / provincia',
+    it: 'Stato / provincia',
+    vi: 'Tỉnh / bang',
+    fr: 'État / province',
+  })
+  const searchPlaceholder = tr(lang, {
+    zh: '输入省/州/邦搜索',
+    en: 'Search state or province',
+    de: 'Bundesland oder Provinz suchen',
+    ja: '州・省を検索',
+    ko: '주/도 검색',
+    es: 'Buscar estado o provincia',
+    it: 'Cerca stato o provincia',
+    vi: 'Tìm tỉnh/bang',
+    fr: 'Rechercher un état ou une province',
+  })
   const [open, setOpen] = useState(false)
   const [keyword, setKeyword] = useState('')
   const wrapperRef = useRef<HTMLDivElement | null>(null)
@@ -63,14 +88,14 @@ const RegionSelect: React.FC<RegionSelectProps> = ({
         disabled={disabled}
         onClick={() => !disabled && setOpen((prev) => !prev)}
       >
-        {selectedLabel || placeholder}
+        {selectedLabel || resolvedPlaceholder}
       </button>
       {open && !disabled && (
         <div className="phone-code-dropdown">
           <div className="phone-code-dropdown-search">
             <input
               className="phone-code-dropdown-search-input"
-              placeholder="输入省/州/邦搜索"
+              placeholder={searchPlaceholder}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />

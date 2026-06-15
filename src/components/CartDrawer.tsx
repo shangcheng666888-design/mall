@@ -5,6 +5,8 @@ import cartEmpty from '../assets/cart-empty.png'
 import { useCart } from '../cart/CartContext.tsx'
 import { useLang } from '../context/LangContext'
 import { useToast } from './ToastProvider'
+import { tr } from '../i18n'
+
 
 interface CartDrawerProps {
   open: boolean
@@ -76,15 +78,23 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
               </svg>
             </span>
             <span className="cart-drawer-count">
-              {lang === 'zh'
-                ? `${totalCount} 物品`
-                : `${totalCount} item${totalCount === 1 ? '' : 's'}`}
+              {tr(lang, {
+                zh: `${totalCount} 件商品`,
+                en: `${totalCount} item${totalCount === 1 ? '' : 's'}`,
+                de: `${totalCount} Artikel`,
+                ja: `${totalCount} 点`,
+                ko: `${totalCount}개 상품`,
+                es: `${totalCount} artículo${totalCount === 1 ? '' : 's'}`,
+                it: `${totalCount} articolo${totalCount === 1 ? '' : 'i'}`,
+                vi: `${totalCount} sản phẩm`,
+                fr: `${totalCount} article${totalCount === 1 ? '' : 's'}`,
+              })}
             </span>
           </div>
           <button
             type="button"
             className="cart-drawer-close"
-            aria-label={lang === 'zh' ? '关闭购物车' : 'Close cart'}
+            aria-label={tr(lang, { zh: '关闭购物车', en: 'Close cart', de: 'Warenkorb schließen', ja: 'カートを閉じる', ko: '장바구니 닫기', es: 'Cerrar carrito', it: 'Chiudi il carrello', vi: 'Đóng giỏ hàng', fr: 'Fermer le panier' })}
             onClick={onClose}
           >
             ×
@@ -92,7 +102,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
         </header>
 
         <div className="cart-drawer-subtitle">
-          {lang === 'zh' ? '我的购物车' : 'My cart'}
+          {tr(lang, { zh: '我的购物车', en: 'My cart', de: 'Mein Warenkorb', ja: '私のカート', ko: '내 장바구니', es: 'mi carrito', it: 'Il mio carrello', vi: 'Giỏ hàng của tôi', fr: 'Mon panier' })}
         </div>
 
         <div className="cart-drawer-body">
@@ -100,11 +110,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
             <div className="cart-drawer-empty">
               <img
                 src={cartEmpty}
-                alt={lang === 'zh' ? '购物车还没有商品' : 'Your cart is empty'}
+                alt={tr(lang, { zh: '购物车还没有商品', en: 'Your cart is empty', de: 'Ihr Warenkorb ist leer', ja: 'カートは空です', ko: '장바구니가 비어 있습니다.', es: 'Tu carrito está vacío', it: 'Il tuo carrello è vuoto', vi: 'Giỏ hàng của bạn trống', fr: 'Votre panier est vide' })}
                 className="cart-drawer-empty-img"
               />
               <div className="cart-drawer-empty-text">
-                {lang === 'zh' ? '购物车还没有商品' : 'Your cart has no items yet'}
+                {tr(lang, { zh: '购物车还没有商品', en: 'Your cart has no items yet', de: 'Ihr Warenkorb enthält noch keine Artikel', ja: 'カートにはまだ商品がありません', ko: '장바구니에 아직 항목이 없습니다.', es: 'Su carrito aún no tiene artículos', it: 'Il tuo carrello non ha ancora articoli', vi: 'Giỏ hàng của bạn chưa có mặt hàng nào', fr: 'Votre panier ne contient pas encore d\'articles' })}
               </div>
               <button
                 type="button"
@@ -114,7 +124,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                   navigate('/products')
                 }}
               >
-                {lang === 'zh' ? '去购物' : 'Go shopping'}
+                {tr(lang, { zh: '去购物', en: 'Go shopping', de: 'Gehen Sie einkaufen', ja: '買い物に行く', ko: '쇼핑하러 가세요', es: 'Hacer compras', it: 'Vai a fare shopping', vi: 'Đi mua sắm', fr: 'Faire du shopping' })}
               </button>
             </div>
           ) : (
@@ -169,7 +179,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                     <button
                       type="button"
                       className="cart-drawer-item-remove"
-                      aria-label={lang === 'zh' ? '移除商品' : 'Remove item'}
+                      aria-label={tr(lang, { zh: '移除商品', en: 'Remove item', de: 'Artikel entfernen', ja: 'アイテムを削除する', ko: '항목 삭제', es: 'Quitar elemento', it: 'Rimuovi l\'articolo', vi: 'Xóa mục', fr: 'Supprimer l\'élément' })}
                       onClick={() => removeItem(item.id)}
                     >
                       <svg
@@ -201,7 +211,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
             if (!hasSelected) return
             if (!getAuthUserId()) {
               showToast(
-                lang === 'zh' ? '请先登录后再下单' : 'Please log in before checkout',
+                tr(lang, { zh: '请先登录后再下单', en: 'Please log in before checkout', de: 'Bitte melden Sie sich vor dem Bezahlen an', ja: 'チェックアウト前にログインしてください', ko: '결제하기 전에 로그인하세요.', es: 'Por favor inicia sesión antes de realizar el pago', it: 'Effettua il login prima del checkout', vi: 'Vui lòng đăng nhập trước khi thanh toán', fr: 'Veuillez vous connecter avant de procéder au paiement' }),
                 'error',
               )
               onClose()
@@ -213,7 +223,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
           }}
         >
           <span className="cart-drawer-footer-label">
-            {lang === 'zh' ? '下单' : 'Checkout'}
+            {tr(lang, { zh: '下单', en: 'Checkout', de: 'Kasse', ja: 'チェックアウト', ko: '점검', es: 'Verificar', it: 'Guardare', vi: 'Thanh toán', fr: 'Vérifier' })}
           </span>
           <span className="cart-drawer-footer-amount">${selectedAmount.toFixed(2)}</span>
         </footer>

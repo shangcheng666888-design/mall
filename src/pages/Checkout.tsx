@@ -15,6 +15,8 @@ import { COUNTRY_OPTIONS } from '../constants/countries'
 import { getRegions, getCities } from '../constants/countryRegions'
 import walletIcon from '../assets/qianbao.png'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 function getCountryLabel(code: string) {
   return COUNTRY_OPTIONS.find((c) => c.value === code)?.label ?? code
@@ -215,21 +217,19 @@ const Checkout: React.FC = () => {
 
   const handleSubmit = async () => {
     if (itemsToCheckout.length === 0) {
-      showToast(lang === 'zh' ? '暂无商品' : 'No items to checkout', 'error')
+      showToast(tr(lang, { zh: '暂无商品', en: 'No items to checkout', de: 'Keine Artikel zum Auschecken', ja: 'チェックアウトするアイテムがありません', ko: '결제할 항목이 없습니다.', es: 'No hay artículos para pagar', it: 'Nessun articolo da verificare', vi: 'Không có mặt hàng nào để thanh toán', fr: 'Aucun article à commander' }), 'error')
       return
     }
     if (!selectedAddress) {
       showToast(
-        lang === 'zh' ? '请选择收件地址' : 'Please select a shipping address',
+        tr(lang, { zh: '请选择收件地址', en: 'Please select a shipping address', de: 'Bitte wählen Sie eine Lieferadresse aus', ja: '配送先住所を選択してください', ko: '배송지 주소를 선택해주세요', es: 'Por favor seleccione una dirección de envío', it: 'Seleziona un indirizzo di spedizione', vi: 'Vui lòng chọn địa chỉ giao hàng', fr: 'Veuillez sélectionner une adresse de livraison' }),
         'error',
       )
       return
     }
     if (balanceInsufficient) {
       showToast(
-        lang === 'zh'
-          ? '余额不足，请先充值'
-          : 'Insufficient balance, please recharge first',
+        tr(lang, { zh: '余额不足，请先充值', en: 'Insufficient balance, please recharge first', de: 'Unzureichendes Guthaben, bitte zuerst aufladen', ja: '残高が不足しています。最初にチャージしてください', ko: '잔액이 부족합니다. 먼저 충전해 주세요.', es: 'Saldo insuficiente, recarga primero', it: 'Saldo insufficiente, ricaricare prima', vi: 'Số dư không đủ, vui lòng nạp tiền trước', fr: 'Solde insuffisant, veuillez d\'abord recharger' }),
         'error',
       )
       return
@@ -242,7 +242,7 @@ const Checkout: React.FC = () => {
       const order = getOrderById(orderIdFromUrl!)
       if (!order || order.status !== 'pending') {
         showToast(
-          lang === 'zh' ? '订单已失效' : 'Order is no longer valid',
+          tr(lang, { zh: '订单已失效', en: 'Order is no longer valid', de: 'Bestellung ist nicht mehr gültig', ja: '注文はもう無効です', ko: '주문이 더 이상 유효하지 않습니다.', es: 'El pedido ya no es válido', it: 'L\'ordine non è più valido', vi: 'Đơn đặt hàng không còn hiệu lực', fr: 'La commande n\'est plus valable' }),
           'error',
         )
         return
@@ -260,7 +260,7 @@ const Checkout: React.FC = () => {
 
     if (!userId) {
       showToast(
-        lang === 'zh' ? '请先登录后再下单' : 'Please log in before placing an order',
+        tr(lang, { zh: '请先登录后再下单', en: 'Please log in before placing an order', de: 'Bitte melden Sie sich an, bevor Sie eine Bestellung aufgeben', ja: 'ご注文前にログインしてください', ko: '주문하기 전에 로그인하세요.', es: 'Por favor inicia sesión antes de realizar un pedido', it: 'Effettua il login prima di effettuare un ordine', vi: 'Vui lòng đăng nhập trước khi đặt hàng', fr: 'Veuillez vous connecter avant de passer une commande' }),
         'error',
       )
       return
@@ -328,9 +328,7 @@ const Checkout: React.FC = () => {
       showToast(
         err instanceof Error
           ? err.message
-          : lang === 'zh'
-            ? '下单失败，请重试'
-            : 'Order failed, please try again',
+          : tr(lang, { zh: '下单失败，请重试', en: 'Order failed, please try again', de: 'Die Bestellung ist fehlgeschlagen. Bitte versuchen Sie es erneut', ja: '注文に失敗しました。もう一度お試しください', ko: '주문에 실패했습니다. 다시 시도해 주세요.', es: 'El pedido falló, inténtelo de nuevo', it: 'Ordine fallito, riprova', vi: 'Đặt hàng không thành công, vui lòng thử lại', fr: 'La commande a échoué, veuillez réessayer' }),
         'error',
       )
     }
@@ -350,18 +348,16 @@ const Checkout: React.FC = () => {
         <div className="checkout-success">
           <div className="checkout-success-icon" aria-hidden>✓</div>
           <h1 className="checkout-success-title">
-            {lang === 'zh' ? '订单提交成功' : 'Order submitted successfully'}
+            {tr(lang, { zh: '订单提交成功', en: 'Order submitted successfully', de: 'Bestellung erfolgreich übermittelt', ja: '注文は正常に送信されました', ko: '주문이 성공적으로 제출되었습니다.', es: 'Pedido enviado con éxito', it: 'Ordine inviato con successo', vi: 'Đơn hàng được gửi thành công', fr: 'Commande soumise avec succès' })}
           </h1>
           {successOrderNumber && (
             <p className="checkout-success-order-no">
-              {lang === 'zh' ? '订单号：' : 'Order No: '}
+              {tr(lang, { zh: '订单号：', en: 'Order No: ', de: 'Bestellnummer:', ja: '注文番号:', ko: '주문 번호:', es: 'Número de pedido:', it: 'N. ordine:', vi: 'Số thứ tự:', fr: 'Numéro de commande :' })}
               {successOrderNumber}
             </p>
           )}
           <p className="checkout-success-desc">
-            {lang === 'zh'
-              ? '感谢您的购买，请留意订单状态'
-              : 'Thank you for your purchase. Please keep an eye on your order status.'}
+            {tr(lang, { zh: '感谢您的购买，请留意订单状态', en: 'Thank you for your purchase. Please keep an eye on your order status.', de: 'Vielen Dank für Ihren Einkauf. Bitte behalten Sie den Status Ihrer Bestellung im Auge.', ja: 'ご購入いただきありがとうございます。ご注文状況にご注意ください。', ko: '구매해주셔서 감사합니다. 주문 상태를 계속 지켜봐 주시기 바랍니다.', es: 'Gracias por tu compra. Esté atento al estado de su pedido.', it: 'Grazie per il tuo acquisto Tieni d\'occhio lo stato del tuo ordine.', vi: 'Cảm ơn bạn đã mua hàng. Vui lòng theo dõi trạng thái đơn hàng của bạn.', fr: 'Merci pour votre achat. Veuillez garder un œil sur l\'état de votre commande.' })}
           </p>
           <div className="checkout-success-actions">
             <button
@@ -369,10 +365,10 @@ const Checkout: React.FC = () => {
               className="checkout-success-btn checkout-success-btn--primary"
               onClick={() => navigate('/account?tab=orders')}
             >
-              {lang === 'zh' ? '查看订单' : 'View orders'}
+              {tr(lang, { zh: '查看订单', en: 'View orders', de: 'Bestellungen ansehen', ja: '注文を見る', ko: '주문 보기', es: 'Ver pedidos', it: 'Visualizza gli ordini', vi: 'Xem đơn hàng', fr: 'Afficher les commandes' })}
             </button>
             <Link to="/products" className="checkout-success-btn checkout-success-btn--secondary">
-              {lang === 'zh' ? '继续购物' : 'Continue shopping'}
+              {tr(lang, { zh: '继续购物', en: 'Continue shopping', de: 'Weiter einkaufen', ja: '買い物を続ける', ko: '계속 쇼핑하기', es: 'Continuar comprando', it: 'Continua a fare acquisti', vi: 'Tiếp tục mua sắm', fr: 'Continuer mes achats' })}
             </Link>
           </div>
         </div>
@@ -385,10 +381,10 @@ const Checkout: React.FC = () => {
       <main className="app-main checkout-page">
         <div className="checkout-empty">
           <p className="checkout-empty-text">
-            {lang === 'zh' ? '暂无商品' : 'No items to checkout'}
+            {tr(lang, { zh: '暂无商品', en: 'No items to checkout', de: 'Keine Artikel zum Auschecken', ja: 'チェックアウトするアイテムがありません', ko: '결제할 항목이 없습니다.', es: 'No hay artículos para pagar', it: 'Nessun articolo da verificare', vi: 'Không có mặt hàng nào để thanh toán', fr: 'Aucun article à commander' })}
           </p>
             <Link to="/products" className="checkout-empty-btn">
-              {lang === 'zh' ? '去购物' : 'Go shopping'}
+              {tr(lang, { zh: '去购物', en: 'Go shopping', de: 'Gehen Sie einkaufen', ja: '買い物に行く', ko: '쇼핑하러 가세요', es: 'Hacer compras', it: 'Vai a fare shopping', vi: 'Đi mua sắm', fr: 'Faire du shopping' })}
           </Link>
         </div>
       </main>
@@ -399,7 +395,7 @@ const Checkout: React.FC = () => {
     return (
       <main className="app-main checkout-page">
         <div className="checkout-inner" style={{ padding: '2rem', textAlign: 'center' }}>
-          <p>{lang === 'zh' ? '正在跳转到登录页…' : 'Redirecting to login…'}</p>
+          <p>{tr(lang, { zh: '正在跳转到登录页…', en: 'Redirecting to login…', de: 'Weiterleitung zum Login…', ja: 'ログインにリダイレクトしています…', ko: '로그인으로 리디렉션 중…', es: 'Redirigiendo para iniciar sesión…', it: 'Reindirizzamento all\'accesso...', vi: 'Đang chuyển hướng đến đăng nhập…', fr: 'Redirection vers la connexion…' })}</p>
         </div>
       </main>
     )
@@ -409,30 +405,26 @@ const Checkout: React.FC = () => {
     <main className="app-main checkout-page">
       <div className="checkout-inner">
         <h1 className="checkout-title">
-          {lang === 'zh' ? '下单' : 'Checkout'}
+          {tr(lang, { zh: '下单', en: 'Checkout', de: 'Kasse', ja: 'チェックアウト', ko: '점검', es: 'Verificar', it: 'Guardare', vi: 'Thanh toán', fr: 'Vérifier' })}
         </h1>
 
         <section className="checkout-section">
           <h2 className="checkout-section-title">
-            {lang === 'zh' ? '收件地址' : 'Shipping address'}
+            {tr(lang, { zh: '收件地址', en: 'Shipping address', de: 'Lieferadresse', ja: 'お届け先の住所', ko: '배송 주소', es: 'Dirección de envío', it: 'Indirizzo di spedizione', vi: 'Địa chỉ giao hàng', fr: 'Adresse de livraison' })}
           </h2>
           <button
             type="button"
             className="checkout-address-row"
             onClick={() => setAddressModalOpen(true)}
             aria-label={
-              lang === 'zh'
-                ? '选择或添加收件地址'
-                : 'Select or add a shipping address'
+              tr(lang, { zh: '选择或添加收件地址', en: 'Select or add a shipping address', de: 'Wählen Sie eine Lieferadresse aus oder fügen Sie sie hinzu', ja: '配送先住所を選択または追加します', ko: '배송 주소를 선택하거나 추가하세요.', es: 'Seleccione o agregue una dirección de envío', it: 'Seleziona o aggiungi un indirizzo di spedizione', vi: 'Chọn hoặc thêm địa chỉ giao hàng', fr: 'Sélectionnez ou ajoutez une adresse de livraison' })
             }
           >
             <span className="checkout-address-add-icon" aria-hidden>+</span>
             <span className="checkout-address-text">
               {selectedAddress
                 ? `${selectedAddress.recipient} ${selectedAddress.phoneCode} ${selectedAddress.phone} ${formatAddress(selectedAddress)}`
-                : lang === 'zh'
-                  ? '请选择收件地址'
-                  : 'Please select a shipping address'}
+                : tr(lang, { zh: '请选择收件地址', en: 'Please select a shipping address', de: 'Bitte wählen Sie eine Lieferadresse aus', ja: '配送先住所を選択してください', ko: '배송지 주소를 선택해주세요', es: 'Por favor seleccione una dirección de envío', it: 'Seleziona un indirizzo di spedizione', vi: 'Vui lòng chọn địa chỉ giao hàng', fr: 'Veuillez sélectionner une adresse de livraison' })}
             </span>
             <span className="checkout-address-arrow" aria-hidden>&gt;</span>
           </button>
@@ -442,9 +434,17 @@ const Checkout: React.FC = () => {
           <div className="checkout-seller-row">
             <span className="checkout-seller-check" aria-hidden>✓</span>
             <span className="checkout-seller-name">
-              {lang === 'zh'
-                ? `购买商品 (总计 ${itemsToCheckout.length} 项目)`
-                : `Items to purchase (total ${itemsToCheckout.length})`}
+              {tr(lang, {
+                zh: `购买商品 (总计 ${itemsToCheckout.length} 项目)`,
+                en: `Items to purchase (total ${itemsToCheckout.length})`,
+                de: `Zu kaufende Artikel (insgesamt ${itemsToCheckout.length})`,
+                ja: `購入商品（合計 ${itemsToCheckout.length} 件）`,
+                ko: `구매 상품 (총 ${itemsToCheckout.length}개)`,
+                es: `Artículos a comprar (total ${itemsToCheckout.length})`,
+                it: `Articoli da acquistare (totale ${itemsToCheckout.length})`,
+                vi: `Sản phẩm mua (tổng ${itemsToCheckout.length})`,
+                fr: `Articles à acheter (total ${itemsToCheckout.length})`,
+              })}
             </span>
           </div>
           <div className="checkout-items">
@@ -521,7 +521,7 @@ const Checkout: React.FC = () => {
 
         <section id="checkout-payment-section" className="checkout-section checkout-payment">
           <h2 className="checkout-section-title">
-            {lang === 'zh' ? '支付方式' : 'Payment method'}
+            {tr(lang, { zh: '支付方式', en: 'Payment method', de: 'Zahlungsart', ja: '支払方法', ko: '결제수단', es: 'Método de pago', it: 'Metodo di pagamento', vi: 'Phương thức thanh toán', fr: 'Mode de paiement' })}
           </h2>
           <div className="checkout-payment-options">
             <div className={`checkout-payment-option${balanceInsufficient ? ' checkout-payment-option--disabled' : ' checkout-payment-option--selected'}`} aria-disabled={balanceInsufficient ? 'true' : 'false'}>
@@ -530,10 +530,10 @@ const Checkout: React.FC = () => {
                 <img src={walletIcon} alt="" />
               </span>
               <span className="checkout-payment-label">
-                {lang === 'zh' ? '余额' : 'Balance'} (${balance.toFixed(2)})
+                {tr(lang, { zh: '余额', en: 'Balance', de: 'Gleichgewicht', ja: 'バランス', ko: '균형', es: 'Balance', it: 'Bilancia', vi: 'Sự cân bằng', fr: 'Équilibre' })} (${balance.toFixed(2)})
                 {balanceInsufficient && (
                   <span className="checkout-payment-region-hint">
-                    {lang === 'zh' ? '余额不足' : 'Insufficient balance'}
+                    {tr(lang, { zh: '余额不足', en: 'Insufficient balance', de: 'Unzureichendes Gleichgewicht', ja: '残高不足', ko: '잔액 부족', es: 'Saldo insuficiente', it: 'Equilibrio insufficiente', vi: 'Số dư không đủ', fr: 'Solde insuffisant' })}
                   </span>
                 )}
               </span>
@@ -543,19 +543,19 @@ const Checkout: React.FC = () => {
 
         <section className="checkout-section checkout-summary">
           <h2 className="checkout-section-title">
-            {lang === 'zh' ? '订单汇总' : 'Order summary'}
+            {tr(lang, { zh: '订单汇总', en: 'Order summary', de: 'Bestellübersicht', ja: '注文概要', ko: '주문 요약', es: 'Resumen del pedido', it: 'Riepilogo dell\'ordine', vi: 'Tóm tắt đơn hàng', fr: 'Récapitulatif de la commande' })}
           </h2>
           <div className="checkout-summary-rows">
             <div className="checkout-summary-row">
-              <span>{lang === 'zh' ? '商品金额' : 'Items subtotal'}</span>
+              <span>{tr(lang, { zh: '商品金额', en: 'Items subtotal', de: 'Zwischensumme der Elemente', ja: '項目の小計', ko: '항목 소계', es: 'Subtotal de artículos', it: 'Totale parziale degli articoli', vi: 'Tổng phụ các mục', fr: 'Sous-total des articles' })}</span>
               <span>${itemSubtotal.toFixed(2)}</span>
             </div>
             <div className="checkout-summary-row">
-              <span>{lang === 'zh' ? '折扣' : 'Discount'}</span>
+              <span>{tr(lang, { zh: '折扣', en: 'Discount', de: 'Rabatt', ja: '割引', ko: '할인', es: 'Descuento', it: 'Sconto', vi: 'Giảm giá', fr: 'Rabais' })}</span>
               <span>-${discount.toFixed(2)}</span>
             </div>
             <div className="checkout-summary-row">
-              <span>{lang === 'zh' ? '税收' : 'Tax'}</span>
+              <span>{tr(lang, { zh: '税收', en: 'Tax', de: 'Steuer', ja: '税', ko: '세', es: 'Impuesto', it: 'Tassare', vi: 'Thuế', fr: 'Impôt' })}</span>
               <span>+${tax.toFixed(2)}</span>
             </div>
           </div>
@@ -567,15 +567,11 @@ const Checkout: React.FC = () => {
               onClick={handleSubmit}
             >
               {submitting
-                ? lang === 'zh'
-                  ? '提交中...'
-                  : 'Submitting...'
-                : lang === 'zh'
-                  ? '提交订单'
-                  : 'Place order'}
+                ? tr(lang, { zh: '提交中...', en: 'Submitting...', de: 'Einreichen...', ja: '送信中...', ko: '제출 중...', es: 'Sumisión...', it: 'Invio...', vi: 'Đang gửi...', fr: 'Soumission...' })
+                : tr(lang, { zh: '提交订单', en: 'Place order', de: 'Bestellung aufgeben', ja: '注文する', ko: '주문하기', es: 'Realizar pedido', it: 'Effettua l\'ordine', vi: 'Đặt hàng', fr: 'Passer la commande' })}
             </button>
             <span className="checkout-total-label">
-              {lang === 'zh' ? '合计' : 'Total'}
+              {tr(lang, { zh: '合计', en: 'Total', de: 'Gesamt', ja: '合計', ko: '총', es: 'Total', it: 'Totale', vi: 'Tổng cộng', fr: 'Total' })}
             </span>
             <span className="checkout-total-amount">${total.toFixed(2)}</span>
           </div>
@@ -587,14 +583,14 @@ const Checkout: React.FC = () => {
           <div className="checkout-submit-loader-wrap">
             <div className="checkout-submit-loader" aria-hidden />
             <span className="checkout-submit-loader-text">
-              {lang === 'zh' ? '提交中...' : 'Submitting...'}
+              {tr(lang, { zh: '提交中...', en: 'Submitting...', de: 'Einreichen...', ja: '送信中...', ko: '제출 중...', es: 'Sumisión...', it: 'Invio...', vi: 'Đang gửi...', fr: 'Soumission...' })}
             </span>
             <button
               type="button"
               className="checkout-submit-cancel-btn"
               onClick={handleCancelSubmit}
               >
-              {lang === 'zh' ? '取消' : 'Cancel'}
+              {tr(lang, { zh: '取消', en: 'Cancel', de: 'Stornieren', ja: 'キャンセル', ko: '취소', es: 'Cancelar', it: 'Cancellare', vi: 'Hủy bỏ', fr: 'Annuler' })}
             </button>
           </div>
         </div>
@@ -611,12 +607,12 @@ const Checkout: React.FC = () => {
           <div className="checkout-address-modal" onClick={(e) => e.stopPropagation()}>
             <div className="checkout-address-modal-header">
               <h2 id="checkout-address-modal-title">
-                {lang === 'zh' ? '选择收件地址' : 'Select shipping address'}
+                {tr(lang, { zh: '选择收件地址', en: 'Select shipping address', de: 'Lieferadresse auswählen', ja: '配送先住所を選択してください', ko: '배송지 선택', es: 'Seleccionar dirección de envío', it: 'Seleziona l\'indirizzo di spedizione', vi: 'Chọn địa chỉ giao hàng', fr: 'Sélectionnez l\'adresse de livraison' })}
               </h2>
               <button
                 type="button"
                 className="checkout-address-modal-close"
-                aria-label={lang === 'zh' ? '关闭' : 'Close'}
+                aria-label={tr(lang, { zh: '关闭', en: 'Close', de: 'Schließen', ja: '近い', ko: '닫다', es: 'Cerca', it: 'Vicino', vi: 'Đóng', fr: 'Fermer' })}
                 onClick={() => setAddressModalOpen(false)}
               >
                 ×
@@ -625,9 +621,7 @@ const Checkout: React.FC = () => {
             <div className="checkout-address-modal-body">
               {addressList.length === 0 ? (
                 <p className="checkout-address-modal-empty">
-                  {lang === 'zh'
-                    ? '暂无地址，请先添加'
-                    : 'No addresses yet, please add one first'}
+                  {tr(lang, { zh: '暂无地址，请先添加', en: 'No addresses yet, please add one first', de: 'Noch keine Adressen, bitte fügen Sie zuerst eine hinzu', ja: 'まだアドレスがありません。まずアドレスを追加してください', ko: '아직 주소가 없습니다. 먼저 주소를 추가하세요.', es: 'Aún no hay direcciones, por favor agregue una primero', it: 'Ancora nessun indirizzo, aggiungine prima uno', vi: 'Chưa có địa chỉ, vui lòng thêm một địa chỉ trước', fr: 'Aucune adresse pour l\'instant, veuillez d\'abord en ajouter une' })}
                 </p>
               ) : (
                 <ul className="checkout-address-modal-list">
@@ -657,7 +651,7 @@ const Checkout: React.FC = () => {
                   setAddAddressModalOpen(true)
                 }}
               >
-                {lang === 'zh' ? '+ 新增地址' : '+ Add new address'}
+                {tr(lang, { zh: '+ 新增地址', en: '+ Add new address', de: '+ Neue Adresse hinzufügen', ja: '+ 新しいアドレスを追加', ko: '+ 새 주소 추가', es: '+ Agregar nueva dirección', it: '+ Aggiungi un nuovo indirizzo', vi: '+ Thêm địa chỉ mới', fr: '+ Ajouter une nouvelle adresse' })}
               </button>
             </div>
           </div>
@@ -674,7 +668,7 @@ const Checkout: React.FC = () => {
           }
           if (!userId) {
             showToast(
-              lang === 'zh' ? '请先登录' : 'Please log in first',
+              tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }),
               'error',
             )
             return
@@ -685,7 +679,7 @@ const Checkout: React.FC = () => {
               setAddressList(nextList)
               setSelectedAddress(item)
               showToast(
-                lang === 'zh' ? '保存成功' : 'Saved successfully',
+                tr(lang, { zh: '保存成功', en: 'Saved successfully', de: 'Erfolgreich gespeichert', ja: '正常に保存されました', ko: '성공적으로 저장되었습니다', es: 'Guardado exitosamente', it: 'Salvato con successo', vi: 'Đã lưu thành công', fr: 'Enregistré avec succès' }),
               )
               setAddAddressModalOpen(false)
             })
@@ -693,9 +687,7 @@ const Checkout: React.FC = () => {
               showToast(
                 err instanceof Error
                   ? err.message
-                  : lang === 'zh'
-                    ? '保存失败'
-                    : 'Save failed',
+                  : tr(lang, { zh: '保存失败', en: 'Save failed', de: 'Speichern fehlgeschlagen', ja: '保存に失敗しました', ko: '저장 실패', es: 'Error al guardar', it: 'Salvataggio non riuscito', vi: 'Lưu không thành công', fr: 'Échec de l\'enregistrement' }),
                 'error',
               )
             })

@@ -1,6 +1,8 @@
 import type React from 'react'
 import { useCart } from '../cart/CartContext.tsx'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 interface FloatingCartProps {
   onClick?: () => void
@@ -14,7 +16,7 @@ const FloatingCart: React.FC<FloatingCartProps> = ({ onClick }) => {
     <button
       type="button"
       className="floating-cart"
-      aria-label={lang === 'zh' ? '购物车' : 'Cart'}
+      aria-label={tr(lang, { zh: '购物车', en: 'Cart', de: 'Warenkorb', ja: 'カート', ko: '카트', es: 'Carro', it: 'Carrello', vi: 'Xe đẩy', fr: 'Panier' })}
       onClick={onClick}
     >
       <div className="floating-cart-inner">
@@ -34,7 +36,17 @@ const FloatingCart: React.FC<FloatingCartProps> = ({ onClick }) => {
             </svg>
           </span>
           <span className="floating-cart-text">
-            {lang === 'zh' ? `${totalCount} 物品` : `${totalCount} item${totalCount === 1 ? '' : 's'}`}
+            {tr(lang, {
+              zh: `${totalCount} 件商品`,
+              en: `${totalCount} item${totalCount === 1 ? '' : 's'}`,
+              de: `${totalCount} Artikel`,
+              ja: `${totalCount} 点`,
+              ko: `${totalCount}개 상품`,
+              es: `${totalCount} artículo${totalCount === 1 ? '' : 's'}`,
+              it: `${totalCount} articolo${totalCount === 1 ? '' : 'i'}`,
+              vi: `${totalCount} sản phẩm`,
+              fr: `${totalCount} article${totalCount === 1 ? '' : 's'}`,
+            })}
           </span>
         </div>
         <div className="floating-cart-amount">

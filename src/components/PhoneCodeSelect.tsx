@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { COUNTRY_CODES } from '../constants/countryCodes'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 interface PhoneCodeSelectProps {
   value: string
@@ -52,7 +54,7 @@ const PhoneCodeSelect: React.FC<PhoneCodeSelectProps> = ({ value, onChange }) =>
           <div className="phone-code-dropdown-search">
             <input
               className="phone-code-dropdown-search-input"
-              placeholder={lang === 'zh' ? '输入区号搜索' : 'Search country code'}
+              placeholder={tr(lang, { zh: '输入区号搜索', en: 'Search country code', de: 'Ländercode suchen', ja: '国コードを検索する', ko: '국가 코드 검색', es: 'Buscar código de país', it: 'Cerca il codice del paese', vi: 'Tìm kiếm mã quốc gia', fr: 'Rechercher le code du pays' })}
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
             />

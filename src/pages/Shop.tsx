@@ -4,6 +4,7 @@ import ProductCard from '../components/ProductCard'
 import { useToast } from '../components/ToastProvider'
 import { api } from '../api/client'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
 
 function getAuthUserId(): string | null {
   try {
@@ -107,14 +108,34 @@ const Shop: React.FC = () => {
         api
           .post(`/api/users/${uid}/followed-shops`, {
             shopId,
-            shopName: shop?.name ?? (lang === 'zh' ? `店铺 ${shopId}` : `Shop ${shopId}`),
+            shopName: shop?.name ?? tr(lang, {
+              zh: `店铺 ${shopId}`,
+              en: `Shop ${shopId}`,
+              de: `Shop ${shopId}`,
+              ja: `ショップ ${shopId}`,
+              ko: `매장 ${shopId}`,
+              es: `Tienda ${shopId}`,
+              it: `Negozio ${shopId}`,
+              vi: `Cửa hàng ${shopId}`,
+              fr: `Boutique ${shopId}`,
+            }),
           })
           .then(() => setFollowed(true))
           .catch(() => {})
       }
     } else {
       showToast(
-        lang === 'zh' ? '请先登录后再关注店铺' : 'Please log in before following a shop',
+        tr(lang, {
+          zh: '请先登录后再关注店铺',
+          en: 'Please log in before following a shop',
+          de: 'Bitte melden Sie sich an, bevor Sie einem Shop folgen',
+          ja: 'ショップをフォローする前にログインしてください',
+          ko: '매장을 팔로우하려면 먼저 로그인하세요',
+          es: 'Inicie sesión antes de seguir una tienda',
+          it: 'Accedi prima di seguire un negozio',
+          vi: 'Vui lòng đăng nhập trước khi theo dõi cửa hàng',
+          fr: 'Veuillez vous connecter avant de suivre une boutique',
+        }),
         'error',
       )
     }
@@ -144,17 +165,27 @@ const Shop: React.FC = () => {
                 {shop?.logo ? (
                   <img src={shop.logo} alt="" className="shop-hero-avatar-img" />
                 ) : (
-                  (shop?.name ?? (lang === 'zh' ? '店' : 'S')).charAt(0)
+                  (shop?.name ?? tr(lang, { zh: '店', en: 'S', de: 'S', ja: '店', ko: '점', es: 'T', it: 'N', vi: 'C', fr: 'B' })).charAt(0)
                 )}
               </div>
               <div className="shop-hero-meta">
                 <div className="shop-hero-name">
                   {loading
-                    ? (lang === 'zh' ? '加载中...' : 'Loading...')
-                    : (shop?.name ?? (lang === 'zh' ? `店铺 ${shopId}` : `Shop ${shopId}`))}
+                    ? tr(lang, { zh: '加载中...', en: 'Loading...', de: 'Laden...', ja: '読み込み中...', ko: '로딩 중...', es: 'Cargando...', it: 'Caricamento...', vi: 'Đang tải...', fr: 'Chargement...' })
+                    : (shop?.name ?? tr(lang, {
+                        zh: `店铺 ${shopId}`,
+                        en: `Shop ${shopId}`,
+                        de: `Shop ${shopId}`,
+                        ja: `ショップ ${shopId}`,
+                        ko: `매장 ${shopId}`,
+                        es: `Tienda ${shopId}`,
+                        it: `Negozio ${shopId}`,
+                        vi: `Cửa hàng ${shopId}`,
+                        fr: `Boutique ${shopId}`,
+                      }))}
                 </div>
                 <div className="shop-hero-welcome">
-                  {lang === 'zh' ? '欢迎光临！' : 'Welcome!'}
+                  {tr(lang, { zh: '欢迎光临！', en: 'Welcome!', de: 'Willkommen!', ja: 'ようこそ！', ko: '환영합니다!', es: '¡Bienvenido!', it: 'Benvenuto!', vi: 'Chào mừng!', fr: 'Bienvenue !' })}
                 </div>
               </div>
             </div>
@@ -166,8 +197,8 @@ const Shop: React.FC = () => {
           onClick={handleFollowToggle}
         >
           {followed
-            ? (lang === 'zh' ? '★ 已关注' : '★ Following')
-            : (lang === 'zh' ? '☆ 关注店铺' : '☆ Follow shop')}
+            ? tr(lang, { zh: '★ 已关注', en: '★ Following', de: '★ Folge ich', ja: '★ フォロー中', ko: '★ 팔로잉', es: '★ Siguiendo', it: '★ Seguito', vi: '★ Đang theo dõi', fr: '★ Abonné' })
+            : tr(lang, { zh: '☆ 关注店铺', en: '☆ Follow shop', de: '☆ Shop folgen', ja: '☆ ショップをフォロー', ko: '☆ 매장 팔로우', es: '☆ Seguir tienda', it: '☆ Segui negozio', vi: '☆ Theo dõi cửa hàng', fr: '☆ Suivre la boutique' })}
         </button>
       </div>
 
@@ -177,27 +208,27 @@ const Shop: React.FC = () => {
           className={`shop-tab${activeTab === 'recommend' ? ' shop-tab--active' : ''}`}
           onClick={() => setActiveTab('recommend')}
         >
-          {lang === 'zh' ? '推荐' : 'Recommended'}
+          {tr(lang, { zh: '推荐', en: 'Recommended', de: 'Empfohlen', ja: 'おすすめ', ko: '추천', es: 'Recomendado', it: 'Consigliati', vi: 'Đề xuất', fr: 'Recommandé' })}
         </button>
         <button
           type="button"
           className={`shop-tab${activeTab === 'all' ? ' shop-tab--active' : ''}`}
           onClick={() => setActiveTab('all')}
         >
-          {lang === 'zh' ? '所有产品' : 'All products'}
+          {tr(lang, { zh: '所有产品', en: 'All products', de: 'Alle Produkte', ja: 'すべての商品', ko: '모든 상품', es: 'Todos los productos', it: 'Tutti i prodotti', vi: 'Tất cả sản phẩm', fr: 'Tous les produits' })}
         </button>
       </div>
 
       <div className="mall-product-grid card-grid shop-products-grid">
         {loading ? (
           <p className="products-empty">
-            {lang === 'zh' ? '加载中...' : 'Loading...'}
+            {tr(lang, { zh: '加载中...', en: 'Loading...', de: 'Laden...', ja: '読み込み中...', ko: '로딩 중...', es: 'Cargando...', it: 'Caricamento...', vi: 'Đang tải...', fr: 'Chargement...' })}
           </p>
         ) : displayProducts.length === 0 ? (
           <p className="products-empty">
             {activeTab === 'recommend'
-              ? (lang === 'zh' ? '暂无推荐商品' : 'No recommended products')
-              : (lang === 'zh' ? '暂无商品' : 'No products yet')}
+              ? tr(lang, { zh: '暂无推荐商品', en: 'No recommended products', de: 'Keine empfohlenen Produkte', ja: 'おすすめ商品はありません', ko: '추천 상품이 없습니다', es: 'No hay productos recomendados', it: 'Nessun prodotto consigliato', vi: 'Không có sản phẩm đề xuất', fr: 'Aucun produit recommandé' })
+              : tr(lang, { zh: '暂无商品', en: 'No products yet', de: 'Noch keine Produkte', ja: '商品はまだありません', ko: '아직 상품이 없습니다', es: 'Aún no hay productos', it: 'Nessun prodotto ancora', vi: 'Chưa có sản phẩm', fr: 'Pas encore de produits' })}
           </p>
         ) : (
           displayProducts.map((item) => (

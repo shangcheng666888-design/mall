@@ -1,6 +1,8 @@
 import type React from 'react'
 import { Suspense, lazy, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { useLang } from './context/LangContext'
+import { tr } from './i18n'
 import { CartProvider } from './cart/CartContext.tsx'
 import { ToastProvider } from './components/ToastProvider'
 import { ProductFavoritesProvider } from './context/ProductFavoritesContext'
@@ -34,12 +36,26 @@ const ScrollToTop: React.FC = () => {
   return null
 }
 
-const PageLoadFallback: React.FC = () => (
-  <div className="app-loading-fallback" role="status" aria-label="Loading">
-    <span className="app-loading-spinner" aria-hidden />
-    <span className="app-loading-text">Loading…</span>
-  </div>
-)
+const PageLoadFallback: React.FC = () => {
+  const { lang } = useLang()
+  const loadingText = tr(lang, {
+    zh: '加载中…',
+    en: 'Loading…',
+    de: 'Wird geladen…',
+    ja: '読み込み中…',
+    ko: '로딩 중…',
+    es: 'Cargando…',
+    it: 'Caricamento…',
+    vi: 'Đang tải…',
+    fr: 'Chargement…',
+  })
+  return (
+    <div className="app-loading-fallback" role="status" aria-label={loadingText}>
+      <span className="app-loading-spinner" aria-hidden />
+      <span className="app-loading-text">{loadingText}</span>
+    </div>
+  )
+}
 
 const App: React.FC = () => (
   <CartProvider>

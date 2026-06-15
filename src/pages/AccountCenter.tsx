@@ -36,7 +36,7 @@ import type { FollowedShop } from '../utils/followedShops'
 import { getOrderStatusLabel, type Order, type OrderStatus } from '../utils/orderList'
 import {
   formatRecordDate,
-  STATUS_TEXT,
+  getWalletStatusLabel,
   type WalletRechargeRecord,
   type WalletWithdrawRecord,
 } from '../utils/walletRecords'
@@ -45,6 +45,8 @@ import { api } from '../api/client'
 import { useCart } from '../cart/CartContext'
 import type { CartItem } from '../cart/CartContext'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 const VALID_TABS: AccountNavKey[] = ['wallet', 'orders', 'productFavorites', 'shopFavorites', 'settings']
 
@@ -429,7 +431,7 @@ const AccountCenter: React.FC = () => {
     }
     const uid = getAuthUserId()
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.patch(`/api/users/${uid}`, { addresses: nextList })
@@ -439,12 +441,12 @@ const AccountCenter: React.FC = () => {
         setEditingAddressId(null)
         showToast(
           editingAddressId
-            ? (lang === 'zh' ? '修改成功' : 'Updated successfully')
-            : (lang === 'zh' ? '保存成功' : 'Saved successfully'),
+            ? (tr(lang, { zh: '修改成功', en: 'Updated successfully', de: 'Erfolgreich aktualisiert', ja: '正常に更新されました', ko: '업데이트되었습니다.', es: 'Actualizado exitosamente', it: 'Aggiornato con successo', vi: 'Đã cập nhật thành công', fr: 'Mis à jour avec succès' }))
+            : (tr(lang, { zh: '保存成功', en: 'Saved successfully', de: 'Erfolgreich gespeichert', ja: '正常に保存されました', ko: '성공적으로 저장되었습니다', es: 'Guardado exitosamente', it: 'Salvato con successo', vi: 'Đã lưu thành công', fr: 'Enregistré avec succès' })),
         )
       })
       .catch((err: unknown) => {
-        const fallback = lang === 'zh' ? '保存失败' : 'Save failed'
+        const fallback = tr(lang, { zh: '保存失败', en: 'Save failed', de: 'Speichern fehlgeschlagen', ja: '保存に失敗しました', ko: '저장 실패', es: 'Error al guardar', it: 'Salvataggio non riuscito', vi: 'Lưu không thành công', fr: 'Échec de l\'enregistrement' })
         showToast(err instanceof Error ? err.message : fallback, 'error')
       })
   }
@@ -463,16 +465,16 @@ const AccountCenter: React.FC = () => {
     const nextList = addressList.filter((a) => a.id !== id)
     const uid = getAuthUserId()
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.patch(`/api/users/${uid}`, { addresses: nextList })
       .then(() => {
         setAddressList(nextList)
-        showToast(lang === 'zh' ? '已删除' : 'Deleted')
+        showToast(tr(lang, { zh: '已删除', en: 'Deleted', de: 'Gelöscht', ja: '削除されました', ko: '삭제됨', es: 'Eliminado', it: 'Eliminato', vi: 'Đã xóa', fr: 'Supprimé' }))
       })
       .catch((err: unknown) => {
-        const fallback = lang === 'zh' ? '删除失败' : 'Delete failed'
+        const fallback = tr(lang, { zh: '删除失败', en: 'Delete failed', de: 'Das Löschen ist fehlgeschlagen', ja: '削除に失敗しました', ko: '삭제 실패', es: 'Error al eliminar', it: 'Eliminazione non riuscita', vi: 'Xóa không thành công', fr: 'Échec de la suppression' })
         showToast(err instanceof Error ? err.message : fallback, 'error')
       })
   }
@@ -481,16 +483,16 @@ const AccountCenter: React.FC = () => {
     const nextList = addressList.map((a) => ({ ...a, isDefault: a.id === id }))
     const uid = getAuthUserId()
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.patch(`/api/users/${uid}`, { addresses: nextList })
       .then(() => {
         setAddressList(nextList)
-        showToast(lang === 'zh' ? '已设为默认地址' : 'Set as default address')
+        showToast(tr(lang, { zh: '已设为默认地址', en: 'Set as default address', de: 'Als Standardadresse festlegen', ja: 'デフォルトのアドレスとして設定', ko: '기본 주소로 설정', es: 'Establecer como dirección predeterminada', it: 'Imposta come indirizzo predefinito', vi: 'Đặt làm địa chỉ mặc định', fr: 'Définir comme adresse par défaut' }))
       })
       .catch((err: unknown) => {
-        const fallback = lang === 'zh' ? '设置失败' : 'Update failed'
+        const fallback = tr(lang, { zh: '设置失败', en: 'Update failed', de: 'Update fehlgeschlagen', ja: 'アップデートに失敗しました', ko: '업데이트 실패', es: 'La actualización falló', it: 'Aggiornamento non riuscito', vi: 'Cập nhật không thành công', fr: 'La mise à jour a échoué' })
         showToast(err instanceof Error ? err.message : fallback, 'error')
       })
   }
@@ -499,21 +501,19 @@ const AccountCenter: React.FC = () => {
 
   const handleLoginPwdSubmit = () => {
     const next = { old: '', new: '', confirm: '' }
-    if (!loginPwdOld) next.old = lang === 'zh' ? '请输入旧密码' : 'Please enter your current password'
+    if (!loginPwdOld) next.old = tr(lang, { zh: '请输入旧密码', en: 'Please enter your current password', de: 'Bitte geben Sie Ihr aktuelles Passwort ein', ja: '現在のパスワードを入力してください', ko: '현재 비밀번호를 입력해주세요', es: 'Por favor ingrese su contraseña actual', it: 'Inserisci la tua password attuale', vi: 'Vui lòng nhập mật khẩu hiện tại của bạn', fr: 'Veuillez entrer votre mot de passe actuel' })
     if (!loginPwdNew) {
-      next.new = lang === 'zh' ? '请输入新密码' : 'Please enter a new password'
+      next.new = tr(lang, { zh: '请输入新密码', en: 'Please enter a new password', de: 'Bitte geben Sie ein neues Passwort ein', ja: '新しいパスワードを入力してください', ko: '새로운 비밀번호를 입력해주세요', es: 'Por favor ingrese una nueva contraseña', it: 'Inserisci una nuova password', vi: 'Vui lòng nhập mật khẩu mới', fr: 'Veuillez entrer un nouveau mot de passe' })
     } else if (!LOGIN_PWD_REGEX.test(loginPwdNew)) {
       next.new =
-        lang === 'zh'
-          ? '密码需为 6-22 位字母和数字组合'
-          : 'Password must be 6–22 characters with letters and numbers'
+        tr(lang, { zh: '密码需为 6-22 位字母和数字组合', en: 'Password must be 6–22 characters with letters and numbers', de: 'Das Passwort muss 6–22 Zeichen lang sein und Buchstaben und Zahlen enthalten', ja: 'パスワードは文字と数字を含む 6 ～ 22 文字にする必要があります', ko: '비밀번호는 6~22자 영문, 숫자로 구성되어야 합니다.', es: 'La contraseña debe tener entre 6 y 22 caracteres con letras y números.', it: 'La password deve contenere da 6 a 22 caratteri con lettere e numeri', vi: 'Mật khẩu phải có 6–22 ký tự bao gồm chữ cái và số', fr: 'Le mot de passe doit contenir entre 6 et 22 caractères avec des lettres et des chiffres' })
     }
     if (!loginPwdConfirm) {
       next.confirm =
-        lang === 'zh' ? '请再次输入新密码' : 'Please confirm your new password'
+        tr(lang, { zh: '请再次输入新密码', en: 'Please confirm your new password', de: 'Bitte bestätigen Sie Ihr neues Passwort', ja: '新しいパスワードを確認してください', ko: '새 비밀번호를 확인해 주세요.', es: 'Por favor confirma tu nueva contraseña', it: 'Per favore conferma la tua nuova password', vi: 'Vui lòng xác nhận mật khẩu mới của bạn', fr: 'Veuillez confirmer votre nouveau mot de passe' })
     } else if (loginPwdConfirm !== loginPwdNew) {
       next.confirm =
-        lang === 'zh' ? '两次输入的密码不一致' : 'The two passwords do not match'
+        tr(lang, { zh: '两次输入的密码不一致', en: 'The two passwords do not match', de: 'Die beiden Passwörter stimmen nicht überein', ja: '2 つのパスワードが一致しません', ko: '두 비밀번호가 일치하지 않습니다.', es: 'Las dos contraseñas no coinciden', it: 'Le due password non corrispondono', vi: 'Hai mật khẩu không khớp', fr: 'Les deux mots de passe ne correspondent pas' })
     }
 
     setLoginPwdErrors(next)
@@ -521,19 +521,19 @@ const AccountCenter: React.FC = () => {
 
     const uid = getAuthUserId()
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.post(`/api/users/${uid}/change-password`, { oldPassword: loginPwdOld, newPassword: loginPwdNew })
       .then(() => {
-        showToast(lang === 'zh' ? '修改成功' : 'Password updated successfully')
+        showToast(tr(lang, { zh: '修改成功', en: 'Password updated successfully', de: 'Passwort erfolgreich aktualisiert', ja: 'パスワードが正常に更新されました', ko: '비밀번호가 성공적으로 업데이트되었습니다.', es: 'Contraseña actualizada exitosamente', it: 'Password aggiornata con successo', vi: 'Đã cập nhật mật khẩu thành công', fr: 'Mot de passe mis à jour avec succès' }))
         setLoginPwdOld('')
         setLoginPwdNew('')
         setLoginPwdConfirm('')
         setLoginPwdErrors({ old: '', new: '', confirm: '' })
       })
       .catch((err: unknown) => {
-        const fallback = lang === 'zh' ? '修改失败' : 'Update failed'
+        const fallback = tr(lang, { zh: '修改失败', en: 'Update failed', de: 'Update fehlgeschlagen', ja: 'アップデートに失敗しました', ko: '업데이트 실패', es: 'La actualización falló', it: 'Aggiornamento non riuscito', vi: 'Cập nhật không thành công', fr: 'La mise à jour a échoué' })
         const msg = err instanceof Error ? err.message : fallback
         setLoginPwdErrors((e) => ({ ...e, old: msg }))
         showToast(msg, 'error')
@@ -543,39 +543,39 @@ const AccountCenter: React.FC = () => {
   const handleTradePwdSubmit = () => {
     if (tradePwdNew.length !== 6) {
       showToast(
-        lang === 'zh' ? '请输入6位数字密码' : 'Please enter a 6‑digit PIN',
+        tr(lang, { zh: '请输入6位数字密码', en: 'Please enter a 6‑digit PIN', de: 'Bitte geben Sie eine 6-stellige PIN ein', ja: '6 桁の PIN を入力してください', ko: '6자리 PIN을 입력하세요.', es: 'Por favor ingrese un PIN de 6 dígitos', it: 'Inserisci un PIN di 6 cifre', vi: 'Vui lòng nhập mã PIN gồm 6 chữ số', fr: 'Veuillez saisir un code PIN à 6 chiffres' }),
         'error',
       )
       return
     }
     if (tradePwdConfirm.length !== 6) {
       showToast(
-        lang === 'zh' ? '请输入6位数字密码' : 'Please enter a 6‑digit PIN',
+        tr(lang, { zh: '请输入6位数字密码', en: 'Please enter a 6‑digit PIN', de: 'Bitte geben Sie eine 6-stellige PIN ein', ja: '6 桁の PIN を入力してください', ko: '6자리 PIN을 입력하세요.', es: 'Por favor ingrese un PIN de 6 dígitos', it: 'Inserisci un PIN di 6 cifre', vi: 'Vui lòng nhập mã PIN gồm 6 chữ số', fr: 'Veuillez saisir un code PIN à 6 chiffres' }),
         'error',
       )
       return
     }
     if (tradePwdNew !== tradePwdConfirm) {
       showToast(
-        lang === 'zh' ? '两次密码不一致' : 'The two PIN codes do not match',
+        tr(lang, { zh: '两次密码不一致', en: 'The two PIN codes do not match', de: 'Die beiden PIN-Codes stimmen nicht überein', ja: '2 つの PIN コードが一致しません', ko: '두 개의 PIN 코드가 일치하지 않습니다', es: 'Los dos códigos PIN no coinciden', it: 'I due codici PIN non corrispondono', vi: 'Hai mã PIN không khớp nhau', fr: 'Les deux codes PIN ne correspondent pas' }),
         'error',
       )
       return
     }
     const uid = getAuthUserId()
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.patch(`/api/users/${uid}`, { tradePassword: tradePwdNew })
       .then(() => {
         setSettingsProfile((p) => (p ? { ...p, hasTradePassword: true } : { hasTradePassword: true, addresses: [] }))
-        showToast(lang === 'zh' ? '设置成功' : 'Set successfully')
+        showToast(tr(lang, { zh: '设置成功', en: 'Set successfully', de: 'Erfolgreich eingestellt', ja: '正常に設定されました', ko: '성공적으로 설정되었습니다', es: 'Establecer correctamente', it: 'Impostato correttamente', vi: 'Đặt thành công', fr: 'Définir avec succès' }))
         setTradePwdNew('')
         setTradePwdConfirm('')
       })
       .catch((err: unknown) => {
-        const fallback = lang === 'zh' ? '设置失败' : 'Operation failed'
+        const fallback = tr(lang, { zh: '设置失败', en: 'Operation failed', de: 'Der Vorgang ist fehlgeschlagen', ja: '操作が失敗しました', ko: '작업 실패', es: 'Operación fallida', it: 'Operazione fallita', vi: 'Thao tác không thành công', fr: 'L\'opération a échoué' })
         showToast(err instanceof Error ? err.message : fallback, 'error')
       })
   }
@@ -583,46 +583,46 @@ const AccountCenter: React.FC = () => {
   const handleTradePwdEditSubmit = () => {
     if (tradePwdOld.length !== 6) {
       showToast(
-        lang === 'zh' ? '请输入6位数字旧密码' : 'Please enter your current 6‑digit PIN',
+        tr(lang, { zh: '请输入6位数字旧密码', en: 'Please enter your current 6‑digit PIN', de: 'Bitte geben Sie Ihre aktuelle 6-stellige PIN ein', ja: '現在の 6 桁の PIN を入力してください', ko: '현재 6자리 PIN을 입력하세요.', es: 'Ingrese su PIN actual de 6 dígitos', it: 'Inserisci il tuo PIN attuale di 6 cifre', vi: 'Vui lòng nhập mã PIN gồm 6 chữ số hiện tại của bạn', fr: 'Veuillez saisir votre code PIN actuel à 6 chiffres' }),
         'error',
       )
       return
     }
     if (tradePwdNew.length !== 6) {
       showToast(
-        lang === 'zh' ? '请输入6位数字新密码' : 'Please enter a new 6‑digit PIN',
+        tr(lang, { zh: '请输入6位数字新密码', en: 'Please enter a new 6‑digit PIN', de: 'Bitte geben Sie eine neue 6-stellige PIN ein', ja: '新しい 6 桁の PIN を入力してください', ko: '새로운 6자리 PIN을 입력하세요.', es: 'Ingrese un nuevo PIN de 6 dígitos', it: 'Inserisci un nuovo PIN di 6 cifre', vi: 'Vui lòng nhập mã PIN mới gồm 6 chữ số', fr: 'Veuillez saisir un nouveau code PIN à 6 chiffres' }),
         'error',
       )
       return
     }
     if (tradePwdConfirm.length !== 6) {
       showToast(
-        lang === 'zh' ? '请再次输入6位数字新密码' : 'Please confirm your new 6‑digit PIN',
+        tr(lang, { zh: '请再次输入6位数字新密码', en: 'Please confirm your new 6‑digit PIN', de: 'Bitte bestätigen Sie Ihre neue 6-stellige PIN', ja: '新しい 6 桁の PIN を確認してください', ko: '새로운 6자리 PIN을 확인해 주세요.', es: 'Confirme su nuevo PIN de 6 dígitos', it: 'Conferma il tuo nuovo PIN di 6 cifre', vi: 'Vui lòng xác nhận mã PIN 6 chữ số mới của bạn', fr: 'Veuillez confirmer votre nouveau code PIN à 6 chiffres' }),
         'error',
       )
       return
     }
     if (tradePwdNew !== tradePwdConfirm) {
       showToast(
-        lang === 'zh' ? '两次密码不一致' : 'The two PIN codes do not match',
+        tr(lang, { zh: '两次密码不一致', en: 'The two PIN codes do not match', de: 'Die beiden PIN-Codes stimmen nicht überein', ja: '2 つの PIN コードが一致しません', ko: '두 개의 PIN 코드가 일치하지 않습니다', es: 'Los dos códigos PIN no coinciden', it: 'I due codici PIN non corrispondono', vi: 'Hai mã PIN không khớp nhau', fr: 'Les deux codes PIN ne correspondent pas' }),
         'error',
       )
       return
     }
     const uid = getAuthUserId()
     if (!uid) {
-      showToast(lang === 'zh' ? '请先登录' : 'Please log in first', 'error')
+      showToast(tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }), 'error')
       return
     }
     api.patch(`/api/users/${uid}`, { oldTradePassword: tradePwdOld, tradePassword: tradePwdNew })
       .then(() => {
-        showToast(lang === 'zh' ? '修改成功' : 'PIN updated successfully')
+        showToast(tr(lang, { zh: '修改成功', en: 'PIN updated successfully', de: 'PIN erfolgreich aktualisiert', ja: 'PIN が正常に更新されました', ko: 'PIN이 업데이트되었습니다.', es: 'PIN actualizado correctamente', it: 'PIN aggiornato correttamente', vi: 'Đã cập nhật mã PIN thành công', fr: 'Code PIN mis à jour avec succès' }))
         setTradePwdOld('')
         setTradePwdNew('')
         setTradePwdConfirm('')
       })
       .catch((err: unknown) => {
-        const fallback = lang === 'zh' ? '修改失败' : 'Update failed'
+        const fallback = tr(lang, { zh: '修改失败', en: 'Update failed', de: 'Update fehlgeschlagen', ja: 'アップデートに失敗しました', ko: '업데이트 실패', es: 'La actualización falló', it: 'Aggiornamento non riuscito', vi: 'Cập nhật không thành công', fr: 'La mise à jour a échoué' })
         showToast(err instanceof Error ? err.message : fallback, 'error')
       })
   }
@@ -655,7 +655,7 @@ const AccountCenter: React.FC = () => {
                     </div>
                     <div className="account-wallet-balance-text">
                       <div className="account-wallet-balance-label">
-                        {lang === 'zh' ? '账户余额 (USDT)' : 'Account balance (USDT)'}
+                        {tr(lang, { zh: '账户余额 (USDT)', en: 'Account balance (USDT)', de: 'Kontostand (USDT)', ja: '口座残高 (USDT)', ko: '계좌 잔고(USDT)', es: 'Saldo de cuenta (USDT)', it: 'Saldo del conto (USDT)', vi: 'Số dư tài khoản (USDT)', fr: 'Solde du compte (USDT)' })}
                       </div>
                       <div className="account-wallet-balance-value">{walletBalance.toFixed(2)}</div>
                     </div>
@@ -666,14 +666,14 @@ const AccountCenter: React.FC = () => {
                       className="account-wallet-primary-btn"
                       onClick={() => navigate('/wallet/recharge')}
                     >
-                      {lang === 'zh' ? '充值' : 'Recharge'}
+                      {tr(lang, { zh: '充值', en: 'Recharge', de: 'Aufladen', ja: 'リチャージ', ko: '재충전', es: 'Recargar', it: 'Ricaricare', vi: 'nạp tiền', fr: 'Recharger' })}
                     </button>
                     <button
                       type="button"
                       className="account-wallet-secondary-btn"
                       onClick={() => navigate('/wallet/withdraw')}
                     >
-                      {lang === 'zh' ? '提现' : 'Withdraw'}
+                      {tr(lang, { zh: '提现', en: 'Withdraw', de: 'Zurückziehen', ja: '撤回する', ko: '철회하다', es: 'Retirar', it: 'Ritirare', vi: 'Rút', fr: 'Retirer' })}
                     </button>
                   </div>
                 </div>
@@ -682,7 +682,7 @@ const AccountCenter: React.FC = () => {
               <div className="account-wallet-history">
                 <div className="account-wallet-history-header">
                   <div className="account-wallet-history-title">
-                    {lang === 'zh' ? '钱包历史' : 'Wallet history'}
+                    {tr(lang, { zh: '钱包历史', en: 'Wallet history', de: 'Wallet-Geschichte', ja: 'ウォレット履歴', ko: '지갑 내역', es: 'Historial de billetera', it: 'Cronologia del portafoglio', vi: 'Lịch sử ví', fr: 'Historique du portefeuille' })}
                   </div>
                   <div className="account-wallet-history-tabs">
                     <button
@@ -690,14 +690,14 @@ const AccountCenter: React.FC = () => {
                       className={`account-wallet-history-tab${walletHistoryTab === 'recharge' ? ' account-wallet-history-tab--active' : ''}`}
                       onClick={() => setWalletHistoryTab('recharge')}
                     >
-                      {lang === 'zh' ? '充值' : 'Recharge'}
+                      {tr(lang, { zh: '充值', en: 'Recharge', de: 'Aufladen', ja: 'リチャージ', ko: '재충전', es: 'Recargar', it: 'Ricaricare', vi: 'nạp tiền', fr: 'Recharger' })}
                     </button>
                     <button
                       type="button"
                       className={`account-wallet-history-tab${walletHistoryTab === 'withdraw' ? ' account-wallet-history-tab--active' : ''}`}
                       onClick={() => setWalletHistoryTab('withdraw')}
                     >
-                      {lang === 'zh' ? '提现' : 'Withdraw'}
+                      {tr(lang, { zh: '提现', en: 'Withdraw', de: 'Zurückziehen', ja: '撤回する', ko: '철회하다', es: 'Retirar', it: 'Ritirare', vi: 'Rút', fr: 'Retirer' })}
                     </button>
                   </div>
                 </div>
@@ -707,20 +707,20 @@ const AccountCenter: React.FC = () => {
                   {walletHistoryTab === 'recharge' ? (
                     <>
                       <div className="account-wallet-table-head">
-                        <span>{lang === 'zh' ? '日期' : 'Date'}</span>
-                        <span>{lang === 'zh' ? '订单号' : 'Order No.'}</span>
-                        <span>{lang === 'zh' ? '充值金额' : 'Recharge amount'}</span>
-                        <span>{lang === 'zh' ? '币种/协议' : 'Currency / protocol'}</span>
-                        <span>{lang === 'zh' ? '订单状态' : 'Status'}</span>
-                        <span>{lang === 'zh' ? '交易截图' : 'Screenshot'}</span>
-                        <span>{lang === 'zh' ? '实际到账' : 'Received amount'}</span>
-                        <span>{lang === 'zh' ? '充值地址' : 'Recharge address'}</span>
+                        <span>{tr(lang, { zh: '日期', en: 'Date', de: 'Datum', ja: '日付', ko: '날짜', es: 'Fecha', it: 'Data', vi: 'Ngày', fr: 'Date' })}</span>
+                        <span>{tr(lang, { zh: '订单号', en: 'Order No.', de: 'Bestell-Nr.', ja: '注文番号', ko: '주문번호', es: 'Nro. de orden', it: 'Ordine n.', vi: 'Số thứ tự', fr: 'Numéro de commande' })}</span>
+                        <span>{tr(lang, { zh: '充值金额', en: 'Recharge amount', de: 'Aufladebetrag', ja: 'チャージ金額', ko: '충전금액', es: 'Monto de recarga', it: 'Importo della ricarica', vi: 'Số tiền nạp', fr: 'Montant de la recharge' })}</span>
+                        <span>{tr(lang, { zh: '币种/协议', en: 'Currency / protocol', de: 'Währung/Protokoll', ja: '通貨/プロトコル', ko: '통화/프로토콜', es: 'Moneda / protocolo', it: 'Valuta/protocollo', vi: 'Tiền tệ/giao thức', fr: 'Monnaie/protocole' })}</span>
+                        <span>{tr(lang, { zh: '订单状态', en: 'Status', de: 'Status', ja: '状態', ko: '상태', es: 'Estado', it: 'Stato', vi: 'Trạng thái', fr: 'Statut' })}</span>
+                        <span>{tr(lang, { zh: '交易截图', en: 'Screenshot', de: 'Screenshot', ja: 'スクリーンショット', ko: '스크린샷', es: 'Captura de pantalla', it: 'Schermata', vi: 'Ảnh chụp màn hình', fr: 'Capture d\'écran' })}</span>
+                        <span>{tr(lang, { zh: '实际到账', en: 'Received amount', de: 'Erhaltener Betrag', ja: '受取額', ko: '수령금액', es: 'Monto recibido', it: 'Importo ricevuto', vi: 'Số tiền nhận được', fr: 'Montant reçu' })}</span>
+                        <span>{tr(lang, { zh: '充值地址', en: 'Recharge address', de: 'Aufladeadresse', ja: 'リチャージアドレス', ko: '충전 주소', es: 'Dirección de recarga', it: 'Indirizzo di ricarica', vi: 'Địa chỉ nạp tiền', fr: 'Adresse de recharge' })}</span>
                       </div>
                       <div className="account-wallet-table-body">
                         {rechargeRecords.length === 0 ? (
                           <div className="account-wallet-table-body--empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
                             <span className="account-empty-text">
-                              {lang === 'zh' ? '暂无数据' : 'No data'}
+                              {tr(lang, { zh: '暂无数据', en: 'No data', de: 'Keine Daten', ja: 'データなし', ko: '데이터 없음', es: 'Sin datos', it: 'Nessun dato', vi: 'Không có dữ liệu', fr: 'Aucune donnée' })}
                             </span>
                           </div>
                         ) : (
@@ -731,19 +731,11 @@ const AccountCenter: React.FC = () => {
                               <span>{r.amount}</span>
                               <span>{r.currency}/{r.protocol}</span>
                               <span>
-                                {lang === 'zh'
-                                  ? (STATUS_TEXT[r.status] ?? r.status)
-                                  : ({
-                                      pending: 'Pending',
-                                      approved: 'Approved',
-                                      rejected: 'Rejected',
-                                      completed: 'Completed',
-                                      failed: 'Failed',
-                                    }[r.status] ?? r.status)}
+                                {getWalletStatusLabel(r.status, lang)}
                               </span>
                               <span>
                                 {r.rechargeScreenshotUrl ? (
-                                  <a href={r.rechargeScreenshotUrl} target="_blank" rel="noopener noreferrer" className="account-wallet-screenshot-link" title={lang === 'zh' ? '查看大图' : 'View'}>
+                                  <a href={r.rechargeScreenshotUrl} target="_blank" rel="noopener noreferrer" className="account-wallet-screenshot-link" title={tr(lang, { zh: '查看大图', en: 'View', de: 'Sicht', ja: 'ビュー', ko: '보다', es: 'Vista', it: 'Visualizzazione', vi: 'Xem', fr: 'Voir' })}>
                                     <img src={r.rechargeScreenshotUrl} alt="" className="account-wallet-screenshot-thumb" />
                                   </a>
                                 ) : (
@@ -760,18 +752,18 @@ const AccountCenter: React.FC = () => {
                   ) : (
                     <>
                       <div className="account-wallet-table-head account-wallet-table-head--withdraw">
-                        <span>{lang === 'zh' ? '日期' : 'Date'}</span>
-                        <span>{lang === 'zh' ? '订单号' : 'Order No.'}</span>
-                        <span>{lang === 'zh' ? '提现金额' : 'Withdrawal amount'}</span>
-                        <span>{lang === 'zh' ? '币种' : 'Currency'}</span>
-                        <span>{lang === 'zh' ? '提现地址' : 'Withdrawal address'}</span>
-                        <span>{lang === 'zh' ? '订单状态' : 'Status'}</span>
+                        <span>{tr(lang, { zh: '日期', en: 'Date', de: 'Datum', ja: '日付', ko: '날짜', es: 'Fecha', it: 'Data', vi: 'Ngày', fr: 'Date' })}</span>
+                        <span>{tr(lang, { zh: '订单号', en: 'Order No.', de: 'Bestell-Nr.', ja: '注文番号', ko: '주문번호', es: 'Nro. de orden', it: 'Ordine n.', vi: 'Số thứ tự', fr: 'Numéro de commande' })}</span>
+                        <span>{tr(lang, { zh: '提现金额', en: 'Withdrawal amount', de: 'Auszahlungsbetrag', ja: '出金額', ko: '출금금액', es: 'Monto del retiro', it: 'Importo del prelievo', vi: 'Số tiền rút', fr: 'Montant du retrait' })}</span>
+                        <span>{tr(lang, { zh: '币种', en: 'Currency', de: 'Währung', ja: '通貨', ko: '통화', es: 'Divisa', it: 'Valuta', vi: 'Tiền tệ', fr: 'Devise' })}</span>
+                        <span>{tr(lang, { zh: '提现地址', en: 'Withdrawal address', de: 'Auszahlungsadresse', ja: '出金アドレス', ko: '출금주소', es: 'dirección de retiro', it: 'Indirizzo di ritiro', vi: 'Địa chỉ rút tiền', fr: 'Adresse de retrait' })}</span>
+                        <span>{tr(lang, { zh: '订单状态', en: 'Status', de: 'Status', ja: '状態', ko: '상태', es: 'Estado', it: 'Stato', vi: 'Trạng thái', fr: 'Statut' })}</span>
                       </div>
                       <div className="account-wallet-table-body">
                         {withdrawRecords.length === 0 ? (
                           <div className="account-wallet-table-body--empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
                             <span className="account-empty-text">
-                              {lang === 'zh' ? '暂无数据' : 'No data'}
+                              {tr(lang, { zh: '暂无数据', en: 'No data', de: 'Keine Daten', ja: 'データなし', ko: '데이터 없음', es: 'Sin datos', it: 'Nessun dato', vi: 'Không có dữ liệu', fr: 'Aucune donnée' })}
                             </span>
                           </div>
                         ) : (
@@ -783,15 +775,7 @@ const AccountCenter: React.FC = () => {
                               <span>{w.currency}</span>
                               <span>{w.address}</span>
                               <span>
-                                {lang === 'zh'
-                                  ? (STATUS_TEXT[w.status] ?? w.status)
-                                  : ({
-                                      pending: 'Pending',
-                                      approved: 'Approved',
-                                      rejected: 'Rejected',
-                                      completed: 'Completed',
-                                      failed: 'Failed',
-                                    }[w.status] ?? w.status)}
+                                {getWalletStatusLabel(w.status, lang)}
                               </span>
                             </div>
                           ))
@@ -818,7 +802,7 @@ const AccountCenter: React.FC = () => {
                     ? orderList.filter((o) => REFUND_STATUSES.includes(o.status))
                     : orderList.filter((o) => o.status === orderTab)
             const cartPlaceholderAddress = {
-              recipient: lang === 'zh' ? '请前往结算页选择' : 'Please choose on checkout page',
+              recipient: tr(lang, { zh: '请前往结算页选择', en: 'Please choose on checkout page', de: 'Bitte wählen Sie auf der Checkout-Seite aus', ja: '購入手続きページでお選びください', ko: '결제 페이지에서 선택해주세요.', es: 'Por favor elija en la página de pago', it: 'Si prega di scegliere nella pagina di pagamento', vi: 'Vui lòng chọn trên trang thanh toán', fr: 'Veuillez choisir sur la page de paiement' }),
               email: '',
               phoneCode: '',
               phone: '',
@@ -826,12 +810,12 @@ const AccountCenter: React.FC = () => {
               province: '',
               city: '',
               postal: '',
-              detail: lang === 'zh' ? '请前往结算页选择收件地址' : 'Please choose the address on checkout page',
+              detail: tr(lang, { zh: '请前往结算页选择收件地址', en: 'Please choose the address on checkout page', de: 'Bitte wählen Sie die Adresse auf der Checkout-Seite aus', ja: 'チェックアウトページで住所を選択してください', ko: '결제 페이지에서 주소를 선택하세요.', es: 'Elija la dirección en la página de pago', it: 'Si prega di scegliere l\'indirizzo nella pagina di pagamento', vi: 'Vui lòng chọn địa chỉ trên trang thanh toán', fr: 'Veuillez choisir l\'adresse sur la page de paiement' }),
             }
             const cartAsOrder: Order | null = cartItems.length > 0
               ? {
                   id: '__cart__',
-                  orderNumber: lang === 'zh' ? '购物车' : 'Cart',
+                  orderNumber: tr(lang, { zh: '购物车', en: 'Cart', de: 'Warenkorb', ja: 'カート', ko: '카트', es: 'Carro', it: 'Carrello', vi: 'Xe đẩy', fr: 'Panier' }),
                   status: 'pending',
                   items: cartItems as Order['items'],
                   address: cartPlaceholderAddress,
@@ -843,13 +827,13 @@ const AccountCenter: React.FC = () => {
               filteredOrders = [cartAsOrder, ...filteredOrders]
             }
             const orderTabs: { key: 'all' | OrderStatus | 'delivered' | 'refund'; label: string }[] = [
-              { key: 'all', label: lang === 'zh' ? '全部' : 'All' },
-              { key: 'pending', label: lang === 'zh' ? '待支付' : 'To pay' },
-              { key: 'shipping', label: lang === 'zh' ? '待发货' : 'To ship' },
-              { key: 'delivered', label: lang === 'zh' ? '待收货' : 'To receive' },
-              { key: 'completed', label: lang === 'zh' ? '订单完成' : 'Completed' },
-              { key: 'refund', label: lang === 'zh' ? '退款/售后' : 'Refund / After‑sales' },
-              { key: 'cancelled', label: lang === 'zh' ? '已取消' : 'Cancelled' },
+              { key: 'all', label: tr(lang, { zh: '全部', en: 'All', de: 'Alle', ja: '全て', ko: '모두', es: 'Todo', it: 'Tutto', vi: 'Tất cả', fr: 'Tous' }) },
+              { key: 'pending', label: tr(lang, { zh: '待支付', en: 'To pay', de: 'Zu bezahlen', ja: '支払う', ko: '지불하다', es: 'para pagar', it: 'Per pagare', vi: 'Để trả tiền', fr: 'Payer' }) },
+              { key: 'shipping', label: tr(lang, { zh: '待发货', en: 'To ship', de: 'Zum Versenden', ja: '発送する', ko: '배송하려면', es: 'para enviar', it: 'Da spedire', vi: 'Gửi hàng', fr: 'Pour expédier' }) },
+              { key: 'delivered', label: tr(lang, { zh: '待收货', en: 'To receive', de: 'Empfangen', ja: '受け取るには', ko: '받으려면', es: 'para recibir', it: 'Ricevere', vi: 'Để nhận', fr: 'Pour recevoir' }) },
+              { key: 'completed', label: tr(lang, { zh: '订单完成', en: 'Completed', de: 'Vollendet', ja: '完了しました', ko: '완전한', es: 'Terminado', it: 'Completato', vi: 'Hoàn thành', fr: 'Complété' }) },
+              { key: 'refund', label: tr(lang, { zh: '退款/售后', en: 'Refund / After‑sales', de: 'Rückerstattung / Kundendienst', ja: '返金・アフターサービス', ko: '환불/애프터서비스', es: 'Reembolso / Postventa', it: 'Rimborso/Post-vendita', vi: 'Hoàn tiền/Sau bán hàng', fr: 'Remboursement / Après-vente' }) },
+              { key: 'cancelled', label: tr(lang, { zh: '已取消', en: 'Cancelled', de: 'Abgesagt', ja: 'キャンセル', ko: '취소', es: 'Cancelado', it: 'Annullato', vi: 'Đã hủy', fr: 'Annulé' }) },
             ]
             const formatOrderDate = (ts: number) => {
               const d = new Date(ts)
@@ -866,17 +850,17 @@ const AccountCenter: React.FC = () => {
             const handleCancelOrder = (orderId: string) => {
               if (orderId === '__cart__') {
                 clearCart()
-                showToast(lang === 'zh' ? '已清空购物车' : 'Cart cleared')
+                showToast(tr(lang, { zh: '已清空购物车', en: 'Cart cleared', de: 'Warenkorb geleert', ja: 'カートが空になりました', ko: '장바구니가 비워졌습니다.', es: 'Carrito borrado', it: 'Carrello svuotato', vi: 'Đã xóa giỏ hàng', fr: 'Panier vidé' }))
                 return
               }
               api
                 .patch(`/api/orders/${encodeURIComponent(orderId)}`, { status: 'cancelled' })
                 .then(() => {
                   setOrderList((prev) => prev.map((o) => (o.id === orderId ? { ...o, status: 'cancelled' } as Order : o)))
-                  showToast(lang === 'zh' ? '订单已取消' : 'Order cancelled')
+                  showToast(tr(lang, { zh: '订单已取消', en: 'Order cancelled', de: 'Bestellung storniert', ja: '注文がキャンセルされました', ko: '주문이 취소됨', es: 'Orden cancelada', it: 'Ordine annullato', vi: 'Đơn hàng bị hủy', fr: 'Commande annulée' }))
                 })
                 .catch((e: unknown) => {
-                  const fallback = lang === 'zh' ? '取消订单失败' : 'Failed to cancel the order'
+                  const fallback = tr(lang, { zh: '取消订单失败', en: 'Failed to cancel the order', de: 'Die Bestellung konnte nicht storniert werden', ja: '注文のキャンセルに失敗しました', ko: '주문을 취소하지 못했습니다.', es: 'No se pudo cancelar el pedido', it: 'Impossibile annullare l\'ordine', vi: 'Không thể hủy đơn hàng', fr: 'Impossible d\'annuler la commande' })
                   showToast(e instanceof Error ? e.message : fallback, 'error')
                 })
             }
@@ -891,10 +875,10 @@ const AccountCenter: React.FC = () => {
                       o.id === orderId ? ({ ...o, status: 'completed' } as Order) : o,
                     ),
                   )
-                  showToast(lang === 'zh' ? '已确认收货' : 'Order confirmed received')
+                  showToast(tr(lang, { zh: '已确认收货', en: 'Order confirmed received', de: 'Bestellung bestätigt erhalten', ja: '注文確認済み', ko: '주문 확인됨', es: 'Pedido confirmado recibido', it: 'Ordine confermato ricevuto', vi: 'Đơn hàng được xác nhận đã nhận', fr: 'Commande confirmée reçue' }))
                 })
                 .catch((e: unknown) => {
-                  const fallback = lang === 'zh' ? '确认收货失败' : 'Failed to confirm receipt'
+                  const fallback = tr(lang, { zh: '确认收货失败', en: 'Failed to confirm receipt', de: 'Der Empfang konnte nicht bestätigt werden', ja: '受信確認に失敗しました', ko: '영수증 확인 실패', es: 'No se pudo confirmar la recepción', it: 'Impossibile confermare la ricezione', vi: 'Không thể xác nhận đã nhận', fr: 'Échec de la confirmation de la réception' })
                   showToast(e instanceof Error ? e.message : fallback, 'error')
                 })
             }
@@ -909,17 +893,17 @@ const AccountCenter: React.FC = () => {
                       o.id === orderId ? ({ ...o, status: 'return_pending' } as Order) : o,
                     ),
                   )
-                  showToast(lang === 'zh' ? '已提交退货申请' : 'Return request submitted')
+                  showToast(tr(lang, { zh: '已提交退货申请', en: 'Return request submitted', de: 'Rückgabeantrag eingereicht', ja: '返品リクエストが送信されました', ko: '반품 요청이 제출되었습니다.', es: 'Solicitud de devolución enviada', it: 'Richiesta di reso inviata', vi: 'Đã gửi yêu cầu trả lại', fr: 'Demande de retour soumise' }))
                 })
                 .catch((e: unknown) => {
-                  const fallback = lang === 'zh' ? '申请退货失败' : 'Failed to submit return request'
+                  const fallback = tr(lang, { zh: '申请退货失败', en: 'Failed to submit return request', de: 'Rücksendeantrag konnte nicht gesendet werden', ja: '返品リクエストの送信に失敗しました', ko: '반품 요청을 제출하지 못했습니다.', es: 'No se pudo enviar la solicitud de devolución', it: 'Impossibile inviare la richiesta di reso', vi: 'Không thể gửi yêu cầu trả lại', fr: 'Échec de la soumission de la demande de retour' })
                   showToast(e instanceof Error ? e.message : fallback, 'error')
                 })
             }
             return (
               <section className="account-orders">
                 <h1 className="account-orders-title">
-                  {lang === 'zh' ? '我的订单' : 'My orders'}
+                  {tr(lang, { zh: '我的订单', en: 'My orders', de: 'Meine Bestellungen', ja: '私の注文', ko: '내 주문', es: 'mis pedidos', it: 'I miei ordini', vi: 'Đơn đặt hàng của tôi', fr: 'Mes commandes' })}
                 </h1>
                 <div className="account-orders-tabs">
                   {orderTabs.map(({ key, label }) => (
@@ -937,15 +921,23 @@ const AccountCenter: React.FC = () => {
                   <div className="account-orders-empty">
                     <img
                       src={kongtai}
-                      alt={lang === 'zh' ? '暂无订单' : 'No orders yet'}
+                      alt={tr(lang, { zh: '暂无订单', en: 'No orders yet', de: 'Noch keine Bestellungen', ja: 'まだ注文はありません', ko: '아직 주문이 없습니다', es: 'Aún no hay pedidos', it: 'Nessun ordine ancora', vi: 'Chưa có đơn đặt hàng nào', fr: 'Aucune commande pour l\'instant' })}
                       className="account-empty-img"
                     />
                     <div className="account-empty-text">
                       {orderTab === 'all'
-                        ? (lang === 'zh' ? '暂无订单' : 'No orders yet')
-                        : lang === 'zh'
-                          ? `暂无${orderTabs.find((t) => t.key === orderTab)?.label ?? ''}订单`
-                          : 'No orders under this filter'}
+                        ? (tr(lang, { zh: '暂无订单', en: 'No orders yet', de: 'Noch keine Bestellungen', ja: 'まだ注文はありません', ko: '아직 주문이 없습니다', es: 'Aún no hay pedidos', it: 'Nessun ordine ancora', vi: 'Chưa có đơn đặt hàng nào', fr: 'Aucune commande pour l\'instant' }))
+                        : tr(lang, {
+                            zh: `暂无${orderTabs.find((t) => t.key === orderTab)?.label ?? ''}订单`,
+                            en: 'No orders under this filter',
+                            de: 'Keine Bestellungen unter diesem Filter',
+                            ja: 'このフィルターに該当する注文はありません',
+                            ko: '이 필터에 해당하는 주문이 없습니다',
+                            es: 'No hay pedidos con este filtro',
+                            it: 'Nessun ordine con questo filtro',
+                            vi: 'Không có đơn hàng theo bộ lọc này',
+                            fr: 'Aucune commande pour ce filtre',
+                          })}
                     </div>
                   </div>
                 ) : (
@@ -955,10 +947,18 @@ const AccountCenter: React.FC = () => {
                         <div className="account-order-card-header">
                           <span className="account-order-card-no">
                             {order.id === '__cart__'
-                              ? (lang === 'zh' ? '购物车' : 'Cart')
-                              : (lang === 'zh'
-                                ? `订单号：${order.orderNumber}`
-                                : `Order No: ${order.orderNumber}`)}
+                              ? (tr(lang, { zh: '购物车', en: 'Cart', de: 'Warenkorb', ja: 'カート', ko: '카트', es: 'Carro', it: 'Carrello', vi: 'Xe đẩy', fr: 'Panier' }))
+                              : tr(lang, {
+                                  zh: `订单号：${order.orderNumber}`,
+                                  en: `Order No: ${order.orderNumber}`,
+                                  de: `Bestellnr.: ${order.orderNumber}`,
+                                  ja: `注文番号：${order.orderNumber}`,
+                                  ko: `주문 번호: ${order.orderNumber}`,
+                                  es: `N.º de pedido: ${order.orderNumber}`,
+                                  it: `N. ordine: ${order.orderNumber}`,
+                                  vi: `Mã đơn: ${order.orderNumber}`,
+                                  fr: `N° de commande : ${order.orderNumber}`,
+                                })}
                           </span>
                           {order.id !== '__cart__' && (
                             <span className="account-order-card-date">{formatOrderDate(order.createdAt)}</span>
@@ -987,13 +987,11 @@ const AccountCenter: React.FC = () => {
                           <div className="account-order-card-summary">
                             <div className="account-order-card-addr">
                               {order.id === '__cart__'
-                                ? (lang === 'zh'
-                                  ? '请前往结算页选择收件地址'
-                                  : 'Please choose the address on checkout page')
+                                ? (tr(lang, { zh: '请前往结算页选择收件地址', en: 'Please choose the address on checkout page', de: 'Bitte wählen Sie die Adresse auf der Checkout-Seite aus', ja: 'チェックアウトページで住所を選択してください', ko: '결제 페이지에서 주소를 선택하세요.', es: 'Elija la dirección en la página de pago', it: 'Si prega di scegliere l\'indirizzo nella pagina di pagamento', vi: 'Vui lòng chọn địa chỉ trên trang thanh toán', fr: 'Veuillez choisir l\'adresse sur la page de paiement' }))
                                 : `${order.address.recipient} ${order.address.phoneCode} ${order.address.phone} ${order.address.detail}`}
                             </div>
                             <div className="account-order-card-total">
-                              {lang === 'zh' ? '合计：' : 'Total: '}
+                              {tr(lang, { zh: '合计：', en: 'Total: ', de: 'Gesamt:', ja: '合計：', ko: '총:', es: 'Total:', it: 'Totale:', vi: 'Tổng cộng:', fr: 'Total:' })}
                               <strong>${order.total.toFixed(2)}</strong>
                             </div>
                           </div>
@@ -1007,8 +1005,8 @@ const AccountCenter: React.FC = () => {
                                 onClick={() => handlePayOrder(order)}
                               >
                                 {order.id === '__cart__'
-                                  ? (lang === 'zh' ? '去结算' : 'Go to checkout')
-                                  : (lang === 'zh' ? '去支付' : 'Pay now')}
+                                  ? (tr(lang, { zh: '去结算', en: 'Go to checkout', de: 'Gehen Sie zur Kasse', ja: 'チェックアウトに行く', ko: '결제로 이동', es: 'Ir a pagar', it: 'Vai alla cassa', vi: 'Đi đến thanh toán', fr: 'Passer à la caisse' }))
+                                  : (tr(lang, { zh: '去支付', en: 'Pay now', de: 'Bezahlen Sie jetzt', ja: '今すぐお支払いください', ko: '지금 결제', es: 'Paga ahora', it: 'Paga adesso', vi: 'Thanh toán ngay', fr: 'Payez maintenant' }))}
                               </button>
                               <button
                                 type="button"
@@ -1016,14 +1014,14 @@ const AccountCenter: React.FC = () => {
                                 onClick={() => handleCancelOrder(order.id)}
                               >
                                 {order.id === '__cart__'
-                                  ? (lang === 'zh' ? '清空购物车' : 'Clear cart')
-                                  : (lang === 'zh' ? '取消订单' : 'Cancel order')}
+                                  ? (tr(lang, { zh: '清空购物车', en: 'Clear cart', de: 'Warenkorb leeren', ja: 'カートをクリアする', ko: '장바구니 지우기', es: 'Limpiar carrito', it: 'Svuota carrello', vi: 'Xóa giỏ hàng', fr: 'Vider le panier' }))
+                                  : (tr(lang, { zh: '取消订单', en: 'Cancel order', de: 'Bestellung stornieren', ja: '注文をキャンセルする', ko: '주문 취소', es: 'Cancelar pedido', it: 'Annulla l\'ordine', vi: 'Hủy đơn hàng', fr: 'Annuler la commande' }))}
                               </button>
                             </>
                           )}
                           {(order.status === 'shipping' || order.status === 'outbound' || order.status === 'transit') && (
                             <button type="button" className="account-order-card-btn account-order-card-btn--secondary">
-                              {lang === 'zh' ? '查看物流' : 'Track shipment'}
+                              {tr(lang, { zh: '查看物流', en: 'Track shipment', de: 'Sendung verfolgen', ja: '出荷を追跡する', ko: '배송 추적', es: 'Seguimiento del envío', it: 'Traccia la spedizione', vi: 'Theo dõi lô hàng', fr: 'Suivre l\'expédition' })}
                             </button>
                           )}
                           {order.status === 'signed' && (
@@ -1032,7 +1030,7 @@ const AccountCenter: React.FC = () => {
                               className="account-order-card-btn account-order-card-btn--primary"
                               onClick={() => handleConfirmOrder(order.id)}
                             >
-                              {lang === 'zh' ? '确认收货' : 'Confirm received'}
+                              {tr(lang, { zh: '确认收货', en: 'Confirm received', de: 'Bestätigen Sie den Empfang', ja: '受信を確認する', ko: '수신 확인', es: 'Confirmar recibido', it: 'Conferma ricevuta', vi: 'Xác nhận đã nhận', fr: 'Confirmer reçu' })}
                             </button>
                           )}
                           {order.status === 'completed' && (
@@ -1041,12 +1039,12 @@ const AccountCenter: React.FC = () => {
                               className="account-order-card-btn account-order-card-btn--secondary"
                               onClick={() => handleRequestReturn(order.id)}
                             >
-                              {lang === 'zh' ? '申请退货' : 'Request return'}
+                              {tr(lang, { zh: '申请退货', en: 'Request return', de: 'Rücksendung anfordern', ja: '返品のリクエスト', ko: '반품요청', es: 'Solicitar devolución', it: 'Richiedi il reso', vi: 'Yêu cầu trả lại', fr: 'Demander un retour' })}
                             </button>
                           )}
                           {(order.status === 'return_pending' || order.status === 'returned' || order.status === 'refund_pending' || order.status === 'refunded') && (
                             <button type="button" className="account-order-card-btn account-order-card-btn--secondary">
-                              {lang === 'zh' ? '查看详情' : 'View details'}
+                              {tr(lang, { zh: '查看详情', en: 'View details', de: 'Details anzeigen', ja: '詳細を見る', ko: '세부정보 보기', es: 'Ver detalles', it: 'Visualizza i dettagli', vi: 'Xem chi tiết', fr: 'Afficher les détails' })}
                             </button>
                           )}
                         </div>
@@ -1070,11 +1068,11 @@ const AccountCenter: React.FC = () => {
                 <div className="account-fav-products-empty">
                   <img
                     src={kongtai}
-                    alt={lang === 'zh' ? '暂无商品收藏' : 'No favorite products yet'}
+                    alt={tr(lang, { zh: '暂无商品收藏', en: 'No favorite products yet', de: 'Noch keine Lieblingsprodukte', ja: 'お気に入りの商品はまだありません', ko: '아직 마음에 드는 제품이 없습니다.', es: 'Aún no hay productos favoritos', it: 'Nessun prodotto preferito ancora', vi: 'Chưa có sản phẩm yêu thích', fr: 'Aucun produit favori pour l\'instant' })}
                     className="account-empty-img"
                   />
                   <div className="account-empty-text">
-                    {lang === 'zh' ? '暂无数据' : 'No data'}
+                    {tr(lang, { zh: '暂无数据', en: 'No data', de: 'Keine Daten', ja: 'データなし', ko: '데이터 없음', es: 'Sin datos', it: 'Nessun dato', vi: 'Không có dữ liệu', fr: 'Aucune donnée' })}
                   </div>
                 </div>
               ) : (
@@ -1106,12 +1104,20 @@ const AccountCenter: React.FC = () => {
                         disabled={productFavPage <= 1}
                         onClick={() => setProductFavPage((p) => p - 1)}
                       >
-                        {lang === 'zh' ? '上一页' : 'Previous'}
+                        {tr(lang, { zh: '上一页', en: 'Previous', de: 'Vorherige', ja: '前の', ko: '이전의', es: 'Anterior', it: 'Precedente', vi: 'Trước', fr: 'Précédent' })}
                       </button>
                       <span className="account-fav-pagination-info">
-                        {lang === 'zh'
-                          ? `第 ${productFavPage} / ${productFavTotalPages} 页`
-                          : `Page ${productFavPage} / ${productFavTotalPages}`}
+                        {tr(lang, {
+                          zh: `第 ${productFavPage} / ${productFavTotalPages} 页`,
+                          en: `Page ${productFavPage} / ${productFavTotalPages}`,
+                          de: `Seite ${productFavPage} / ${productFavTotalPages}`,
+                          ja: `${productFavPage} / ${productFavTotalPages} ページ`,
+                          ko: `${productFavPage} / ${productFavTotalPages} 페이지`,
+                          es: `Página ${productFavPage} / ${productFavTotalPages}`,
+                          it: `Pagina ${productFavPage} / ${productFavTotalPages}`,
+                          vi: `Trang ${productFavPage} / ${productFavTotalPages}`,
+                          fr: `Page ${productFavPage} / ${productFavTotalPages}`,
+                        })}
                       </span>
                       <button
                         type="button"
@@ -1119,7 +1125,7 @@ const AccountCenter: React.FC = () => {
                         disabled={productFavPage >= productFavTotalPages}
                         onClick={() => setProductFavPage((p) => p + 1)}
                       >
-                        {lang === 'zh' ? '下一页' : 'Next'}
+                        {tr(lang, { zh: '下一页', en: 'Next', de: 'Nächste', ja: '次', ko: '다음', es: 'Próximo', it: 'Prossimo', vi: 'Kế tiếp', fr: 'Suivant' })}
                       </button>
                     </div>
                   )}
@@ -1135,18 +1141,18 @@ const AccountCenter: React.FC = () => {
                   &lt;
                 </span>
                 <h1 className="account-fav-shops-title">
-                  {lang === 'zh' ? '关注店铺' : 'Followed shops'}
+                  {tr(lang, { zh: '关注店铺', en: 'Followed shops', de: 'Gefolgte Geschäfte', ja: 'フォローしたお店', ko: '팔로우한 상점', es: 'Tiendas seguidas', it: 'Negozi seguiti', vi: 'Cửa hàng đã theo dõi', fr: 'Boutiques suivies' })}
                 </h1>
               </header>
               {followedShops.length === 0 ? (
                 <div className="account-fav-shops-empty">
                   <img
                     src={kongtai}
-                    alt={lang === 'zh' ? '暂无关注店铺' : 'No followed shops yet'}
+                    alt={tr(lang, { zh: '暂无关注店铺', en: 'No followed shops yet', de: 'Noch keine Shops, denen ich gefolgt bin', ja: 'まだフォローしているショップはありません', ko: '아직 팔로우한 매장이 없습니다.', es: 'Aún no hay tiendas seguidas', it: 'Nessun negozio seguito ancora', vi: 'Chưa có cửa hàng nào được theo dõi', fr: 'Aucune boutique suivie pour l\'instant' })}
                     className="account-empty-img"
                   />
                   <div className="account-empty-text">
-                    {lang === 'zh' ? '暂无数据' : 'No data'}
+                    {tr(lang, { zh: '暂无数据', en: 'No data', de: 'Keine Daten', ja: 'データなし', ko: '데이터 없음', es: 'Sin datos', it: 'Nessun dato', vi: 'Không có dữ liệu', fr: 'Aucune donnée' })}
                   </div>
                 </div>
               ) : (
@@ -1165,7 +1171,7 @@ const AccountCenter: React.FC = () => {
                           <div className="account-fav-shops-item-info">
                             <span className="account-fav-shops-item-name">{shop.name}</span>
                             <span className="account-fav-shops-item-enter">
-                              {lang === 'zh' ? '进入店铺' : 'Enter shop'}
+                              {tr(lang, { zh: '进入店铺', en: 'Enter shop', de: 'Laden betreten', ja: '店に入る', ko: '가게에 들어가세요', es: 'Entrar a la tienda', it: 'Entra nel negozio', vi: 'Vào cửa hàng', fr: 'Entrez dans la boutique' })}
                             </span>
                           </div>
                           <span className="account-fav-shops-item-arrow" aria-hidden="true">›</span>
@@ -1181,18 +1187,18 @@ const AccountCenter: React.FC = () => {
                               api.delete(`/api/users/${u.id}/followed-shops/${encodeURIComponent(shop.id)}`)
                                 .then(() => {
                                   setFollowedShops((prev) => prev.filter((s) => s.id !== shop.id))
-                                  showToast(lang === 'zh' ? '已取消关注' : 'Unfollowed')
+                                  showToast(tr(lang, { zh: '已取消关注', en: 'Unfollowed', de: 'Nicht verfolgt', ja: 'フォローされていません', ko: '팔로우하지 않음', es: 'No seguido', it: 'Non seguito', vi: 'Đã hủy theo dõi', fr: 'Non suivi' }))
                                 })
                                 .catch(() =>
                                   showToast(
-                                    lang === 'zh' ? '操作失败' : 'Operation failed',
+                                    tr(lang, { zh: '操作失败', en: 'Operation failed', de: 'Der Vorgang ist fehlgeschlagen', ja: '操作が失敗しました', ko: '작업 실패', es: 'Operación fallida', it: 'Operazione fallita', vi: 'Thao tác không thành công', fr: 'L\'opération a échoué' }),
                                     'error',
                                   ),
                                 )
                             }
                           }}
                         >
-                          {lang === 'zh' ? '取消关注' : 'Unfollow'}
+                          {tr(lang, { zh: '取消关注', en: 'Unfollow', de: 'Nicht mehr folgen', ja: 'フォローを解除する', ko: '언팔로우', es: 'Dejar de seguir', it: 'Smetti di seguire', vi: 'Hủy theo dõi', fr: 'Ne plus suivre' })}
                         </button>
                       </li>
                     ))}
@@ -1205,12 +1211,20 @@ const AccountCenter: React.FC = () => {
                         disabled={shopFavPage <= 1}
                         onClick={() => setShopFavPage((p) => p - 1)}
                       >
-                        {lang === 'zh' ? '上一页' : 'Previous'}
+                        {tr(lang, { zh: '上一页', en: 'Previous', de: 'Vorherige', ja: '前の', ko: '이전의', es: 'Anterior', it: 'Precedente', vi: 'Trước', fr: 'Précédent' })}
                       </button>
                       <span className="account-fav-pagination-info">
-                        {lang === 'zh'
-                          ? `第 ${shopFavPage} / ${shopFavTotalPages} 页`
-                          : `Page ${shopFavPage} / ${shopFavTotalPages}`}
+                        {tr(lang, {
+                          zh: `第 ${shopFavPage} / ${shopFavTotalPages} 页`,
+                          en: `Page ${shopFavPage} / ${shopFavTotalPages}`,
+                          de: `Seite ${shopFavPage} / ${shopFavTotalPages}`,
+                          ja: `${shopFavPage} / ${shopFavTotalPages} ページ`,
+                          ko: `${shopFavPage} / ${shopFavTotalPages} 페이지`,
+                          es: `Página ${shopFavPage} / ${shopFavTotalPages}`,
+                          it: `Pagina ${shopFavPage} / ${shopFavTotalPages}`,
+                          vi: `Trang ${shopFavPage} / ${shopFavTotalPages}`,
+                          fr: `Page ${shopFavPage} / ${shopFavTotalPages}`,
+                        })}
                       </span>
                       <button
                         type="button"
@@ -1218,7 +1232,7 @@ const AccountCenter: React.FC = () => {
                         disabled={shopFavPage >= shopFavTotalPages}
                         onClick={() => setShopFavPage((p) => p + 1)}
                       >
-                        {lang === 'zh' ? '下一页' : 'Next'}
+                        {tr(lang, { zh: '下一页', en: 'Next', de: 'Nächste', ja: '次', ko: '다음', es: 'Próximo', it: 'Prossimo', vi: 'Kế tiếp', fr: 'Suivant' })}
                       </button>
                     </div>
                   )}
@@ -1232,7 +1246,7 @@ const AccountCenter: React.FC = () => {
               {settingsView === 'list' ? (
                 <>
                   <h1 className="account-settings-title">
-                    {lang === 'zh' ? '设置' : 'Settings'}
+                    {tr(lang, { zh: '设置', en: 'Settings', de: 'Einstellungen', ja: '設定', ko: '설정', es: 'Ajustes', it: 'Impostazioni', vi: 'Cài đặt', fr: 'Paramètres' })}
                   </h1>
                   <div className="account-settings-list">
                     <button
@@ -1240,21 +1254,21 @@ const AccountCenter: React.FC = () => {
                       className="account-settings-item"
                       onClick={() => setSettingsView('loginPwd')}
                     >
-                      {lang === 'zh' ? '登录密码' : 'Login password'}
+                      {tr(lang, { zh: '登录密码', en: 'Login password', de: 'Login-Passwort', ja: 'ログインパスワード', ko: '로그인 비밀번호', es: 'Contraseña de inicio de sesión', it: 'Password di accesso', vi: 'Mật khẩu đăng nhập', fr: 'Mot de passe de connexion' })}
                     </button>
                     <button
                       type="button"
                       className="account-settings-item"
                       onClick={() => setSettingsView(settingsProfile?.hasTradePassword ? 'tradePwdEdit' : 'tradePwd')}
                     >
-                      {lang === 'zh' ? '交易密码' : 'Payment PIN'}
+                      {tr(lang, { zh: '交易密码', en: 'Payment PIN', de: 'Zahlungs-PIN', ja: '支払い暗証番号', ko: '결제 PIN', es: 'PIN de pago', it: 'PIN di pagamento', vi: 'Mã PIN thanh toán', fr: 'Code PIN de paiement' })}
                     </button>
                     <button
                       type="button"
                       className="account-settings-item"
                       onClick={() => setSettingsView('address')}
                     >
-                      {lang === 'zh' ? '收件地址' : 'Shipping addresses'}
+                      {tr(lang, { zh: '收件地址', en: 'Shipping addresses', de: 'Versandadressen', ja: '配送先住所', ko: '배송 주소', es: 'Direcciones de envío', it: 'Indirizzi di spedizione', vi: 'Địa chỉ giao hàng', fr: 'Adresses de livraison' })}
                     </button>
                     <button
                       type="button"
@@ -1266,7 +1280,7 @@ const AccountCenter: React.FC = () => {
                         setLogoutSuccessOpen(true)
                       }}
                     >
-                      {lang === 'zh' ? '账号注销' : 'Log out'}
+                      {tr(lang, { zh: '账号注销', en: 'Log out', de: 'Abmelden', ja: 'ログアウト', ko: '로그아웃', es: 'Finalizar la sesión', it: 'Esci', vi: 'Đăng xuất', fr: 'Se déconnecter' })}
                     </button>
                   </div>
                 </>
@@ -1276,13 +1290,13 @@ const AccountCenter: React.FC = () => {
                     <button
                       type="button"
                       className="wallet-recharge-back"
-                      aria-label={lang === 'zh' ? '返回' : 'Back'}
+                      aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
                       onClick={() => setSettingsView('list')}
                     >
                       &lt;
                     </button>
                     <h1 className="account-address-title">
-                      {lang === 'zh' ? '收件地址' : 'Shipping addresses'}
+                      {tr(lang, { zh: '收件地址', en: 'Shipping addresses', de: 'Versandadressen', ja: '配送先住所', ko: '배송 주소', es: 'Direcciones de envío', it: 'Indirizzi di spedizione', vi: 'Địa chỉ giao hàng', fr: 'Adresses de livraison' })}
                     </h1>
                     <button
                       type="button"
@@ -1290,14 +1304,14 @@ const AccountCenter: React.FC = () => {
                       onClick={openAddressModalForNew}
                     >
                       <span className="account-address-add-icon" aria-hidden>+</span>
-                      {lang === 'zh' ? '新增地址' : 'Add address'}
+                      {tr(lang, { zh: '新增地址', en: 'Add address', de: 'Adresse hinzufügen', ja: 'アドレスを追加', ko: '주소 추가', es: 'Agregar dirección', it: 'Aggiungi indirizzo', vi: 'Thêm địa chỉ', fr: 'Ajouter une adresse' })}
                     </button>
                   </header>
                   {addressList.length === 0 ? (
                     <div className="account-address-empty">
                       <img src={kongtai} alt="" className="account-empty-img" />
                       <div className="account-empty-text">
-                        {lang === 'zh' ? '暂无数据' : 'No data'}
+                        {tr(lang, { zh: '暂无数据', en: 'No data', de: 'Keine Daten', ja: 'データなし', ko: '데이터 없음', es: 'Sin datos', it: 'Nessun dato', vi: 'Không có dữ liệu', fr: 'Aucune donnée' })}
                       </div>
                     </div>
                   ) : (
@@ -1306,7 +1320,7 @@ const AccountCenter: React.FC = () => {
                         <li key={addr.id} className="account-address-card">
                           {addr.isDefault && (
                             <span className="account-address-default-badge">
-                              {lang === 'zh' ? '默认' : 'Default'}
+                              {tr(lang, { zh: '默认', en: 'Default', de: 'Standard', ja: 'デフォルト', ko: '기본', es: 'Por defecto', it: 'Predefinito', vi: 'Mặc định', fr: 'Défaut' })}
                             </span>
                           )}
                           <div className="account-address-card-body">
@@ -1325,7 +1339,7 @@ const AccountCenter: React.FC = () => {
                               className="account-address-card-btn"
                               onClick={() => openAddressModalForEdit(addr)}
                             >
-                              {lang === 'zh' ? '编辑' : 'Edit'}
+                              {tr(lang, { zh: '编辑', en: 'Edit', de: 'Bearbeiten', ja: '編集', ko: '편집하다', es: 'Editar', it: 'Modificare', vi: 'Biên tập', fr: 'Modifier' })}
                             </button>
                             {!addr.isDefault && (
                               <button
@@ -1333,7 +1347,7 @@ const AccountCenter: React.FC = () => {
                                 className="account-address-card-btn"
                                 onClick={() => handleSetDefaultAddress(addr.id)}
                               >
-                                {lang === 'zh' ? '设为默认' : 'Set as default'}
+                                {tr(lang, { zh: '设为默认', en: 'Set as default', de: 'Als Standard festlegen', ja: 'デフォルトとして設定', ko: '기본값으로 설정', es: 'Establecer como predeterminado', it: 'Imposta come predefinito', vi: 'Đặt làm mặc định', fr: 'Définir par défaut' })}
                               </button>
                             )}
                             <button
@@ -1341,7 +1355,7 @@ const AccountCenter: React.FC = () => {
                               className="account-address-card-btn account-address-card-btn--danger"
                               onClick={() => handleDeleteAddress(addr.id)}
                             >
-                              {lang === 'zh' ? '删除' : 'Delete'}
+                              {tr(lang, { zh: '删除', en: 'Delete', de: 'Löschen', ja: '消去', ko: '삭제', es: 'Borrar', it: 'Eliminare', vi: 'Xóa bỏ', fr: 'Supprimer' })}
                             </button>
                           </div>
                         </li>
@@ -1355,17 +1369,17 @@ const AccountCenter: React.FC = () => {
                     <button
                       type="button"
                       className="account-settings-back"
-                      aria-label={lang === 'zh' ? '返回' : 'Back'}
+                      aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
                       onClick={() => setSettingsView('list')}
                     >
                       &lt;
                     </button>
                     <h1 className="account-settings-form-title">
                       {settingsView === 'loginPwd'
-                        ? (lang === 'zh' ? '修改登录密码' : 'Change login password')
+                        ? (tr(lang, { zh: '修改登录密码', en: 'Change login password', de: 'Login-Passwort ändern', ja: 'ログインパスワードを変更する', ko: '로그인 비밀번호 변경', es: 'Cambiar contraseña de inicio de sesión', it: 'Cambia password di accesso', vi: 'Thay đổi mật khẩu đăng nhập', fr: 'Changer le mot de passe de connexion' }))
                         : settingsView === 'tradePwdEdit'
-                          ? (lang === 'zh' ? '修改交易密码' : 'Change payment PIN')
-                          : (lang === 'zh' ? '交易密码设置' : 'Set payment PIN')}
+                          ? (tr(lang, { zh: '修改交易密码', en: 'Change payment PIN', de: 'Zahlungs-PIN ändern', ja: '支払い暗証番号の変更', ko: '결제 PIN 변경', es: 'Cambiar PIN de pago', it: 'Modifica PIN di pagamento', vi: 'Thay đổi mã PIN thanh toán', fr: 'Modifier le code PIN de paiement' }))
+                          : (tr(lang, { zh: '交易密码设置', en: 'Set payment PIN', de: 'Zahlungs-PIN festlegen', ja: '支払い暗証番号を設定する', ko: '결제 PIN 설정', es: 'Establecer PIN de pago', it: 'Imposta il PIN di pagamento', vi: 'Đặt mã PIN thanh toán', fr: 'Définir le code PIN de paiement' }))}
                     </h1>
                   </header>
                   {settingsView === 'loginPwd' ? (
@@ -1373,13 +1387,13 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '旧密码' : 'Current password'}
+                          {tr(lang, { zh: '旧密码', en: 'Current password', de: 'Aktuelles Passwort', ja: '現在のパスワード', ko: '현재 비밀번호', es: 'Contraseña actual', it: 'Password attuale', vi: 'Mật khẩu hiện tại', fr: 'Mot de passe actuel' })}
                         </label>
                         <div className={`account-settings-input-wrap${loginPwdErrors.old ? ' account-settings-input-wrap--error' : ''}`}>
                           <input
                             type={loginPwdShowOld ? 'text' : 'password'}
                             className="account-settings-input"
-                            placeholder={lang === 'zh' ? '请输入当前密码' : 'Please enter your current password'}
+                            placeholder={tr(lang, { zh: '请输入当前密码', en: 'Please enter your current password', de: 'Bitte geben Sie Ihr aktuelles Passwort ein', ja: '現在のパスワードを入力してください', ko: '현재 비밀번호를 입력해주세요', es: 'Por favor ingrese su contraseña actual', it: 'Inserisci la tua password attuale', vi: 'Vui lòng nhập mật khẩu hiện tại của bạn', fr: 'Veuillez entrer votre mot de passe actuel' })}
                             value={loginPwdOld}
                             onChange={(e) => {
                               setLoginPwdOld(e.target.value)
@@ -1392,8 +1406,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 loginPwdShowOld
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide password')
-                                  : (lang === 'zh' ? '显示密码' : 'Show password')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide password', de: 'Passwort verbergen', ja: 'パスワードを隠す', ko: '비밀번호 숨기기', es: 'Ocultar contraseña', it: 'Nascondi la password', vi: 'Ẩn mật khẩu', fr: 'Masquer le mot de passe' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show password', de: 'Passwort anzeigen', ja: 'パスワードを表示', ko: '비밀번호 표시', es: 'Mostrar contraseña', it: 'Mostra password', vi: 'Hiển thị mật khẩu', fr: 'Afficher le mot de passe' }))
                               }
                             onClick={() => setLoginPwdShowOld((v) => !v)}
                           >
@@ -1415,16 +1429,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '新密码' : 'New password'}
+                          {tr(lang, { zh: '新密码', en: 'New password', de: 'Neues Passwort', ja: '新しいパスワード', ko: '새 비밀번호', es: 'Nueva contraseña', it: 'Nuova password', vi: 'Mật khẩu mới', fr: 'Nouveau mot de passe' })}
                         </label>
                         <div className={`account-settings-input-wrap${loginPwdErrors.new ? ' account-settings-input-wrap--error' : ''}`}>
                           <input
                             type={loginPwdShowNew ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请设置密码（6-22 位字母和数字组合）'
-                                : '6–22 characters with letters and numbers'
+                              tr(lang, { zh: '请设置密码（6-22 位字母和数字组合）', en: '6–22 characters with letters and numbers', de: '6–22 Zeichen mit Buchstaben und Zahlen', ja: '文字と数字を含む 6 ～ 22 文字', ko: '6~22자(문자와 숫자 포함)', es: '6 a 22 caracteres con letras y números', it: '6–22 caratteri con lettere e numeri', vi: '6–22 ký tự có chữ cái và số', fr: '6 à 22 caractères avec lettres et chiffres' })
                             }
                             value={loginPwdNew}
                             onChange={(e) => {
@@ -1438,8 +1450,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 loginPwdShowNew
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide password')
-                                  : (lang === 'zh' ? '显示密码' : 'Show password')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide password', de: 'Passwort verbergen', ja: 'パスワードを隠す', ko: '비밀번호 숨기기', es: 'Ocultar contraseña', it: 'Nascondi la password', vi: 'Ẩn mật khẩu', fr: 'Masquer le mot de passe' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show password', de: 'Passwort anzeigen', ja: 'パスワードを表示', ko: '비밀번호 표시', es: 'Mostrar contraseña', it: 'Mostra password', vi: 'Hiển thị mật khẩu', fr: 'Afficher le mot de passe' }))
                               }
                             onClick={() => setLoginPwdShowNew((v) => !v)}
                           >
@@ -1461,16 +1473,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '确认密码' : 'Confirm password'}
+                          {tr(lang, { zh: '确认密码', en: 'Confirm password', de: 'Passwort bestätigen', ja: 'パスワードを認証する', ko: '비밀번호 확인', es: 'Confirmar Contraseña', it: 'Conferma password', vi: 'Xác nhận mật khẩu', fr: 'Confirmez le mot de passe' })}
                         </label>
                         <div className={`account-settings-input-wrap${loginPwdErrors.confirm ? ' account-settings-input-wrap--error' : ''}`}>
                           <input
                             type={loginPwdShowConfirm ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请再次输入密码'
-                                : 'Please enter the password again'
+                              tr(lang, { zh: '请再次输入密码', en: 'Please enter the password again', de: 'Bitte geben Sie das Passwort erneut ein', ja: 'パスワードをもう一度入力してください', ko: '비밀번호를 다시 입력해주세요', es: 'Por favor ingrese la contraseña nuevamente', it: 'Inserisci nuovamente la password', vi: 'Vui lòng nhập lại mật khẩu', fr: 'Veuillez saisir à nouveau le mot de passe' })
                             }
                             value={loginPwdConfirm}
                             onChange={(e) => {
@@ -1484,8 +1494,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 loginPwdShowConfirm
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide password')
-                                  : (lang === 'zh' ? '显示密码' : 'Show password')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide password', de: 'Passwort verbergen', ja: 'パスワードを隠す', ko: '비밀번호 숨기기', es: 'Ocultar contraseña', it: 'Nascondi la password', vi: 'Ẩn mật khẩu', fr: 'Masquer le mot de passe' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show password', de: 'Passwort anzeigen', ja: 'パスワードを表示', ko: '비밀번호 표시', es: 'Mostrar contraseña', it: 'Mostra password', vi: 'Hiển thị mật khẩu', fr: 'Afficher le mot de passe' }))
                               }
                             onClick={() => setLoginPwdShowConfirm((v) => !v)}
                           >
@@ -1505,7 +1515,7 @@ const AccountCenter: React.FC = () => {
                         </div>
                       </div>
                       <button type="button" className="account-settings-submit" onClick={handleLoginPwdSubmit}>
-                        {lang === 'zh' ? '确认' : 'Confirm'}
+                        {tr(lang, { zh: '确认', en: 'Confirm', de: 'Bestätigen', ja: '確認する', ko: '확인하다', es: 'Confirmar', it: 'Confermare', vi: 'Xác nhận', fr: 'Confirmer' })}
                       </button>
                     </div>
                   ) : settingsView === 'tradePwdEdit' ? (
@@ -1513,16 +1523,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '旧密码' : 'Current PIN'}
+                          {tr(lang, { zh: '旧密码', en: 'Current PIN', de: 'Aktuelle PIN', ja: '現在のPIN', ko: '현재 PIN', es: 'PIN actual', it: 'PIN attuale', vi: 'Mã PIN hiện tại', fr: 'Code PIN actuel' })}
                         </label>
                         <div className="account-settings-input-wrap">
                           <input
                             type={tradePwdShowOld ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请输入6位数字旧密码'
-                                : 'Please enter your current 6‑digit PIN'
+                              tr(lang, { zh: '请输入6位数字旧密码', en: 'Please enter your current 6‑digit PIN', de: 'Bitte geben Sie Ihre aktuelle 6-stellige PIN ein', ja: '現在の 6 桁の PIN を入力してください', ko: '현재 6자리 PIN을 입력하세요.', es: 'Ingrese su PIN actual de 6 dígitos', it: 'Inserisci il tuo PIN attuale di 6 cifre', vi: 'Vui lòng nhập mã PIN gồm 6 chữ số hiện tại của bạn', fr: 'Veuillez saisir votre code PIN actuel à 6 chiffres' })
                             }
                             value={tradePwdOld}
                             onChange={(e) => setTradePwdOld(restrictToSixDigits(e.target.value))}
@@ -1535,8 +1543,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 tradePwdShowOld
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide PIN')
-                                  : (lang === 'zh' ? '显示密码' : 'Show PIN')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide PIN', de: 'PIN ausblenden', ja: 'PINを隠す', ko: 'PIN 숨기기', es: 'Ocultar PIN', it: 'Nascondi PIN', vi: 'Ẩn mã PIN', fr: 'Masquer le code PIN' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show PIN', de: 'PIN anzeigen', ja: 'PINを表示', ko: 'PIN 표시', es: 'Mostrar PIN', it: 'Mostra PIN', vi: 'Hiển thị mã PIN', fr: 'Afficher le code PIN' }))
                               }
                             onClick={() => setTradePwdShowOld((v) => !v)}
                           >
@@ -1555,16 +1563,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '新密码' : 'New PIN'}
+                          {tr(lang, { zh: '新密码', en: 'New PIN', de: 'Neue PIN', ja: '新しいPIN', ko: '새 PIN', es: 'Nuevo PIN', it: 'Nuovo PIN', vi: 'Mã PIN mới', fr: 'Nouveau code PIN' })}
                         </label>
                         <div className="account-settings-input-wrap">
                           <input
                             type={tradePwdShowNew ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请输入6位数字密码'
-                                : 'Please enter a new 6‑digit PIN'
+                              tr(lang, { zh: '请输入6位数字密码', en: 'Please enter a new 6‑digit PIN', de: 'Bitte geben Sie eine neue 6-stellige PIN ein', ja: '新しい 6 桁の PIN を入力してください', ko: '새로운 6자리 PIN을 입력하세요.', es: 'Ingrese un nuevo PIN de 6 dígitos', it: 'Inserisci un nuovo PIN di 6 cifre', vi: 'Vui lòng nhập mã PIN mới gồm 6 chữ số', fr: 'Veuillez saisir un nouveau code PIN à 6 chiffres' })
                             }
                             value={tradePwdNew}
                             onChange={(e) => setTradePwdNew(restrictToSixDigits(e.target.value))}
@@ -1577,8 +1583,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 tradePwdShowNew
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide PIN')
-                                  : (lang === 'zh' ? '显示密码' : 'Show PIN')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide PIN', de: 'PIN ausblenden', ja: 'PINを隠す', ko: 'PIN 숨기기', es: 'Ocultar PIN', it: 'Nascondi PIN', vi: 'Ẩn mã PIN', fr: 'Masquer le code PIN' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show PIN', de: 'PIN anzeigen', ja: 'PINを表示', ko: 'PIN 표시', es: 'Mostrar PIN', it: 'Mostra PIN', vi: 'Hiển thị mã PIN', fr: 'Afficher le code PIN' }))
                               }
                             onClick={() => setTradePwdShowNew((v) => !v)}
                           >
@@ -1597,16 +1603,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '确认密码' : 'Confirm PIN'}
+                          {tr(lang, { zh: '确认密码', en: 'Confirm PIN', de: 'PIN bestätigen', ja: 'PINの確認', ko: 'PIN 확인', es: 'Confirmar PIN', it: 'Conferma il PIN', vi: 'Xác nhận mã PIN', fr: 'Confirmer le code PIN' })}
                         </label>
                         <div className="account-settings-input-wrap">
                           <input
                             type={tradePwdShowConfirm ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请再次输入6位数字密码'
-                                : 'Please confirm the 6‑digit PIN'
+                              tr(lang, { zh: '请再次输入6位数字密码', en: 'Please confirm the 6‑digit PIN', de: 'Bitte bestätigen Sie die 6-stellige PIN', ja: '6桁のPINをご確認ください', ko: '6자리 PIN을 확인해 주세요.', es: 'Confirme el PIN de 6 dígitos', it: 'Conferma il PIN di 6 cifre', vi: 'Vui lòng xác nhận mã PIN gồm 6 chữ số', fr: 'Veuillez confirmer le code PIN à 6 chiffres' })
                             }
                             value={tradePwdConfirm}
                             onChange={(e) => setTradePwdConfirm(restrictToSixDigits(e.target.value))}
@@ -1619,8 +1623,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 tradePwdShowConfirm
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide PIN')
-                                  : (lang === 'zh' ? '显示密码' : 'Show PIN')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide PIN', de: 'PIN ausblenden', ja: 'PINを隠す', ko: 'PIN 숨기기', es: 'Ocultar PIN', it: 'Nascondi PIN', vi: 'Ẩn mã PIN', fr: 'Masquer le code PIN' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show PIN', de: 'PIN anzeigen', ja: 'PINを表示', ko: 'PIN 표시', es: 'Mostrar PIN', it: 'Mostra PIN', vi: 'Hiển thị mã PIN', fr: 'Afficher le code PIN' }))
                               }
                             onClick={() => setTradePwdShowConfirm((v) => !v)}
                           >
@@ -1637,7 +1641,7 @@ const AccountCenter: React.FC = () => {
                         </div>
                       </div>
                       <button type="button" className="account-settings-submit" onClick={handleTradePwdEditSubmit}>
-                        {lang === 'zh' ? '确认' : 'Confirm'}
+                        {tr(lang, { zh: '确认', en: 'Confirm', de: 'Bestätigen', ja: '確認する', ko: '확인하다', es: 'Confirmar', it: 'Confermare', vi: 'Xác nhận', fr: 'Confirmer' })}
                       </button>
                     </div>
                   ) : (
@@ -1645,16 +1649,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '新密码' : 'New PIN'}
+                          {tr(lang, { zh: '新密码', en: 'New PIN', de: 'Neue PIN', ja: '新しいPIN', ko: '새 PIN', es: 'Nuevo PIN', it: 'Nuovo PIN', vi: 'Mã PIN mới', fr: 'Nouveau code PIN' })}
                         </label>
                         <div className="account-settings-input-wrap">
                           <input
                             type={tradePwdShowNew ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请输入6位数字密码'
-                                : 'Please enter a new 6‑digit PIN'
+                              tr(lang, { zh: '请输入6位数字密码', en: 'Please enter a new 6‑digit PIN', de: 'Bitte geben Sie eine neue 6-stellige PIN ein', ja: '新しい 6 桁の PIN を入力してください', ko: '새로운 6자리 PIN을 입력하세요.', es: 'Ingrese un nuevo PIN de 6 dígitos', it: 'Inserisci un nuovo PIN di 6 cifre', vi: 'Vui lòng nhập mã PIN mới gồm 6 chữ số', fr: 'Veuillez saisir un nouveau code PIN à 6 chiffres' })
                             }
                             value={tradePwdNew}
                             onChange={(e) => setTradePwdNew(restrictToSixDigits(e.target.value))}
@@ -1667,8 +1669,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 tradePwdShowNew
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide PIN')
-                                  : (lang === 'zh' ? '显示密码' : 'Show PIN')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide PIN', de: 'PIN ausblenden', ja: 'PINを隠す', ko: 'PIN 숨기기', es: 'Ocultar PIN', it: 'Nascondi PIN', vi: 'Ẩn mã PIN', fr: 'Masquer le code PIN' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show PIN', de: 'PIN anzeigen', ja: 'PINを表示', ko: 'PIN 표시', es: 'Mostrar PIN', it: 'Mostra PIN', vi: 'Hiển thị mã PIN', fr: 'Afficher le code PIN' }))
                               }
                             onClick={() => setTradePwdShowNew((v) => !v)}
                           >
@@ -1687,16 +1689,14 @@ const AccountCenter: React.FC = () => {
                       <div className="account-settings-field">
                         <label className="account-settings-label">
                           <span className="account-settings-required">*</span>
-                          {lang === 'zh' ? '确认密码' : 'Confirm PIN'}
+                          {tr(lang, { zh: '确认密码', en: 'Confirm PIN', de: 'PIN bestätigen', ja: 'PINの確認', ko: 'PIN 확인', es: 'Confirmar PIN', it: 'Conferma il PIN', vi: 'Xác nhận mã PIN', fr: 'Confirmer le code PIN' })}
                         </label>
                         <div className="account-settings-input-wrap">
                           <input
                             type={tradePwdShowConfirm ? 'text' : 'password'}
                             className="account-settings-input"
                             placeholder={
-                              lang === 'zh'
-                                ? '请再次输入6位数字密码'
-                                : 'Please confirm the 6‑digit PIN'
+                              tr(lang, { zh: '请再次输入6位数字密码', en: 'Please confirm the 6‑digit PIN', de: 'Bitte bestätigen Sie die 6-stellige PIN', ja: '6桁のPINをご確認ください', ko: '6자리 PIN을 확인해 주세요.', es: 'Confirme el PIN de 6 dígitos', it: 'Conferma il PIN di 6 cifre', vi: 'Vui lòng xác nhận mã PIN gồm 6 chữ số', fr: 'Veuillez confirmer le code PIN à 6 chiffres' })
                             }
                             value={tradePwdConfirm}
                             onChange={(e) => setTradePwdConfirm(restrictToSixDigits(e.target.value))}
@@ -1709,8 +1709,8 @@ const AccountCenter: React.FC = () => {
                             className="account-settings-pwd-toggle"
                               aria-label={
                                 tradePwdShowConfirm
-                                  ? (lang === 'zh' ? '隐藏密码' : 'Hide PIN')
-                                  : (lang === 'zh' ? '显示密码' : 'Show PIN')
+                                  ? (tr(lang, { zh: '隐藏密码', en: 'Hide PIN', de: 'PIN ausblenden', ja: 'PINを隠す', ko: 'PIN 숨기기', es: 'Ocultar PIN', it: 'Nascondi PIN', vi: 'Ẩn mã PIN', fr: 'Masquer le code PIN' }))
+                                  : (tr(lang, { zh: '显示密码', en: 'Show PIN', de: 'PIN anzeigen', ja: 'PINを表示', ko: 'PIN 표시', es: 'Mostrar PIN', it: 'Mostra PIN', vi: 'Hiển thị mã PIN', fr: 'Afficher le code PIN' }))
                               }
                             onClick={() => setTradePwdShowConfirm((v) => !v)}
                           >
@@ -1727,7 +1727,7 @@ const AccountCenter: React.FC = () => {
                         </div>
                       </div>
                       <button type="button" className="account-settings-submit" onClick={handleTradePwdSubmit}>
-                        {lang === 'zh' ? '确定' : 'Confirm'}
+                        {tr(lang, { zh: '确定', en: 'Confirm', de: 'Bestätigen', ja: '確認する', ko: '확인하다', es: 'Confirmar', it: 'Confermare', vi: 'Xác nhận', fr: 'Confirmer' })}
                       </button>
                     </div>
                   )}

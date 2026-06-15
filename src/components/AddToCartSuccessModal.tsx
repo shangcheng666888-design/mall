@@ -1,6 +1,8 @@
 import type React from 'react'
 import { useEffect } from 'react'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 interface AddToCartSuccessModalProps {
   open: boolean
@@ -26,7 +28,7 @@ const AddToCartSuccessModal: React.FC<AddToCartSuccessModalProps> = ({ open, onC
     <div
       className="auth-success-overlay"
       role="dialog"
-      aria-label={lang === 'zh' ? '已加入购物车' : 'Added to cart'}
+      aria-label={tr(lang, { zh: '已加入购物车', en: 'Added to cart', de: 'Zum Warenkorb hinzugefügt', ja: 'カートに追加されました', ko: '장바구니에 추가됨', es: 'Agregado al carrito', it: 'Aggiunto al carrello', vi: 'Đã thêm vào giỏ hàng', fr: 'Ajouté au panier' })}
       onClick={onClose}
     >
       <div className="auth-success-box" onClick={(e) => e.stopPropagation()}>
@@ -44,7 +46,7 @@ const AddToCartSuccessModal: React.FC<AddToCartSuccessModalProps> = ({ open, onC
           </svg>
         </div>
         <p className="auth-success-text">
-          {lang === 'zh' ? '已加入购物车' : 'Added to cart'}
+          {tr(lang, { zh: '已加入购物车', en: 'Added to cart', de: 'Zum Warenkorb hinzugefügt', ja: 'カートに追加されました', ko: '장바구니에 추가됨', es: 'Agregado al carrito', it: 'Aggiunto al carrello', vi: 'Đã thêm vào giỏ hàng', fr: 'Ajouté au panier' })}
         </p>
       </div>
     </div>

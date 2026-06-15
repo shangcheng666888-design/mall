@@ -4,6 +4,8 @@ import AccountSidebar from '../components/AccountSidebar'
 import { useToast } from '../components/ToastProvider'
 import { api } from '../api/client'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 function getAuthUserId(): string | null {
   try {
@@ -131,47 +133,47 @@ const WalletRecharge: React.FC = () => {
   const handleCopyAddress = () => {
     const addr = depositAddress
     if (!addr) {
-      showToast(lang === 'zh' ? '暂无收款地址' : 'No deposit address', 'error')
+      showToast(tr(lang, { zh: '暂无收款地址', en: 'No deposit address', de: 'Keine Einzahlungsadresse', ja: '入金アドレスがありません', ko: '입금주소 없음', es: 'Sin dirección de depósito', it: 'Nessun indirizzo di deposito', vi: 'Không có địa chỉ gửi tiền', fr: 'Aucune adresse de dépôt' }), 'error')
       return
     }
     if (navigator.clipboard) {
       navigator.clipboard
         .writeText(addr)
         .then(() => {
-          showToast(lang === 'zh' ? '复制成功' : 'Copied')
+          showToast(tr(lang, { zh: '复制成功', en: 'Copied', de: 'Kopiert', ja: 'コピーされました', ko: '복사됨', es: 'copiado', it: 'Copiato', vi: 'Đã sao chép', fr: 'Copié' }))
         })
         .catch(() => {
-          showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+          showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
         })
     } else {
-      showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+      showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
     }
   }
 
   const handleCopyQrcode = () => {
     const canvas = qrCanvasRef.current
     if (!canvas || typeof navigator === 'undefined' || !(navigator.clipboard as any)) {
-      showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+      showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
       return
     }
     canvas.toBlob((blob) => {
       if (!blob) {
-        showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+        showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
         return
       }
       const ClipboardItemCtor = (window as any).ClipboardItem
       if (!ClipboardItemCtor) {
-        showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+        showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
         return
       }
       const item = new ClipboardItemCtor({ [blob.type]: blob })
       ;(navigator.clipboard as any)
         .write([item])
         .then(() => {
-          showToast(lang === 'zh' ? '二维码已复制' : 'QR code copied')
+          showToast(tr(lang, { zh: '二维码已复制', en: 'QR code copied', de: 'QR-Code kopiert', ja: 'QRコードをコピーしました', ko: 'QR 코드가 복사되었습니다.', es: 'Código QR copiado', it: 'Codice QR copiato', vi: 'Đã sao chép mã QR', fr: 'Code QR copié' }))
         })
         .catch(() => {
-          showToast(lang === 'zh' ? '复制失败' : 'Copy failed', 'error')
+          showToast(tr(lang, { zh: '复制失败', en: 'Copy failed', de: 'Das Kopieren ist fehlgeschlagen', ja: 'コピーに失敗しました', ko: '복사 실패', es: 'Copia fallida', it: 'Copia non riuscita', vi: 'Sao chép không thành công', fr: 'Échec de la copie' }), 'error')
         })
     }, 'image/png')
   }
@@ -213,20 +215,20 @@ const WalletRecharge: React.FC = () => {
               <button
                 type="button"
                 className="wallet-recharge-back"
-                aria-label={lang === 'zh' ? '返回' : 'Back'}
+                aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
                 onClick={goBack}
               >
                 &lt;
               </button>
               <h1 className="wallet-recharge-title">
-                {lang === 'zh' ? '我的钱包/充值' : 'My wallet / Recharge'}
+                {tr(lang, { zh: '我的钱包/充值', en: 'My wallet / Recharge', de: 'Mein Portemonnaie / Aufladen', ja: 'マイウォレット / リチャージ', ko: '내 지갑 / 충전', es: 'Mi billetera / Recargar', it: 'Il mio portafoglio/Ricarica', vi: 'Ví của tôi / Nạp tiền', fr: 'Mon portefeuille / Recharger' })}
               </h1>
             </header>
 
             <div className="wallet-recharge-form">
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
-                  {lang === 'zh' ? '充值币种' : 'Top‑up currency'}
+                  {tr(lang, { zh: '充值币种', en: 'Top‑up currency', de: 'Aufladewährung', ja: 'チャージ通貨', ko: '충전 통화', es: 'Moneda de recarga', it: 'Valuta di ricarica', vi: 'Tiền tệ nạp thêm', fr: 'Devise de recharge' })}
                 </label>
                 <div className="wallet-recharge-select-wrap">
                   <select
@@ -252,7 +254,7 @@ const WalletRecharge: React.FC = () => {
 
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
-                  {lang === 'zh' ? '区块链网络' : 'Blockchain network'}
+                  {tr(lang, { zh: '区块链网络', en: 'Blockchain network', de: 'Blockchain-Netzwerk', ja: 'ブロックチェーンネットワーク', ko: '블록체인 네트워크', es: 'Red de cadena de bloques', it: 'Rete blockchain', vi: 'Mạng chuỗi khối', fr: 'Réseau blockchain' })}
                 </label>
                 <div className="wallet-recharge-select-wrap">
                   <select
@@ -260,9 +262,9 @@ const WalletRecharge: React.FC = () => {
                     value={network}
                     onChange={(e) => setNetwork(e.target.value as 'ETH' | 'BTC' | 'TRC20')}
                   >
-                    <option value="ETH">{lang === 'zh' ? 'ETH 网络' : 'ETH network'}</option>
-                    <option value="BTC">{lang === 'zh' ? 'BTC 网络' : 'BTC network'}</option>
-                    <option value="TRC20">{lang === 'zh' ? 'USDT‑TRC20 网络' : 'USDT‑TRC20 network'}</option>
+                    <option value="ETH">{tr(lang, { zh: 'ETH 网络', en: 'ETH network', de: 'ETH-Netzwerk', ja: 'ETHネットワーク', ko: 'ETH 네트워크', es: 'red ETH', it: 'Rete dell\'ETH', vi: 'mạng ETH', fr: 'Réseau EPF' })}</option>
+                    <option value="BTC">{tr(lang, { zh: 'BTC 网络', en: 'BTC network', de: 'BTC-Netzwerk', ja: 'BTCネットワーク', ko: 'BTC 네트워크', es: 'red BTC', it: 'Rete Bitcoin', vi: 'Mạng BTC', fr: 'Réseau BTC' })}</option>
+                    <option value="TRC20">{tr(lang, { zh: 'USDT‑TRC20 网络', en: 'USDT‑TRC20 network', de: 'USDT-TRC20-Netzwerk', ja: 'USDT‑TRC20ネットワーク', ko: 'USDT‑TRC20 네트워크', es: 'Red USDT‑TRC20', it: 'Rete USDT‑TRC20', vi: 'Mạng USDT‑TRC20', fr: 'Réseau USDT‑TRC20' })}</option>
                   </select>
                   <span className="wallet-recharge-select-caret" aria-hidden>
                     ▾
@@ -284,19 +286,19 @@ const WalletRecharge: React.FC = () => {
                     className="wallet-recharge-qrcode-save-btn"
                     onClick={handleCopyQrcode}
                   >
-                    {lang === 'zh' ? '保存二维码' : 'Save QR code'}
+                    {tr(lang, { zh: '保存二维码', en: 'Save QR code', de: 'QR-Code speichern', ja: 'QRコードを保存する', ko: 'QR 코드 저장', es: 'Guardar código QR', it: 'Salva il codice QR', vi: 'Lưu mã QR', fr: 'Enregistrer le code QR' })}
                   </button>
                 )}
               </div>
 
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
-                  {lang === 'zh' ? '充值地址' : 'Deposit address'}
+                  {tr(lang, { zh: '充值地址', en: 'Deposit address', de: 'Einzahlungsadresse', ja: '入金アドレス', ko: '입금주소', es: 'Dirección de depósito', it: 'Indirizzo di deposito', vi: 'Địa chỉ gửi tiền', fr: 'Adresse de dépôt' })}
                 </label>
                 <div className="wallet-recharge-address-row">
                   <input
                     className="wallet-recharge-address-input"
-                    value={depositAddress || (lang === 'zh' ? '暂无收款地址' : 'No deposit address')}
+                    value={depositAddress || (tr(lang, { zh: '暂无收款地址', en: 'No deposit address', de: 'Keine Einzahlungsadresse', ja: '入金アドレスがありません', ko: '입금주소 없음', es: 'Sin dirección de depósito', it: 'Nessun indirizzo di deposito', vi: 'Không có địa chỉ gửi tiền', fr: 'Aucune adresse de dépôt' }))}
                     readOnly
                   />
                   <button
@@ -304,7 +306,7 @@ const WalletRecharge: React.FC = () => {
                     className="wallet-recharge-copy-btn"
                     onClick={handleCopyAddress}
                   >
-                    {lang === 'zh' ? '复制' : 'Copy'}
+                    {tr(lang, { zh: '复制', en: 'Copy', de: 'Kopie', ja: 'コピー', ko: '복사', es: 'Copiar', it: 'Copia', vi: 'Sao chép', fr: 'Copie' })}
                   </button>
                 </div>
               </div>
@@ -312,12 +314,12 @@ const WalletRecharge: React.FC = () => {
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
                   <span className="wallet-recharge-required">*</span>
-                  {lang === 'zh' ? '数量' : 'Amount'}
+                  {tr(lang, { zh: '数量', en: 'Amount', de: 'Menge', ja: '額', ko: '양', es: 'Cantidad', it: 'Quantità', vi: 'Số lượng', fr: 'Montant' })}
                 </label>
                 <input
                   className="wallet-recharge-input wallet-recharge-input--short"
                   placeholder={
-                    lang === 'zh' ? '请输入充值金额' : 'Please enter the recharge amount'
+                    tr(lang, { zh: '请输入充值金额', en: 'Please enter the recharge amount', de: 'Bitte geben Sie den Aufladebetrag ein', ja: 'チャージ金額を入力してください', ko: '충전금액을 입력해주세요', es: 'Por favor ingresa el monto de la recarga', it: 'Inserisci l\'importo della ricarica', vi: 'Vui lòng nhập số tiền nạp', fr: 'Veuillez saisir le montant de la recharge' })
                   }
                   value={amount}
                   onChange={(e) => {
@@ -332,14 +334,14 @@ const WalletRecharge: React.FC = () => {
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
                   <span className="wallet-recharge-required">*</span>
-                  {lang === 'zh' ? '交易截图' : 'Transaction screenshot'}
+                  {tr(lang, { zh: '交易截图', en: 'Transaction screenshot', de: 'Screenshot der Transaktion', ja: 'トランザクションのスクリーンショット', ko: '거래 스크린샷', es: 'Captura de pantalla de la transacción', it: 'Schermata della transazione', vi: 'Ảnh chụp màn hình giao dịch', fr: 'Capture d\'écran de la transaction' })}
                 </label>
                 <input
                   ref={screenshotInputRef}
                   type="file"
                   accept="image/jpeg,image/png,image/gif,image/webp"
                   className="wallet-recharge-upload-input"
-                  aria-label={lang === 'zh' ? '上传交易截图' : 'Upload transaction screenshot'}
+                  aria-label={tr(lang, { zh: '上传交易截图', en: 'Upload transaction screenshot', de: 'Laden Sie den Screenshot der Transaktion hoch', ja: 'トランザクションのスクリーンショットをアップロードする', ko: '거래 스크린샷 업로드', es: 'Cargar captura de pantalla de la transacción', it: 'Carica lo screenshot della transazione', vi: 'Tải lên ảnh chụp màn hình giao dịch', fr: 'Télécharger une capture d\'écran de la transaction' })}
                   onChange={async (e) => {
                     const file = e.target.files?.[0]
                     if (!file) return
@@ -348,7 +350,7 @@ const WalletRecharge: React.FC = () => {
                       const { url } = await api.uploadImage(file)
                       setScreenshotUrl(url)
                     } catch (err) {
-                      showToast(err instanceof Error ? err.message : (lang === 'zh' ? '上传失败' : 'Upload failed'), 'error')
+                      showToast(err instanceof Error ? err.message : (tr(lang, { zh: '上传失败', en: 'Upload failed', de: 'Der Upload ist fehlgeschlagen', ja: 'アップロードに失敗しました', ko: '업로드 실패', es: 'Error al subir', it: 'Caricamento non riuscito', vi: 'Tải lên không thành công', fr: 'Échec du téléchargement' })), 'error')
                     } finally {
                       setScreenshotUploading(false)
                       e.target.value = ''
@@ -361,14 +363,14 @@ const WalletRecharge: React.FC = () => {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && screenshotInputRef.current?.click()}
-                  aria-label={lang === 'zh' ? '上传交易截图' : 'Upload transaction screenshot'}
+                  aria-label={tr(lang, { zh: '上传交易截图', en: 'Upload transaction screenshot', de: 'Laden Sie den Screenshot der Transaktion hoch', ja: 'トランザクションのスクリーンショットをアップロードする', ko: '거래 스크린샷 업로드', es: 'Cargar captura de pantalla de la transacción', it: 'Carica lo screenshot della transazione', vi: 'Tải lên ảnh chụp màn hình giao dịch', fr: 'Télécharger une capture d\'écran de la transaction' })}
                 >
                   {screenshotUploading ? (
-                    <span className="wallet-recharge-screenshot-loading">{lang === 'zh' ? '上传中…' : 'Uploading…'}</span>
+                    <span className="wallet-recharge-screenshot-loading">{tr(lang, { zh: '上传中…', en: 'Uploading…', de: 'Hochladen…', ja: 'アップロード中…', ko: '업로드 중…', es: 'Subiendo…', it: 'Caricamento…', vi: 'Đang tải lên…', fr: 'Téléchargement…' })}</span>
                   ) : screenshotUrl ? (
                     <>
                       <img src={screenshotUrl} alt="" className="wallet-recharge-screenshot-preview" />
-                      <span className="wallet-recharge-screenshot-label">{lang === 'zh' ? '点击可重新上传' : 'Click to replace'}</span>
+                      <span className="wallet-recharge-screenshot-label">{tr(lang, { zh: '点击可重新上传', en: 'Click to replace', de: 'Klicken Sie zum Ersetzen', ja: 'クリックして置き換えます', ko: '교체하려면 클릭하세요.', es: 'Haga clic para reemplazar', it: 'Fare clic per sostituire', vi: 'Bấm để thay thế', fr: 'Cliquez pour remplacer' })}</span>
                     </>
                   ) : (
                     <>
@@ -376,7 +378,7 @@ const WalletRecharge: React.FC = () => {
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                         <circle cx="12" cy="13" r="4" />
                       </svg>
-                      <span className="wallet-recharge-screenshot-text">{lang === 'zh' ? '点击上传' : 'Click to upload'}</span>
+                      <span className="wallet-recharge-screenshot-text">{tr(lang, { zh: '点击上传', en: 'Click to upload', de: 'Klicken Sie zum Hochladen', ja: 'クリックしてアップロード', ko: '업로드하려면 클릭하세요.', es: 'Haga clic para cargar', it: 'Fare clic per caricare', vi: 'Bấm để tải lên', fr: 'Cliquez pour télécharger' })}</span>
                     </>
                   )}
                 </div>
@@ -388,7 +390,7 @@ const WalletRecharge: React.FC = () => {
                 disabled={submitDisabled}
                 onClick={() => setTradePwdModalOpen(true)}
               >
-                {lang === 'zh' ? '确定' : 'Confirm'}
+                {tr(lang, { zh: '确定', en: 'Confirm', de: 'Bestätigen', ja: '確認する', ko: '확인하다', es: 'Confirmar', it: 'Confermare', vi: 'Xác nhận', fr: 'Confirmer' })}
               </button>
             </div>
 
@@ -407,16 +409,16 @@ const WalletRecharge: React.FC = () => {
                   <button
                     type="button"
                     className="account-tradepwd-close"
-                    aria-label={lang === 'zh' ? '关闭' : 'Close'}
+                    aria-label={tr(lang, { zh: '关闭', en: 'Close', de: 'Schließen', ja: '近い', ko: '닫다', es: 'Cerca', it: 'Vicino', vi: 'Đóng', fr: 'Fermer' })}
                     onClick={() => setTradePwdModalOpen(false)}
                   >
                     ×
                   </button>
                   <h2 id="wallet-recharge-tradepwd-title" className="account-tradepwd-title">
-                    {lang === 'zh' ? '输入交易密码' : 'Enter payment PIN'}
+                    {tr(lang, { zh: '输入交易密码', en: 'Enter payment PIN', de: 'Geben Sie die Zahlungs-PIN ein', ja: '支払い暗証番号を入力してください', ko: '결제 PIN 입력', es: 'Ingrese el PIN de pago', it: 'Inserisci il PIN di pagamento', vi: 'Nhập mã PIN thanh toán', fr: 'Saisissez le code PIN de paiement' })}
                   </h2>
                   <p className="account-tradepwd-subtitle">
-                    {lang === 'zh' ? '请输入交易密码' : 'Please enter your payment PIN'}
+                    {tr(lang, { zh: '请输入交易密码', en: 'Please enter your payment PIN', de: 'Bitte geben Sie Ihre Zahlungs-PIN ein', ja: '支払いPINを入力してください', ko: '결제 PIN을 입력하세요.', es: 'Por favor ingrese su PIN de pago', it: 'Inserisci il PIN di pagamento', vi: 'Vui lòng nhập mã PIN thanh toán của bạn', fr: 'Veuillez saisir votre code PIN de paiement' })}
                   </p>
                   <div className="account-tradepwd-inputs">
                     {tradePwdChars.map((ch, idx) => (
@@ -441,7 +443,7 @@ const WalletRecharge: React.FC = () => {
                       const uid = getAuthUserId()
                       if (!uid) {
                         showToast(
-                          lang === 'zh' ? '请先登录' : 'Please log in first',
+                          tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }),
                           'error',
                         )
                         return
@@ -449,15 +451,13 @@ const WalletRecharge: React.FC = () => {
                       const amountValue = parseFloat(amount)
                       if (!Number.isFinite(amountValue) || amountValue <= 0) {
                         showToast(
-                          lang === 'zh'
-                            ? '请输入正确的金额'
-                            : 'Please enter a valid amount',
+                          tr(lang, { zh: '请输入正确的金额', en: 'Please enter a valid amount', de: 'Bitte geben Sie einen gültigen Betrag ein', ja: '有効な金額を入力してください', ko: '올바른 금액을 입력하세요.', es: 'Por favor ingresa una cantidad válida', it: 'Inserisci un importo valido', vi: 'Vui lòng nhập số tiền hợp lệ', fr: 'Veuillez entrer un montant valide' }),
                           'error',
                         )
                         return
                       }
                       if (!screenshotUrl) {
-                        showToast(lang === 'zh' ? '请上传交易截图' : 'Please upload transaction screenshot', 'error')
+                        showToast(tr(lang, { zh: '请上传交易截图', en: 'Please upload transaction screenshot', de: 'Bitte laden Sie einen Screenshot der Transaktion hoch', ja: '取引のスクリーンショットをアップロードしてください', ko: '거래 스크린샷을 업로드해주세요.', es: 'Por favor sube la captura de pantalla de la transacción', it: 'Per favore carica lo screenshot della transazione', vi: 'Vui lòng tải lên ảnh chụp màn hình giao dịch', fr: 'Veuillez télécharger une capture d\'écran de la transaction' }), 'error')
                         return
                       }
                       try {
@@ -470,18 +470,16 @@ const WalletRecharge: React.FC = () => {
                         setTradePwd('')
                         setAmount('')
                         setScreenshotUrl(null)
-                        showToast(lang === 'zh' ? '提交成功' : 'Submitted successfully')
+                        showToast(tr(lang, { zh: '提交成功', en: 'Submitted successfully', de: 'Erfolgreich übermittelt', ja: '正常に送信されました', ko: '성공적으로 제출되었습니다', es: 'Enviado exitosamente', it: 'Inserito con successo', vi: 'Đã gửi thành công', fr: 'Soumis avec succès' }))
                         goBack()
                       } catch (err: unknown) {
                         const fallback =
-                          lang === 'zh'
-                            ? '提交失败，请稍后重试'
-                            : 'Submission failed, please try again later'
+                          tr(lang, { zh: '提交失败，请稍后重试', en: 'Submission failed, please try again later', de: 'Die Übermittlung ist fehlgeschlagen. Bitte versuchen Sie es später noch einmal', ja: '送信に失敗しました。後でもう一度お試しください', ko: '제출하지 못했습니다. 나중에 다시 시도해 주세요.', es: 'El envío falló. Vuelve a intentarlo más tarde.', it: 'Invio non riuscito, riprova più tardi', vi: 'Gửi không thành công, vui lòng thử lại sau', fr: 'Échec de la soumission, veuillez réessayer plus tard' })
                         showToast(err instanceof Error ? err.message : fallback, 'error')
                       }
                     }}
                   >
-                    {lang === 'zh' ? '确认密码' : 'Confirm PIN'}
+                    {tr(lang, { zh: '确认密码', en: 'Confirm PIN', de: 'PIN bestätigen', ja: 'PINの確認', ko: 'PIN 확인', es: 'Confirmar PIN', it: 'Conferma il PIN', vi: 'Xác nhận mã PIN', fr: 'Confirmer le code PIN' })}
                   </button>
                 </div>
               </div>

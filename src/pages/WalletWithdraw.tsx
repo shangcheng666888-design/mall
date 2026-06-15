@@ -4,6 +4,8 @@ import AccountSidebar from '../components/AccountSidebar'
 import { useToast } from '../components/ToastProvider'
 import { api } from '../api/client'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 function getAuthUserId(): string | null {
   try {
@@ -94,29 +96,29 @@ const WalletWithdraw: React.FC = () => {
               <button
                 type="button"
                 className="wallet-recharge-back"
-                aria-label={lang === 'zh' ? '返回' : 'Back'}
+                aria-label={tr(lang, { zh: '返回', en: 'Back', de: 'Zurück', ja: '戻る', ko: '뒤쪽에', es: 'Atrás', it: 'Indietro', vi: 'Mặt sau', fr: 'Dos' })}
                 onClick={goBack}
               >
                 &lt;
               </button>
               <h1 className="wallet-recharge-title">
-                {lang === 'zh' ? '我的钱包/提现' : 'My wallet / Withdraw'}
+                {tr(lang, { zh: '我的钱包/提现', en: 'My wallet / Withdraw', de: 'Mein Portemonnaie / Abheben', ja: '私の財布 / 引き出し', ko: '내 지갑 / 출금', es: 'Mi billetera / Retirar', it: 'Il mio portafoglio / Prelievo', vi: 'Ví của tôi / Rút tiền', fr: 'Mon portefeuille / Retrait' })}
               </h1>
             </header>
 
             <div className="wallet-recharge-form">
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
-                  {lang === 'zh' ? '提现方式' : 'Withdrawal method'}
+                  {tr(lang, { zh: '提现方式', en: 'Withdrawal method', de: 'Auszahlungsmethode', ja: '出金方法', ko: '출금방법', es: 'método de retiro', it: 'Metodo di prelievo', vi: 'Phương thức rút tiền', fr: 'Méthode de retrait' })}
                 </label>
                 <div className="wallet-withdraw-method">
-                  {lang === 'zh' ? '加密货币' : 'Cryptocurrency'}
+                  {tr(lang, { zh: '加密货币', en: 'Cryptocurrency', de: 'Kryptowährung', ja: '暗号通貨', ko: '암호화폐', es: 'Criptomoneda', it: 'Criptovaluta', vi: 'tiền điện tử', fr: 'Crypto-monnaie' })}
                 </div>
               </div>
 
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
-                  {lang === 'zh' ? '币种协议' : 'Currency / protocol'}
+                  {tr(lang, { zh: '币种协议', en: 'Currency / protocol', de: 'Währung/Protokoll', ja: '通貨/プロトコル', ko: '통화/프로토콜', es: 'Moneda / protocolo', it: 'Valuta/protocollo', vi: 'Tiền tệ/giao thức', fr: 'Monnaie/protocole' })}
                 </label>
                 <div className="wallet-recharge-select-wrap">
                   <select className="wallet-recharge-select" defaultValue="USDT">
@@ -130,7 +132,7 @@ const WalletWithdraw: React.FC = () => {
 
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
-                  {lang === 'zh' ? '区块链网络' : 'Blockchain network'}
+                  {tr(lang, { zh: '区块链网络', en: 'Blockchain network', de: 'Blockchain-Netzwerk', ja: 'ブロックチェーンネットワーク', ko: '블록체인 네트워크', es: 'Red de cadena de bloques', it: 'Rete blockchain', vi: 'Mạng chuỗi khối', fr: 'Réseau blockchain' })}
                 </label>
                 <button type="button" className="wallet-withdraw-network-btn">
                   TRC20
@@ -140,15 +142,13 @@ const WalletWithdraw: React.FC = () => {
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
                   <span className="wallet-recharge-required">*</span>
-                  {lang === 'zh' ? '提现地址' : 'Withdrawal address'}
+                  {tr(lang, { zh: '提现地址', en: 'Withdrawal address', de: 'Auszahlungsadresse', ja: '出金アドレス', ko: '출금주소', es: 'dirección de retiro', it: 'Indirizzo di ritiro', vi: 'Địa chỉ rút tiền', fr: 'Adresse de retrait' })}
                 </label>
                 <div className="wallet-recharge-address-row wallet-withdraw-address-row">
                   <input
                     className="wallet-recharge-address-input"
                     placeholder={
-                      lang === 'zh'
-                        ? '请输入提币地址'
-                        : 'Please enter the withdrawal address'
+                      tr(lang, { zh: '请输入提币地址', en: 'Please enter the withdrawal address', de: 'Bitte geben Sie die Auszahlungsadresse ein', ja: '出金アドレスを入力してください', ko: '출금주소를 입력해주세요', es: 'Por favor ingrese la dirección de retiro', it: 'Inserisci l\'indirizzo di ritiro', vi: 'Vui lòng nhập địa chỉ rút tiền', fr: 'Veuillez saisir l\'adresse de retrait' })
                     }
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
@@ -159,16 +159,16 @@ const WalletWithdraw: React.FC = () => {
               <div className="wallet-recharge-field">
                 <label className="wallet-recharge-label">
                   <span className="wallet-recharge-required">*</span>
-                  {lang === 'zh' ? '数量' : 'Amount'}
+                  {tr(lang, { zh: '数量', en: 'Amount', de: 'Menge', ja: '額', ko: '양', es: 'Cantidad', it: 'Quantità', vi: 'Số lượng', fr: 'Montant' })}
                 </label>
                 <input
                   className="wallet-recharge-input wallet-recharge-input--short"
-                  placeholder={lang === 'zh' ? '请输入' : 'Please enter'}
+                  placeholder={tr(lang, { zh: '请输入', en: 'Please enter', de: 'Bitte treten Sie ein', ja: '入力してください', ko: '입력해주세요', es: 'Por favor ingresa', it: 'Per favore entra', vi: 'Vui lòng nhập', fr: 'Veuillez entrer' })}
                   value={amount}
                   onChange={handleAmountChange}
                 />
                 <div className="wallet-recharge-hint">
-                  {lang === 'zh' ? '当前可用余额：' : 'Available balance: '}
+                  {tr(lang, { zh: '当前可用余额：', en: 'Available balance: ', de: 'Verfügbares Guthaben:', ja: '利用可能な残高:', ko: '사용 가능한 잔액:', es: 'Saldo disponible:', it: 'Saldo disponibile:', vi: 'Số dư khả dụng:', fr: 'Solde disponible :' })}
                   {/* 从本地 authUser 中读取最新余额 */}
                   {(() => {
                     try {
@@ -192,7 +192,7 @@ const WalletWithdraw: React.FC = () => {
                   setTradePwdModalOpen(true)
                 }}
               >
-                {lang === 'zh' ? '确定' : 'Confirm'}
+                {tr(lang, { zh: '确定', en: 'Confirm', de: 'Bestätigen', ja: '確認する', ko: '확인하다', es: 'Confirmar', it: 'Confermare', vi: 'Xác nhận', fr: 'Confirmer' })}
               </button>
             </div>
           </section>
@@ -214,16 +214,16 @@ const WalletWithdraw: React.FC = () => {
             <button
               type="button"
               className="account-tradepwd-close"
-                  aria-label={lang === 'zh' ? '关闭' : 'Close'}
+                  aria-label={tr(lang, { zh: '关闭', en: 'Close', de: 'Schließen', ja: '近い', ko: '닫다', es: 'Cerca', it: 'Vicino', vi: 'Đóng', fr: 'Fermer' })}
               onClick={() => setTradePwdModalOpen(false)}
             >
               ×
             </button>
             <h2 id="wallet-withdraw-tradepwd-title" className="account-tradepwd-title">
-                  {lang === 'zh' ? '输入交易密码' : 'Enter payment PIN'}
+                  {tr(lang, { zh: '输入交易密码', en: 'Enter payment PIN', de: 'Geben Sie die Zahlungs-PIN ein', ja: '支払い暗証番号を入力してください', ko: '결제 PIN 입력', es: 'Ingrese el PIN de pago', it: 'Inserisci il PIN di pagamento', vi: 'Nhập mã PIN thanh toán', fr: 'Saisissez le code PIN de paiement' })}
             </h2>
                 <p className="account-tradepwd-subtitle">
-                  {lang === 'zh' ? '请输入交易密码' : 'Please enter your payment PIN'}
+                  {tr(lang, { zh: '请输入交易密码', en: 'Please enter your payment PIN', de: 'Bitte geben Sie Ihre Zahlungs-PIN ein', ja: '支払いPINを入力してください', ko: '결제 PIN을 입력하세요.', es: 'Por favor ingrese su PIN de pago', it: 'Inserisci il PIN di pagamento', vi: 'Vui lòng nhập mã PIN thanh toán của bạn', fr: 'Veuillez saisir votre code PIN de paiement' })}
                 </p>
             <div className="account-tradepwd-inputs">
               {tradePwdChars.map((ch, idx) => (
@@ -247,25 +247,21 @@ const WalletWithdraw: React.FC = () => {
                 const uid = getAuthUserId()
                 if (!uid) {
                   showToast(
-                    lang === 'zh' ? '请先登录' : 'Please log in first',
+                    tr(lang, { zh: '请先登录', en: 'Please log in first', de: 'Bitte melden Sie sich zuerst an', ja: 'まずログインしてください', ko: '먼저 로그인해주세요', es: 'Por favor inicia sesión primero', it: 'Effettua prima l\'accesso', vi: 'Vui lòng đăng nhập trước', fr: 'Veuillez d\'abord vous connecter' }),
                     'error',
                   )
                   return
                 }
                 if (!address.trim()) {
                   showToast(
-                    lang === 'zh'
-                      ? '请输入提币地址'
-                      : 'Please enter the withdrawal address',
+                    tr(lang, { zh: '请输入提币地址', en: 'Please enter the withdrawal address', de: 'Bitte geben Sie die Auszahlungsadresse ein', ja: '出金アドレスを入力してください', ko: '출금주소를 입력해주세요', es: 'Por favor ingrese la dirección de retiro', it: 'Inserisci l\'indirizzo di ritiro', vi: 'Vui lòng nhập địa chỉ rút tiền', fr: 'Veuillez saisir l\'adresse de retrait' }),
                     'error',
                   )
                   return
                 }
                 if (!isAmountFilled) {
                   showToast(
-                    lang === 'zh'
-                      ? '请输入正确的提现金额'
-                      : 'Please enter a valid withdrawal amount',
+                    tr(lang, { zh: '请输入正确的提现金额', en: 'Please enter a valid withdrawal amount', de: 'Bitte geben Sie einen gültigen Auszahlungsbetrag ein', ja: '有効な出金額を入力してください', ko: '유효한 인출 금액을 입력하세요.', es: 'Por favor ingrese un monto de retiro válido', it: 'Inserisci un importo di prelievo valido', vi: 'Vui lòng nhập số tiền rút hợp lệ', fr: 'Veuillez saisir un montant de retrait valide' }),
                     'error',
                   )
                   return
@@ -273,9 +269,7 @@ const WalletWithdraw: React.FC = () => {
                 const amountValue = parseFloat(amount)
                 if (!Number.isFinite(amountValue) || amountValue <= 0) {
                   showToast(
-                    lang === 'zh'
-                      ? '请输入正确的提现金额'
-                      : 'Please enter a valid withdrawal amount',
+                    tr(lang, { zh: '请输入正确的提现金额', en: 'Please enter a valid withdrawal amount', de: 'Bitte geben Sie einen gültigen Auszahlungsbetrag ein', ja: '有効な出金額を入力してください', ko: '유효한 인출 금액을 입력하세요.', es: 'Por favor ingrese un monto de retiro válido', it: 'Inserisci un importo di prelievo valido', vi: 'Vui lòng nhập số tiền rút hợp lệ', fr: 'Veuillez saisir un montant de retrait valide' }),
                     'error',
                   )
                   return
@@ -291,21 +285,17 @@ const WalletWithdraw: React.FC = () => {
                   setAmount('')
                   setAddress('')
                   showToast(
-                    lang === 'zh'
-                      ? '提交成功'
-                      : 'Submitted successfully',
+                    tr(lang, { zh: '提交成功', en: 'Submitted successfully', de: 'Erfolgreich übermittelt', ja: '正常に送信されました', ko: '성공적으로 제출되었습니다', es: 'Enviado exitosamente', it: 'Inserito con successo', vi: 'Đã gửi thành công', fr: 'Soumis avec succès' }),
                   )
                   goBack()
                 } catch (err: unknown) {
                   const fallback =
-                    lang === 'zh'
-                      ? '提交失败，请稍后重试'
-                      : 'Submission failed, please try again later'
+                    tr(lang, { zh: '提交失败，请稍后重试', en: 'Submission failed, please try again later', de: 'Die Übermittlung ist fehlgeschlagen. Bitte versuchen Sie es später noch einmal', ja: '送信に失敗しました。後でもう一度お試しください', ko: '제출하지 못했습니다. 나중에 다시 시도해 주세요.', es: 'El envío falló. Vuelve a intentarlo más tarde.', it: 'Invio non riuscito, riprova più tardi', vi: 'Gửi không thành công, vui lòng thử lại sau', fr: 'Échec de la soumission, veuillez réessayer plus tard' })
                   showToast(err instanceof Error ? err.message : fallback, 'error')
                 }
               }}
             >
-              {lang === 'zh' ? '确认密码' : 'Confirm PIN'}
+              {tr(lang, { zh: '确认密码', en: 'Confirm PIN', de: 'PIN bestätigen', ja: 'PINの確認', ko: 'PIN 확인', es: 'Confirmar PIN', it: 'Conferma il PIN', vi: 'Xác nhận mã PIN', fr: 'Confirmer le code PIN' })}
             </button>
           </div>
         </div>

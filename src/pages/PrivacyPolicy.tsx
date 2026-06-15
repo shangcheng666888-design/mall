@@ -1,18 +1,20 @@
 import type React from 'react'
 import { useLang } from '../context/LangContext'
+import { tr } from '../i18n'
+
 
 const PrivacyPolicy: React.FC = () => {
   const { lang } = useLang()
   return (
     <div className="page policy-page">
       <h1 className="policy-title">
-        {lang === 'zh' ? '隐私政策' : 'Privacy Policy'}
+        {tr(lang, { zh: '隐私政策', en: 'Privacy Policy', de: 'Datenschutzrichtlinie', ja: 'プライバシーポリシー', ko: '개인 정보 보호 정책', es: 'política de privacidad', it: 'politica sulla riservatezza', vi: 'Chính sách bảo mật', fr: 'politique de confidentialité' })}
       </h1>
       <p className="policy-subtitle">
-        {lang === 'zh' ? '条款和条件' : 'Terms and conditions'}
+        {tr(lang, { zh: '条款和条件', en: 'Terms and conditions', de: 'Geschäftsbedingungen', ja: '利用規約', ko: '이용 약관', es: 'Términos y condiciones', it: 'Termini e Condizioni', vi: 'Điều khoản và điều kiện', fr: 'Termes et conditions' })}
       </p>
 
-      {lang === 'zh' ? (
+      {lang === 'zh' || lang === 'tw' ? (
         <>
           <section className="policy-section">
         <h2>1、简介</h2>
